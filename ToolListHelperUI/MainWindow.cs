@@ -23,17 +23,26 @@ namespace ToolListHelperUI
 
         private async void ToolListMakerButton_ClickAsync(object sender, EventArgs e)
         {
+            if (_activeForm?.GetType() == typeof(ToolListMakerWindow))
+            {
+                return;
+            }
             DisableMenuButtons();
-            string errorMessage = await TDMConnector.ValidateDbConnection();
+            string errorMessage = await TDMConnector.ValidateDbConnectionAsync();
             if (errorMessage.Length > 0)
             {
                 UserInterfaceLogic.ShowError(errorMessage, "Błąd połączenia");
                 EnableMenuButtons();
                 return;
             }
-            LoadForm(new ToolListMakerWindow());
-            currentModuleLabel.Text = "Tool List Maker";
+            LoadFormToUI(new ToolListMakerWindow(), "Tool List Maker");
             EnableMenuButtons();
+        }
+
+        private void LoadFormToUI(ToolListMakerWindow toolListMakerWindow, string moduleName)
+        {
+            LoadForm(toolListMakerWindow);
+            currentModuleLabel.Text = moduleName;
         }
 
         private void EnableMenuButtons()
@@ -54,10 +63,6 @@ namespace ToolListHelperUI
 
         public void LoadForm(Form form)
         {
-            if (_activeForm?.GetType() == form.GetType())
-            {
-                return;
-            }
             if (_activeForm != null)
             {
                 _activeForm.Close();
@@ -93,6 +98,14 @@ namespace ToolListHelperUI
         private void CloseAppButton_Click(object sender, EventArgs e)
         {
             CloseForm();
+        }
+
+        private void ToolListMakerButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                LoadFormToUI(new ToolListMakerWindow(), "Tool List Maker");
+            }
         }
     }
 }

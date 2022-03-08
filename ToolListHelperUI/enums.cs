@@ -15,10 +15,4 @@ namespace ToolListHelperUI
         Material,
         Clamping
     }
-    public enum ProgramDataGridLeadColumn
-    {
-        Id,
-        Name,
-        Description
-    }
 }

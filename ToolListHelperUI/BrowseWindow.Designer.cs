@@ -33,6 +33,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.browseDataGridView = new System.Windows.Forms.DataGridView();
+            this.statusLabel = new System.Windows.Forms.Label();
             this.buttonsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.browseDataGridView)).BeginInit();
             this.SuspendLayout();
@@ -107,15 +108,24 @@
             this.browseDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.BrowseDataGridView_CellDoubleClick);
             this.browseDataGridView.SelectionChanged += new System.EventHandler(this.BrowseDataGridView_SelectionChanged);
             // 
+            // statusLabel
+            // 
+            this.statusLabel.Location = new System.Drawing.Point(1, 250);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(448, 20);
+            this.statusLabel.TabIndex = 2;
+            this.statusLabel.Text = "Ładowanie danych..";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // BrowseWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(450, 561);
+            this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.browseDataGridView);
             this.Controls.Add(this.buttonsPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "BrowseWindow";
             this.Text = "BrowseWindow";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.BrowseWindow_FormClosed);
@@ -131,5 +141,6 @@
         private DataGridView browseDataGridView;
         private Button cancelButton;
         private Button okButton;
+        private Label statusLabel;
     }
 }

@@ -151,6 +151,7 @@
             this.toolListMakerButton.Text = "Tool List Maker";
             this.toolListMakerButton.UseVisualStyleBackColor = false;
             this.toolListMakerButton.Click += new System.EventHandler(this.ToolListMakerButton_ClickAsync);
+            this.toolListMakerButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ToolListMakerButton_MouseDown);
             // 
             // menuLabel
             // 

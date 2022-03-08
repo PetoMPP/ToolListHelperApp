@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace ToolListHelperLibrary.Models
 {
-    public class ListModel
+    public struct ListModel
     {
-        public string? Id { get; set; }
+        public CreatingMode CreatingMode { get; set; }
+        public string Id { get; set; }
         public string? Name { get; set; }
         public bool SkipName { get; set; }
         public string? Description { get; set; }

@@ -9,6 +9,7 @@ namespace ToolListHelperLibrary.Models
     public struct ToolData
     {
         public string Id { get; set; }
+        public string ItemDescription { get; set; }
         public ToolType ToolType { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -18,12 +19,17 @@ namespace ToolListHelperUI
         private readonly IBrowseData _browseData;
         private readonly BrowsingMode _mode;
         private readonly Form _caller;
+        private readonly string loadingErrorMessage = "Błąd ładowania danych!";
+        private readonly CancellationTokenSource _cancellationTokenSource = new();
+        private readonly CancellationToken _cancellationToken;
+
         public BrowseWindow(IBrowseData browseData, BrowsingMode browsingMode, Form caller)
         {
             InitializeComponent();
             _browseData = browseData;
             _mode = browsingMode;
             _caller = caller;
+            _cancellationToken = _cancellationTokenSource.Token;
             LoadDataToUI();
         }
 
@@ -31,15 +37,6 @@ namespace ToolListHelperUI
         {
             switch (_mode)
             {
-                case BrowsingMode.ProgramId:
-                    LoadProgramData(ProgramDataGridLeadColumn.Id);
-                    break;
-                case BrowsingMode.ProgramName:
-                    LoadProgramData(ProgramDataGridLeadColumn.Name);
-                    break;
-                case BrowsingMode.ProgramDescription:
-                    LoadProgramData(ProgramDataGridLeadColumn.Description);
-                    break;
                 case BrowsingMode.Machine:
                     LoadMachineData();
                     break;
@@ -48,6 +45,9 @@ namespace ToolListHelperUI
                     break;
                 case BrowsingMode.Clamping:
                     LoadClampingData();
+                    break;
+                default:
+                    LoadProgramData();
                     break;
             }
             AdjustUI();
@@ -60,12 +60,15 @@ namespace ToolListHelperUI
             {
                 case 1:
                     Width = 166;
+                    statusLabel.Width = 148 - SystemInformation.VerticalScrollBarWidth;
                     break;
                 case 2:
                     Width = 316;
+                    statusLabel.Width = 298 - SystemInformation.VerticalScrollBarWidth;
                     break;
                 case 3:
                     Width = 466;
+                    statusLabel.Width = 448 - SystemInformation.VerticalScrollBarWidth;
                     break;
                 default:
                     return;
@@ -78,30 +81,106 @@ namespace ToolListHelperUI
 
         private async void LoadClampingData()
         {
-            IEnumerable<ClampingData> clampings = await TDMConnector.GetClampings();
-            browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(clampings);
+            try
+            {
+                IEnumerable<ClampingData> clampings = await TDMConnector.GetClampingsAsync(_cancellationToken);
+                browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(clampings);
+            }
+            catch (Exception error)
+            {
+                if (error.GetType() == typeof(SqlException))
+                {
+                    ConnectionError(error.Message);
+                    return;
+                }
+                else if (error.GetType() == typeof(TaskCanceledException))
+                {
+                    return;
+                }
+                throw new NotSupportedException(error.Message);
+            }
+            statusLabel.Visible = false;
+        }
+
+        private void ConnectionError(string errorMessage)
+        {
+            statusLabel.Text = loadingErrorMessage;
+            statusLabel.ForeColor = Color.Red;
+            UserInterfaceLogic.ShowError(errorMessage, loadingErrorMessage);
         }
 
         private async void LoadMaterialData()
         {
-            IEnumerable<MaterialData> materials = await TDMConnector.GetMaterials();
-            browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(materials);
+            try
+            {
+                IEnumerable<MaterialData> materials = await TDMConnector.GetMaterialsAsync(_cancellationToken);
+                browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(materials);
+            }
+            catch (Exception error)
+            {
+                if (error.GetType() == typeof(SqlException))
+                {
+                    ConnectionError(error.Message);
+                    return;
+                }
+                else if (error.GetType() == typeof(TaskCanceledException))
+                {
+                    return;
+                }
+                throw new NotSupportedException(error.Message);
+            }
+            statusLabel.Visible = false;
         }
 
         private async void LoadMachineData()
         {
-            IEnumerable<MachineData> machines = await TDMConnector.GetMachines();
-            browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(machines);
+            try
+            {
+                IEnumerable<MachineData> machines = await TDMConnector.GetMachinesAsync(_cancellationToken);
+                browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(machines);
+            }
+            catch (Exception error)
+            {
+                if (error.GetType() == typeof(SqlException))
+                {
+                    ConnectionError(error.Message);
+                    return;
+                }
+                else if (error.GetType() == typeof(TaskCanceledException))
+                {
+                    return;
+                }
+                throw new NotSupportedException(error.Message);
+            }
+            statusLabel.Visible = false;
         }
 
-        private async void LoadProgramData(ProgramDataGridLeadColumn id)
+        private async void LoadProgramData()
         {
-            IEnumerable<ProgramData> programs = await TDMConnector.GetPrograms();
-            browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(programs);
+            try
+            {
+                IEnumerable<ProgramData> programs = await TDMConnector.GetProgramsAsync(_cancellationToken);
+                browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(programs);
+            }
+            catch (Exception error)
+            {
+                if (error.GetType() == typeof(SqlException))
+                {
+                    ConnectionError(error.Message);
+                    return;
+                }
+                else if (error.GetType() == typeof(TaskCanceledException))
+                {
+                    return;
+                }
+                throw new NotSupportedException(error.Message);
+            }
+            statusLabel.Visible = false;
         }
 
         private void BrowseWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
+            _cancellationTokenSource.Cancel();
             _caller.Enabled = true;
         }
 

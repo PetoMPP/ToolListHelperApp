@@ -42,8 +42,8 @@
             this.modeLabel = new System.Windows.Forms.Label();
             this.autoModeRadioButton = new System.Windows.Forms.RadioButton();
             this.sourceFilePanel = new System.Windows.Forms.Panel();
-            this.browseButtonPanel = new System.Windows.Forms.Panel();
-            this.browseButton = new System.Windows.Forms.Button();
+            this.browseFilesButtonPanel = new System.Windows.Forms.Panel();
+            this.browseFilesButton = new System.Windows.Forms.Button();
             this.sourceFilePathPanel = new System.Windows.Forms.Panel();
             this.sourceFilePathTextBox = new System.Windows.Forms.TextBox();
             this.sourceFileLabel = new System.Windows.Forms.Label();
@@ -123,7 +123,7 @@
             this.wizardPanel.SuspendLayout();
             this.modePanel.SuspendLayout();
             this.sourceFilePanel.SuspendLayout();
-            this.browseButtonPanel.SuspendLayout();
+            this.browseFilesButtonPanel.SuspendLayout();
             this.sourceFilePathPanel.SuspendLayout();
             this.settingsPanel.SuspendLayout();
             this.clampingPanel.SuspendLayout();
@@ -274,6 +274,7 @@
             // 
             // sinumericModeRadioButton
             // 
+            this.sinumericModeRadioButton.Checked = true;
             this.sinumericModeRadioButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sinumericModeRadioButton.ForeColor = System.Drawing.Color.Black;
             this.sinumericModeRadioButton.Location = new System.Drawing.Point(225, 30);
@@ -282,6 +283,7 @@
             this.sinumericModeRadioButton.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
             this.sinumericModeRadioButton.Size = new System.Drawing.Size(225, 47);
             this.sinumericModeRadioButton.TabIndex = 2;
+            this.sinumericModeRadioButton.TabStop = true;
             this.sinumericModeRadioButton.Text = "Kod NC Sinumeric";
             this.sinumericModeRadioButton.UseVisualStyleBackColor = true;
             // 
@@ -300,7 +302,7 @@
             // 
             // autoModeRadioButton
             // 
-            this.autoModeRadioButton.Checked = true;
+            this.autoModeRadioButton.Enabled = false;
             this.autoModeRadioButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.autoModeRadioButton.ForeColor = System.Drawing.Color.Black;
             this.autoModeRadioButton.Location = new System.Drawing.Point(0, 30);
@@ -309,14 +311,13 @@
             this.autoModeRadioButton.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
             this.autoModeRadioButton.Size = new System.Drawing.Size(225, 47);
             this.autoModeRadioButton.TabIndex = 1;
-            this.autoModeRadioButton.TabStop = true;
             this.autoModeRadioButton.Text = "Wybierz automatycznie";
             this.autoModeRadioButton.UseVisualStyleBackColor = true;
             // 
             // sourceFilePanel
             // 
             this.sourceFilePanel.BackColor = System.Drawing.Color.White;
-            this.sourceFilePanel.Controls.Add(this.browseButtonPanel);
+            this.sourceFilePanel.Controls.Add(this.browseFilesButtonPanel);
             this.sourceFilePanel.Controls.Add(this.sourceFilePathPanel);
             this.sourceFilePanel.Controls.Add(this.sourceFileLabel);
             this.sourceFilePanel.Location = new System.Drawing.Point(450, 160);
@@ -325,26 +326,27 @@
             this.sourceFilePanel.Size = new System.Drawing.Size(450, 124);
             this.sourceFilePanel.TabIndex = 1;
             // 
-            // browseButtonPanel
+            // browseFilesButtonPanel
             // 
-            this.browseButtonPanel.Controls.Add(this.browseButton);
-            this.browseButtonPanel.Location = new System.Drawing.Point(225, 77);
-            this.browseButtonPanel.Name = "browseButtonPanel";
-            this.browseButtonPanel.Padding = new System.Windows.Forms.Padding(11);
-            this.browseButtonPanel.Size = new System.Drawing.Size(225, 47);
-            this.browseButtonPanel.TabIndex = 4;
+            this.browseFilesButtonPanel.Controls.Add(this.browseFilesButton);
+            this.browseFilesButtonPanel.Location = new System.Drawing.Point(225, 77);
+            this.browseFilesButtonPanel.Name = "browseFilesButtonPanel";
+            this.browseFilesButtonPanel.Padding = new System.Windows.Forms.Padding(11, 0, 11, 11);
+            this.browseFilesButtonPanel.Size = new System.Drawing.Size(225, 47);
+            this.browseFilesButtonPanel.TabIndex = 4;
             // 
-            // browseButton
+            // browseFilesButton
             // 
-            this.browseButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.browseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.browseButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.browseButton.Location = new System.Drawing.Point(11, 11);
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(203, 25);
-            this.browseButton.TabIndex = 2;
-            this.browseButton.Text = "Przeglądaj...";
-            this.browseButton.UseVisualStyleBackColor = true;
+            this.browseFilesButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.browseFilesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.browseFilesButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
+            this.browseFilesButton.Location = new System.Drawing.Point(11, 0);
+            this.browseFilesButton.Name = "browseFilesButton";
+            this.browseFilesButton.Size = new System.Drawing.Size(203, 36);
+            this.browseFilesButton.TabIndex = 2;
+            this.browseFilesButton.Text = "Przeglądaj...";
+            this.browseFilesButton.UseVisualStyleBackColor = true;
+            this.browseFilesButton.Click += new System.EventHandler(this.BrowseFilesButton_Click);
             // 
             // sourceFilePathPanel
             // 
@@ -358,12 +360,17 @@
             // 
             // sourceFilePathTextBox
             // 
+            this.sourceFilePathTextBox.AllowDrop = true;
             this.sourceFilePathTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sourceFilePathTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sourceFilePathTextBox.Location = new System.Drawing.Point(11, 11);
             this.sourceFilePathTextBox.Name = "sourceFilePathTextBox";
             this.sourceFilePathTextBox.Size = new System.Drawing.Size(428, 25);
             this.sourceFilePathTextBox.TabIndex = 1;
+            this.sourceFilePathTextBox.TextChanged += new System.EventHandler(this.SourceFilePathTextBox_TextChanged);
+            this.sourceFilePathTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.SourceFilePathTextBox_DragDrop);
+            this.sourceFilePathTextBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.SourceFilePathTextBox_DragEnter);
+            this.sourceFilePathTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.SourceFilePathTextBox_KeyPress);
             // 
             // sourceFileLabel
             // 
@@ -485,6 +492,7 @@
             this.browseClampingButton.Tag = "Clamping";
             this.browseClampingButton.Text = "▼";
             this.browseClampingButton.UseVisualStyleBackColor = false;
+            this.browseClampingButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // selectClampingRadioButton
             // 
@@ -612,6 +620,7 @@
             this.browseMaterialButton.Tag = "Material";
             this.browseMaterialButton.Text = "▼";
             this.browseMaterialButton.UseVisualStyleBackColor = false;
+            this.browseMaterialButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // selectMaterialRadioButton
             // 
@@ -891,6 +900,7 @@
             this.browseMachineButton.Tag = "Machine";
             this.browseMachineButton.Text = "▼";
             this.browseMachineButton.UseVisualStyleBackColor = false;
+            this.browseMachineButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // selectMachineRadioButton
             // 
@@ -1018,6 +1028,7 @@
             this.browseProgramDescriptionButton.Tag = "ProgramDescription";
             this.browseProgramDescriptionButton.Text = "▼";
             this.browseProgramDescriptionButton.UseVisualStyleBackColor = false;
+            this.browseProgramDescriptionButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // manualProgramDescriptionRadioButton
             // 
@@ -1145,6 +1156,7 @@
             this.browseProgramNameButton.Tag = "ProgramName";
             this.browseProgramNameButton.Text = "▼";
             this.browseProgramNameButton.UseVisualStyleBackColor = false;
+            this.browseProgramNameButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // manualNameRadioButton
             // 
@@ -1302,6 +1314,7 @@
             // 
             // ToolListMakerWindow
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
@@ -1311,13 +1324,15 @@
             this.Name = "ToolListMakerWindow";
             this.Text = "ToolListMakerWindow";
             this.Shown += new System.EventHandler(this.ToolListMakerWindow_Shown);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.SourceFilePathTextBox_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.SourceFilePathTextBox_DragEnter);
             this.Resize += new System.EventHandler(this.ToolListMakerWindow_Resize);
             this.descriptionPanel.ResumeLayout(false);
             this.createPanel.ResumeLayout(false);
             this.wizardPanel.ResumeLayout(false);
             this.modePanel.ResumeLayout(false);
             this.sourceFilePanel.ResumeLayout(false);
-            this.browseButtonPanel.ResumeLayout(false);
+            this.browseFilesButtonPanel.ResumeLayout(false);
             this.sourceFilePathPanel.ResumeLayout(false);
             this.sourceFilePathPanel.PerformLayout();
             this.settingsPanel.ResumeLayout(false);
@@ -1376,7 +1391,7 @@
         private Panel settingsPanel;
         private Panel creatingModePanel;
         private Label creatingModeLabel;
-        private Button browseButton;
+        private Button browseFilesButton;
         private Panel sourceFilePathPanel;
         private TextBox sourceFilePathTextBox;
         private Panel programIdPanel;
@@ -1447,6 +1462,6 @@
         private RadioButton selectMaterialRadioButton;
         private RadioButton noMaterialRadioButton;
         private Label materialLabel;
-        private Panel browseButtonPanel;
+        private Panel browseFilesButtonPanel;
     }
 }
