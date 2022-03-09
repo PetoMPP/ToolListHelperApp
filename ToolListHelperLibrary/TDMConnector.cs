@@ -36,23 +36,58 @@ namespace ToolListHelperLibrary
             using DbConnection connection = GetTDMConnection();
             return model.CreatingMode switch
             {
-                CreatingMode.New => await CreateNewListAsync(model, connection),
-                CreatingMode.Update => await UpdateListAsync(model, connection),
+                CreatingMode.New => await CreateListAsync(model, connection, "Lista stworzona za pomocą programu Tool List Maker"),
+                CreatingMode.Update => await UpdateListAsync(model, connection, "Lista zaktualizowana za pomocą programu Tool List Maker"),
                 _ => throw new ArgumentException("Invalid Creating Mode", nameof(model)),
             };
         }
 
-        private async static Task<(string listId, string errorMessage)> UpdateListAsync(ListModel model, DbConnection connection)
+        private async static Task<(string listId, string errorMessage)> UpdateListAsync(ListModel model, DbConnection connection, string logMessage)
         {
-            // Change List Data
-            await connection.ExecuteAsync(new CommandDefinition(await GenerateUpdateStringFromModelAsync(model, connection), commandType: CommandType.Text));
-            // Overwrite Tool List
-            // Insert Logfile
+            try
+            {
+                // Change List Data
+                await connection.ExecuteAsync(new CommandDefinition(await GenerateUpdateStringFromModelAsync(model, connection), commandType: CommandType.Text));
+                // Overwrite Tool List
+                await OverwriteTools(model, connection);
+                // Insert Logfile
+                await InsertLog(model, connection, logMessage);
+            }
+            catch (Exception error)
+            {
+                return (model.Id, error.Message);
+            }
+            return (model.Id, string.Empty);
+        }
+
+        private static async Task InsertLog(ListModel model, DbConnection connection, string logMessage)
+        {
+            await connection.ExecuteAsync(new CommandDefinition(GenerateLogInsertString(model, connection, logMessage)));
+        }
+
+        private static async Task OverwriteTools(ListModel model, DbConnection connection)
+        {
+            await connection.ExecuteAsync(new CommandDefinition($"DELETE FROM TDM_LISTLISTB WHERE LISTID = '{model.Id}'"));
+            if (model.Tools?.Count > 0)
+            {
+                await connection.ExecuteAsync(new CommandDefinition(GenerateInsertToolsStringFromModel(model, connection), commandType: CommandType.Text));
+            }
+        }
+
+        private static string GenerateLogInsertString(ListModel model, DbConnection connection, string logMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static string GenerateInsertToolsStringFromModel(ListModel model, DbConnection connection)
+        {
+            throw new NotImplementedException();
         }
 
         private async static Task<string> GenerateUpdateStringFromModelAsync(ListModel model, DbConnection connection)
         {
-            StringBuilder stringBuilder = new("UPDATE TDM_LIST SET ");
+            string startString = "UPDATE TDM_LIST SET ";
+            StringBuilder stringBuilder = new(startString);
             if (!model.SkipName)
             {
                 if (model.Name != null)
@@ -88,9 +123,38 @@ namespace ToolListHelperLibrary
             }
             if (!model.SkipMaterial)
             {
-
+                if (model.Material != null)
+                {
+                    stringBuilder.Append($"MATERIALID = '{model.Material}',");
+                }
+                else
+                {
+                    stringBuilder.Append("MATERIALID = NULL,");
+                }
             }
+            if (!model.SkipClamping)
+            {
+                if (model.Clamping != null)
+                {
+                    stringBuilder.Append($"FIXTURE = '{model.Clamping}',");
+                }
+                else
+                {
+                    stringBuilder.Append("FIXTURE = NULL,");
+                }
+            }
+            if (!model.SkipListType)
+            {
+                stringBuilder.Append($"LISTTYPE = '{(int?)model.ListType}',");
+            }
+            stringBuilder.Append($"USERNAME = '{await GetUserNameFromUserId(model.CreatorId, connection)}'");
+            stringBuilder.Append($"WHERE TOOLID = '{model.Id}'");
             return stringBuilder.ToString();
+        }
+
+        private async static Task<string> GetUserNameFromUserId(string creatorId, DbConnection connection)
+        {
+            return await connection.ExecuteScalarAsync<string>($"SELECT CONCAT(FIRSTNAME, '', NAME) FROM TMS_USER WHERE USERNAME = '{creatorId}'");
         }
 
         private async static Task<string> GetMachineGroupIdByMachineIdAsync(string machine, DbConnection connection)
@@ -98,7 +162,7 @@ namespace ToolListHelperLibrary
             return await connection.ExecuteScalarAsync<string>($"SELECT MACHINEGROUPID FROM TDM_MACHINE WHERE MACHINEID = '{machine}'");
         }
 
-        private static Task<(string listId, string errorMessage)> CreateNewListAsync(ListModel model, DbConnection connection)
+        private static Task<(string listId, string errorMessage)> CreateListAsync(ListModel model, DbConnection connection, string v)
         {
             throw new NotImplementedException();
         }
@@ -181,9 +245,9 @@ namespace ToolListHelperLibrary
             }
             using DbConnection connection = GetTDMConnection();
             foreach (ToolData tool in tools)
-	        {
+            {
                 (invalidTools, validTools) = await ValidateTool(invalidTools, validTools, tool, connection);
-	        }
+            }
             return (invalidTools, validTools);
         }
 
@@ -221,10 +285,16 @@ namespace ToolListHelperLibrary
             return (invalidTools, validTools);
         }
 
-        public static async Task<string> ValidateListId(string id)
+        public async static Task<bool> ValidateUser(string creator)
         {
             using DbConnection connection = GetTDMConnection();
-            return await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(LISTID) FROM TDM_LIST WHERE LISTID = '{id}'", commandType: CommandType.Text)) == 0 ? id : string.Empty;
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(USERID) FROM TMS_USER WHERE USERNAME = '{creator}'"));
+        }
+
+        public static async Task<bool> ValidateListId(string id)
+        {
+            using DbConnection connection = GetTDMConnection();
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(LISTID) FROM TDM_LIST WHERE LISTID = '{id}'", commandType: CommandType.Text));
         }
     }
 }

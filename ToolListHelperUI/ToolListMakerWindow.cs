@@ -255,8 +255,8 @@ namespace ToolListHelperUI
             (List<ToolData> invalidTools, List<ToolData> validTools) = await TDMConnector.ValidateTools(model.Tools);
             if (invalidTools.Count > 0)
             {
-                if (MessageBox.Show("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n" + string.Join('\n', invalidTools.Select(t => t.Id ?? t.ItemDescription)
-                    .ToArray()) + "\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if (MessageBox.Show("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => t.Id ?? t.ItemDescription)
+                    .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Cancel)
                 {
                     return;
                 }
@@ -282,11 +282,15 @@ namespace ToolListHelperUI
             }
             if (model.CreatingMode == CreatingMode.Update)
             {
-                string invalidId = await TDMConnector.ValidateListId(model.Id);
-                if (!string.IsNullOrEmpty(invalidId))
+                if (!await TDMConnector.ValidateListId(model.Id))
                 {
-                    errorMessage += $"{errorCounter}. Brak listy o numerze: {invalidId} w TDM!";
+                    errorMessage += $"{errorCounter}. Brak listy o numerze: {model.Id} w TDM!";
+                    errorCounter++;
                 }
+            }
+            if (!await TDMConnector.ValidateUser(model.CreatorId))
+            {
+                errorMessage += $"{errorCounter}. Brak użytkownika o nazwie {model.CreatorId} w TDM!";
             }
             return errorMessage;
         }
@@ -370,6 +374,7 @@ namespace ToolListHelperUI
             bool skipNcFile = skipAddFileRadioButton.Checked;
             NcFileData? ncFile = skipNcFile ? null : new() { FilePath = _filePaths[0], NcFileMode = addFileAsArchiveRadioButton.Checked ? NcFileMode.Archive : addFileAsDevelopingRadioButton.Checked ? NcFileMode.Developing : NcFileMode.Release };
             List<ToolData>? tools = await FileOperations.GetToolsFromFilesAsync(_filePaths, GetFileTypeFromUI());
+            string creator = Environment.UserName;
             return new()
             {
                 CreatingMode = creatingMode,
@@ -388,7 +393,8 @@ namespace ToolListHelperUI
                 SkipClamping = skipClamping,
                 NcFile = ncFile,
                 SkipNcFile = skipNcFile,
-                Tools = tools
+                Tools = tools,
+                CreatorId = creator
             };
         }
 

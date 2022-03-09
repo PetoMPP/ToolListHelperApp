@@ -25,5 +25,6 @@ namespace ToolListHelperLibrary.Models
         public NcFileData? NcFile { get; set; }
         public bool SkipNcFile { get; set; }
         public List<ToolData>? Tools { get; set; }
+        public string CreatorId { get; set; }
     }
 }
