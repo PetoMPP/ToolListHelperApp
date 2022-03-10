@@ -82,6 +82,7 @@
             this.browseDataGridView.AllowUserToAddRows = false;
             this.browseDataGridView.AllowUserToDeleteRows = false;
             this.browseDataGridView.AllowUserToOrderColumns = true;
+            this.browseDataGridView.AllowUserToResizeRows = false;
             this.browseDataGridView.BackgroundColor = System.Drawing.Color.White;
             this.browseDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -105,7 +106,7 @@
             this.browseDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.browseDataGridView.Size = new System.Drawing.Size(450, 521);
             this.browseDataGridView.TabIndex = 1;
-            this.browseDataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.BrowseDataGridView_CellDoubleClick);
+            this.browseDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.BrowseDataGridView_CellMouseDoubleClick);
             this.browseDataGridView.SelectionChanged += new System.EventHandler(this.BrowseDataGridView_SelectionChanged);
             // 
             // statusLabel

@@ -51,7 +51,10 @@ namespace ToolListHelperUI
         private void ToolListMakerWindow_Resize(object sender, EventArgs e)
         {
             // Only horizontal adjustments
-            ResizeSectionPanels();
+            if (Width > 0)
+            {
+                ResizeSectionPanels(); 
+            }
         }
 
         private void ResizeSectionPanels()
@@ -256,14 +259,14 @@ namespace ToolListHelperUI
             if (invalidTools.Count > 0)
             {
                 if (MessageBox.Show("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => t.Id ?? t.ItemDescription)
-                    .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                    .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                 {
                     return;
                 }
-                model.Tools = validTools;
             }
+            model.Tools = validTools;
             (string listId, errorMessage) = await TDMConnector.PostListModelAsync(model);
-            if (errorMessage != null)
+            if (errorMessage.Length > 0)
             {
                 UserInterfaceLogic.ShowError(errorMessage, "Błąd podczas tworzenia listy!");
                 return;
@@ -273,6 +276,7 @@ namespace ToolListHelperUI
         }
         private static async Task<string> ValidateModel(ListModel model)
         {
+            // TODO - Add warning about Machineless model
             string errorMessage = string.Empty;
             int errorCounter = 1;
             if (model.Tools?.Count == 0)
@@ -374,7 +378,7 @@ namespace ToolListHelperUI
             bool skipNcFile = skipAddFileRadioButton.Checked;
             NcFileData? ncFile = skipNcFile ? null : new() { FilePath = _filePaths[0], NcFileMode = addFileAsArchiveRadioButton.Checked ? NcFileMode.Archive : addFileAsDevelopingRadioButton.Checked ? NcFileMode.Developing : NcFileMode.Release };
             List<ToolData>? tools = await FileOperations.GetToolsFromFilesAsync(_filePaths, GetFileTypeFromUI());
-            string creator = Environment.UserName;
+            string creator = Environment.UserName.ToUpper();
             ListStatus listStatus = listStatusCheckBox.Checked ? ListStatus.Ready : ListStatus.Preparing;
             return new()
             {
@@ -427,7 +431,14 @@ namespace ToolListHelperUI
             }
             dialog.ShowDialog();
             sourceFilePathTextBox.Text = _filePathString = string.Join('|', dialog.FileNames);
-            _filePaths = _filePathString.Split('|');
+            if (!string.IsNullOrEmpty(_filePathString))
+            {
+                _filePaths = _filePathString.Split('|'); 
+            }
+            else
+            {
+                _filePaths = Array.Empty<string>();
+            }
         }
 
         private void SourceFilePathTextBox_TextChanged(object sender, EventArgs e)

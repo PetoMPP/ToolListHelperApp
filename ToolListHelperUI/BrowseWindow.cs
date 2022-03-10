@@ -50,7 +50,6 @@ namespace ToolListHelperUI
                     LoadProgramData();
                     break;
             }
-            AdjustUI();
         }
 
         private void AdjustUI()
@@ -85,6 +84,7 @@ namespace ToolListHelperUI
             {
                 IEnumerable<ClampingData> clampings = await TDMConnector.GetClampingsAsync(_cancellationToken);
                 browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(clampings);
+                AdjustUI();
             }
             catch (Exception error)
             {
@@ -115,6 +115,7 @@ namespace ToolListHelperUI
             {
                 IEnumerable<MaterialData> materials = await TDMConnector.GetMaterialsAsync(_cancellationToken);
                 browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(materials);
+                AdjustUI();
             }
             catch (Exception error)
             {
@@ -138,6 +139,7 @@ namespace ToolListHelperUI
             {
                 IEnumerable<MachineData> machines = await TDMConnector.GetMachinesAsync(_cancellationToken);
                 browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(machines);
+                AdjustUI();
             }
             catch (Exception error)
             {
@@ -161,6 +163,7 @@ namespace ToolListHelperUI
             {
                 IEnumerable<ProgramData> programs = await TDMConnector.GetProgramsAsync(_cancellationToken);
                 browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(programs);
+                AdjustUI();
             }
             catch (Exception error)
             {
@@ -191,6 +194,10 @@ namespace ToolListHelperUI
 
         private void SendDataToCaller()
         {
+            if (browseDataGridView.SelectedRows.Count == 0)
+            {
+                return;
+            }
             string? output = _mode switch
             {
                 BrowsingMode.ProgramId => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
@@ -213,11 +220,6 @@ namespace ToolListHelperUI
             Close();
         }
 
-        private void BrowseDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SendDataToCaller();
-        }
-
         private void BrowseDataGridView_SelectionChanged(object sender, EventArgs e)
         {
             if (browseDataGridView.SelectedRows.Count > 0)
@@ -227,6 +229,14 @@ namespace ToolListHelperUI
             else
             {
                 okButton.Enabled = false;
+            }
+        }
+
+        private void BrowseDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (browseDataGridView.HitTest(e.X, e.Y).Type == DataGridViewHitTestType.Cell)
+            {
+                SendDataToCaller();
             }
         }
     }

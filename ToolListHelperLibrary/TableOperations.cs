@@ -15,7 +15,7 @@ namespace ToolListHelperLibrary
             Type type = typeof(T);
             PropertyInfo[] properties = type.GetProperties();
 
-            DataTable table = new DataTable("Table");
+            DataTable table = new("Table");
             foreach (PropertyInfo property in properties)
             {
                 table.Columns.Add(property.Name, Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType);
@@ -27,6 +27,7 @@ namespace ToolListHelperLibrary
                 {
                     values[i] = properties[i].GetValue(model);
                 }
+                table.Rows.Add(values);
             }
             return table;
         }

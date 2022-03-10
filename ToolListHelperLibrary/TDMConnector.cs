@@ -85,14 +85,15 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         public static (int changeDate, int changeTime) GetChangeDate(int timestamp)
         {
+            // TODO - make it work for more than 2 timezones
             Dictionary<int, int> epochDictonary = CreateEpochDixtonary();
             int changeTime = timestamp % 86400;
             if (epochDictonary.TryGetValue(timestamp - changeTime - 7200, out int changeDate))
             {
-                return (changeDate, changeTime);
+                return (changeDate, changeTime + 7200);
             }
             changeDate = epochDictonary[timestamp - changeTime - 3600];
-            return (changeDate, changeTime);
+            return (changeDate, changeTime + 3600);
         }
 
         private static Dictionary<int, int> CreateEpochDixtonary()
@@ -129,25 +130,24 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             {
                 throw new ArgumentException("Tools list cannot be null or empty!", nameof(model));
             }
-            if (model.Tools.Select(t => t.ToolType == ToolType.Assembly).Any() && model.Tools.Select(t => t.ToolType == ToolType.Item).Any())
+            if (model.Tools.Any(t => t.ToolType == ToolType.Assembly) && model.Tools.Any(t => t.ToolType == ToolType.Item))
             {
                 throw new NotSupportedException("List of Tools with diffirent tool types are not supported!");
             }
-            if (model.Tools.Select(t => t.ToolType == ToolType.Assembly).Any())
+            if (model.Tools.Any(t => t.ToolType == ToolType.Assembly))
             {
-                header = "INSERT INTO TDM_LISTLISTB (LISTID, POS, TOOLID, TIMESTAMP) VALUES (";
+                header = "INSERT INTO TDM_LISTLISTB (LISTID, LISTLISTPOS, TOOLID, TIMESTAMP) VALUES ";
             }
             else
             {
-                header = "INSERT INTO TDM_LISTLISTB (LISTID, POS, COMPID, TIMESTAMP) VALUES (";
+                header = "INSERT INTO TDM_LISTLISTB (LISTID, LISTLISTPOS, COMPID, TIMESTAMP) VALUES ";
             }
             StringBuilder stringBuilder = new(header);
             for (int i = 0; i < model.Tools.Count; i++)
             {
-                stringBuilder.Append($"('{model.Id}', {i}, '{model.Tools[i].Id}', {timestamp}),");
+                stringBuilder.Append($"('{model.Id}', {i + 1}, '{model.Tools[i].Id}', {timestamp}),");
             }
             stringBuilder.Length--;
-            stringBuilder.Append(')');
             return stringBuilder.ToString();
         }
 
@@ -215,7 +215,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
                 stringBuilder.Append($"LISTTYPE = '{(int?)model.ListType}',");
             }
             stringBuilder.Append($"USERNAME = '{await GetUserNameFromUserId(model.CreatorId, connection)}'");
-            stringBuilder.Append($"WHERE TOOLID = '{model.Id}'");
+            stringBuilder.Append($"WHERE LISTID = '{model.Id}'");
             return stringBuilder.ToString();
         }
 
@@ -259,7 +259,10 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             stringBuilder.Append(model.Machine == null ? "NULL,NULL," : $"'{model.Machine}','{await GetMachineGroupIdByMachineIdAsync(model.Machine, connection)}',");
             stringBuilder.Append(model.Clamping == null ? "NULL," : $"'{model.Clamping}',");
             // TODO - Fix status string
-            stringBuilder.Append(model.ListStatus == ListStatus.Preparing ? "'TOOL LIST IS PREPARING'" : "'TOOL LIST READY'");
+            stringBuilder.Append(model.ListStatus == ListStatus.Preparing ? "'TOOL LIST IS PREPARING'," : "'TOOL LIST READY',");
+            stringBuilder.Append($"{(model.ListType == null ? (int)ListType.Primary : (int)model.ListType)},");
+            stringBuilder.Append($"'{model.CreatorId}')");
+            return stringBuilder.ToString();
         }
 
         public static async Task<IEnumerable<ProgramData>> GetProgramsAsync(CancellationToken cancellationToken)
@@ -278,13 +281,13 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
         {
             // TODO - Verify column names
             using DbConnection connection = GetTDMConnection();
-            return await connection.QueryAsync<MaterialData>(new CommandDefinition("SELECT A.MATERIALID AS Id, a.NAME AS Name, (SELECT TOP 1 b.NAME FROM TDM_MATERIALGROUPS WHERE b.ID = a.MATERIALGROUPID) AS Group FROM TDM_MATERIAL AS a", commandType: CommandType.Text, cancellationToken: cancellationToken));
+            return await connection.QueryAsync<MaterialData>(new CommandDefinition("SELECT A.MATERIALID AS Id, a.NAME AS Name, (SELECT TOP 1 b.NAME01 FROM TDM_MATERIALGROUP AS b WHERE b.MATERIALGROUPID = a.MATERIALGROUPID) AS ParentGroup FROM TDM_MATERIAL AS a", commandType: CommandType.Text, cancellationToken: cancellationToken));
         }
 
         public static async Task<IEnumerable<MachineData>> GetMachinesAsync(CancellationToken cancellationToken)
         {
             using DbConnection connection = GetTDMConnection();
-            return await connection.QueryAsync<MachineData>(new CommandDefinition("SELECT MACHINEID AS Id, NAME AS Name, MACHINEGROUPID AS Group FROM TDM_MATERIAL", commandType: CommandType.Text, cancellationToken: cancellationToken));
+            return await connection.QueryAsync<MachineData>(new CommandDefinition("SELECT MACHINEID AS Id, NAME AS Name, MACHINEGROUPID AS ParentGroup FROM TDM_MACHINE", commandType: CommandType.Text, cancellationToken: cancellationToken));
         }
 
         public static async Task<string> GetNextListIdAsync()
@@ -322,7 +325,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private static string CreateListIdFromInt(int idValue, int length)
         {
-            string output = idValue.ToString();
+            string output = (idValue + 1).ToString();
             for (int i = output.Length; i < length; i++)
             {
                 output = "0" + output;
@@ -358,18 +361,20 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolAssembly(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
+            // TODO - make a loop
             if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(TOOLID) FROM TDM_TOOL WHERE TOOLID = '{tool.Id}'", commandType: CommandType.Text)) > 0)
             {
                 validTools.Add(tool);
                 return (invalidTools, validTools);
             }
             invalidTools.Add(tool);
-            return (validTools, invalidTools);
+            return (invalidTools, validTools);
         }
 
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolItem(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             tool.ItemDescription = CsvOperations.GetDictonaryDescriptionValue(tool.ItemDescription);
+            // TODO - make a loop
             if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(COMPID) FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text)) == 0)
             {
                 invalidTools.Add(tool);
