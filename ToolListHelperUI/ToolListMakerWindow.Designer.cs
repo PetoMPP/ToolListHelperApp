@@ -118,6 +118,7 @@
             this.creatingModeUpdateRadioButton = new System.Windows.Forms.RadioButton();
             this.creatingModeNewRadioButton = new System.Windows.Forms.RadioButton();
             this.creatingModeLabel = new System.Windows.Forms.Label();
+            this.listStatusCheckBox = new System.Windows.Forms.CheckBox();
             this.descriptionPanel.SuspendLayout();
             this.createPanel.SuspendLayout();
             this.wizardPanel.SuspendLayout();
@@ -1203,6 +1204,7 @@
             // creatingModePanel
             // 
             this.creatingModePanel.BackColor = System.Drawing.Color.White;
+            this.creatingModePanel.Controls.Add(this.listStatusCheckBox);
             this.creatingModePanel.Controls.Add(this.programIdPanel);
             this.creatingModePanel.Controls.Add(this.creatingModeUpdateRadioButton);
             this.creatingModePanel.Controls.Add(this.creatingModeNewRadioButton);
@@ -1311,6 +1313,18 @@
             this.creatingModeLabel.TabIndex = 0;
             this.creatingModeLabel.Text = "Wybierz tryb pracy programu";
             this.creatingModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // listStatusCheckBox
+            // 
+            this.listStatusCheckBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listStatusCheckBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
+            this.listStatusCheckBox.Location = new System.Drawing.Point(0, 77);
+            this.listStatusCheckBox.Name = "listStatusCheckBox";
+            this.listStatusCheckBox.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
+            this.listStatusCheckBox.Size = new System.Drawing.Size(225, 47);
+            this.listStatusCheckBox.TabIndex = 5;
+            this.listStatusCheckBox.Text = "Stwórz listę jako gotową";
+            this.listStatusCheckBox.UseVisualStyleBackColor = true;
             // 
             // ToolListMakerWindow
             // 
@@ -1463,5 +1477,6 @@
         private RadioButton noMaterialRadioButton;
         private Label materialLabel;
         private Panel browseFilesButtonPanel;
+        private CheckBox listStatusCheckBox;
     }
 }

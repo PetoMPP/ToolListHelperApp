@@ -62,7 +62,7 @@ namespace ToolListHelperLibrary
 
         private static async Task InsertLog(ListModel model, DbConnection connection, string logMessage)
         {
-            await connection.ExecuteAsync(new CommandDefinition(GenerateLogInsertString(model, connection, logMessage)));
+            await connection.ExecuteAsync(new CommandDefinition(await GenerateLogInsertString(model, connection, logMessage)));
         }
 
         private static async Task OverwriteTools(ListModel model, DbConnection connection)
@@ -70,18 +70,85 @@ namespace ToolListHelperLibrary
             await connection.ExecuteAsync(new CommandDefinition($"DELETE FROM TDM_LISTLISTB WHERE LISTID = '{model.Id}'"));
             if (model.Tools?.Count > 0)
             {
-                await connection.ExecuteAsync(new CommandDefinition(GenerateInsertToolsStringFromModel(model, connection), commandType: CommandType.Text));
+                await connection.ExecuteAsync(new CommandDefinition(GenerateInsertToolsStringFromModel(model), commandType: CommandType.Text));
             }
         }
 
-        private static string GenerateLogInsertString(ListModel model, DbConnection connection, string logMessage)
+        private async static Task<string> GenerateLogInsertString(ListModel model, DbConnection connection, string logMessage)
         {
-            throw new NotImplementedException();
+            int timestamp = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
+            (int changeDate, int changeTime) = GetChangeDate(timestamp);
+            return @$"
+INSERT INTO TMS_CHANGEINFO (TIMESTAMP, TNAME, ID, POS, USERID, NOTE, CHANGEDATE, CHANGETIME, CREATIONTIMESTAMP) 
+VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(model.Id, connection)}', '{model.CreatorId}','{logMessage}' ,{changeDate}, {changeTime}, {timestamp})";
         }
 
-        private static string GenerateInsertToolsStringFromModel(ListModel model, DbConnection connection)
+        public static (int changeDate, int changeTime) GetChangeDate(int timestamp)
         {
-            throw new NotImplementedException();
+            Dictionary<int, int> epochDictonary = CreateEpochDixtonary();
+            int changeTime = timestamp % 86400;
+            if (epochDictonary.TryGetValue(timestamp - changeTime - 7200, out int changeDate))
+            {
+                return (changeDate, changeTime);
+            }
+            changeDate = epochDictonary[timestamp - changeTime - 3600];
+            return (changeDate, changeTime);
+        }
+
+        private static Dictionary<int, int> CreateEpochDixtonary()
+        {
+            Dictionary<int, int> epochDictonary = new();
+            List<int> epochKeys = CreateRange(1543100400, 1975096800, 86400).ToList();
+            List<int> tdmValues = Enumerable.Range(153000, 158000).ToList();
+            for (int i = 0; i < epochKeys.Count; i++)
+            {
+                epochDictonary.Add(epochKeys[i], tdmValues[i]);
+            }
+            return epochDictonary;
+        }
+
+        private static IEnumerable<int> CreateRange(int startValue, int endVal, int step)
+        {
+            for (int i = startValue; i < endVal; i += step)
+            {
+                yield return i;
+            }
+        }
+
+        private static async Task<int> GetNextLogfilePosition(string id, DbConnection connection)
+        {
+            return (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT MAX(POS) FROM TMS_CHANGEINFO WHERE ID = '{id}' AND TNAME = 'TDM_LIST'", commandType: CommandType.Text))) + 1;
+        }
+
+        private static string GenerateInsertToolsStringFromModel(ListModel model)
+        {
+            // TODO - Fix Column names
+            int timestamp = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
+            string header;
+            if (model.Tools == null || model.Tools.Count == 0)
+            {
+                throw new ArgumentException("Tools list cannot be null or empty!", nameof(model));
+            }
+            if (model.Tools.Select(t => t.ToolType == ToolType.Assembly).Any() && model.Tools.Select(t => t.ToolType == ToolType.Item).Any())
+            {
+                throw new NotSupportedException("List of Tools with diffirent tool types are not supported!");
+            }
+            if (model.Tools.Select(t => t.ToolType == ToolType.Assembly).Any())
+            {
+                header = "INSERT INTO TDM_LISTLISTB (LISTID, POS, TOOLID, TIMESTAMP) VALUES (";
+            }
+            else
+            {
+                header = "INSERT INTO TDM_LISTLISTB (LISTID, POS, COMPID, TIMESTAMP) VALUES (";
+            }
+            StringBuilder stringBuilder = new(header);
+            for (int i = 0; i < model.Tools.Count; i++)
+            {
+                stringBuilder.Append($"('{model.Id}', {i}, '{model.Tools[i].Id}', {timestamp}),");
+            }
+            stringBuilder.Length--;
+            stringBuilder.Append(')');
+            return stringBuilder.ToString();
         }
 
         private async static Task<string> GenerateUpdateStringFromModelAsync(ListModel model, DbConnection connection)
@@ -162,9 +229,37 @@ namespace ToolListHelperLibrary
             return await connection.ExecuteScalarAsync<string>($"SELECT MACHINEGROUPID FROM TDM_MACHINE WHERE MACHINEID = '{machine}'");
         }
 
-        private static Task<(string listId, string errorMessage)> CreateListAsync(ListModel model, DbConnection connection, string v)
+        private async static Task<(string listId, string errorMessage)> CreateListAsync(ListModel model, DbConnection connection, string logMessage)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Change List Data
+                await connection.ExecuteAsync(new CommandDefinition(await GenerateCreationStringFromModelAsync(model, connection), commandType: CommandType.Text));
+                // Overwrite Tool List
+                await OverwriteTools(model, connection);
+                // Insert Logfile
+                await InsertLog(model, connection, logMessage);
+            }
+            catch (Exception error)
+            {
+                return (model.Id, error.Message);
+            }
+            return (model.Id, string.Empty);
+        }
+
+        private static async Task<string> GenerateCreationStringFromModelAsync(ListModel model, DbConnection connection)
+        {
+            StringBuilder stringBuilder = new ("INSERT INTO TDM_LIST (TIMESTAMP, LISTID, NCPROGRAM, PARTNAME, WORKPIECEDRAWING, MATERIALID, MACHINEID, MACHINEGROUPID, FIXTURE, STATEID1, LISTTYPE, USERNAME) VALUES (");
+            stringBuilder.Append($"{DateTimeOffset.Now.ToUnixTimeSeconds()},");
+            stringBuilder.Append($"'{model.Id}',");
+            stringBuilder.Append(model.Name == null ? "NULL," : $"'{model.Name}',");
+            stringBuilder.Append(model.Description == null ? "NULL," : $"'{model.Description}',");
+            stringBuilder.Append($"'{model.Id}',");
+            stringBuilder.Append(model.Material == null ? "NULL," : $"'{model.Material}',");
+            stringBuilder.Append(model.Machine == null ? "NULL,NULL," : $"'{model.Machine}','{await GetMachineGroupIdByMachineIdAsync(model.Machine, connection)}',");
+            stringBuilder.Append(model.Clamping == null ? "NULL," : $"'{model.Clamping}',");
+            // TODO - Fix status string
+            stringBuilder.Append(model.ListStatus == ListStatus.Preparing ? "'TOOL LIST IS PREPARING'" : "'TOOL LIST READY'");
         }
 
         public static async Task<IEnumerable<ProgramData>> GetProgramsAsync(CancellationToken cancellationToken)

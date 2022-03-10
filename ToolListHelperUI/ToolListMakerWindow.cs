@@ -375,6 +375,7 @@ namespace ToolListHelperUI
             NcFileData? ncFile = skipNcFile ? null : new() { FilePath = _filePaths[0], NcFileMode = addFileAsArchiveRadioButton.Checked ? NcFileMode.Archive : addFileAsDevelopingRadioButton.Checked ? NcFileMode.Developing : NcFileMode.Release };
             List<ToolData>? tools = await FileOperations.GetToolsFromFilesAsync(_filePaths, GetFileTypeFromUI());
             string creator = Environment.UserName;
+            ListStatus listStatus = listStatusCheckBox.Checked ? ListStatus.Ready : ListStatus.Preparing;
             return new()
             {
                 CreatingMode = creatingMode,
@@ -394,7 +395,8 @@ namespace ToolListHelperUI
                 NcFile = ncFile,
                 SkipNcFile = skipNcFile,
                 Tools = tools,
-                CreatorId = creator
+                CreatorId = creator,
+                ListStatus = listStatus
             };
         }
 
@@ -403,6 +405,7 @@ namespace ToolListHelperUI
             // TODO - Fix pathes
             OpenFileDialog dialog = new();
             dialog.Multiselect = true;
+            dialog.RestoreDirectory = true;
             switch (GetFileTypeFromUI())
             {
                 case NcFileType.Sinumeric:

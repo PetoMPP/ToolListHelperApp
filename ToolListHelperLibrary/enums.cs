@@ -38,4 +38,9 @@
         Test,
         Prod
     }
+    public enum ListStatus
+    {
+        Preparing,
+        Ready
+    }
 }

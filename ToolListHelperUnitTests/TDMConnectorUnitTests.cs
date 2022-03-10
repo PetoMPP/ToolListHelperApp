@@ -16,5 +16,10 @@ namespace ToolListHelperUnitTests
             Assert.Equal("kamil100", TDMConnector.CreateListIdFromString("kamil99"));
             Assert.Equal("berek1", TDMConnector.CreateListIdFromString("berek"));
         }
+        [Fact]
+        public void ChangeDate()
+        {
+            Assert.NotNull(() => TDMConnector.GetChangeDate((int)DateTimeOffset.Now.ToUnixTimeSeconds()));
+        }
     }
 }
