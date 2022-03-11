@@ -67,23 +67,65 @@ namespace ToolListHelperLibrary
         private async static Task ExecuteFileTransfer(ListModel model, DbConnection connection)
         {
             // Get machine paths
-            Dictionary<NcFileMode, string>? machinePaths = await GetMachinePathsDictonary(model, connection);
+            Dictionary<NcFileMode, string>? machinePaths = await GetMachinePathsDictonary(model.Machine ?? string.Empty, connection);
             if (model.CreatingMode == CreatingMode.New)
             {
-                await SendFile(model, 1, machinePaths[model.NcFile.NcFileMode], connection);
+                NcFileMode? ncFileMode = model.NcFile?.NcFileMode;
+                string? filePath = model.NcFile?.FilePath;
+                await SendFile(filePath ?? string.Empty, 1, machinePaths[ncFileMode == null ? NcFileMode.Archive : (NcFileMode)ncFileMode], connection);
                 return;
             }
             // Get next Version num
+            int nextVersion = await GetNcFileMaxVersion(model.Id, connection) + 1;
             // If creating as released for prod and there is already released move it back to archive
+            if (await CheckIfAnyNcFileIsReleased(model.Id, connection))
+            {
+                await MoveReleasedFileToArchive(model, machinePaths, connection);
+            }
         }
 
-        private static async Task<Dictionary<NcFileMode, string>> GetMachinePathsDictonary(ListModel model, DbConnection connection)
+        private async static Task MoveReleasedFileToArchive(ListModel model, Dictionary<NcFileMode, string> machinePaths, DbConnection connection)
+        {
+            // Get path of file
+            int version = await GetNcFileMaxVersion(model.Id, connection);
+            string filePath = Path.Combine(machinePaths[NcFileMode.Release], model.Name ?? string.Empty) + '.' + CreateVersionString(version) + '.' + await GetNcFileExtension(model.Id, version, connection);
+            // Get target path
+            // Move file
+            // Update file state
+        }
+
+        private static async Task<string> GetNcFileExtension(string id, int version, DbConnection connection)
+        {
+            return await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT EXTENSION FROM NCM_PRODDOCB WHERE VERSION = {version} AND LISTID = '{id}'"));
+        }
+
+        private static string CreateVersionString(int version)
+        {
+            string versionString = version.ToString();
+            for (int i = versionString.Length; i < 5; i++)
+            {
+                versionString = "0" + versionString;
+            }
+            return versionString;
+        }
+
+        private static async Task<bool> CheckIfAnyNcFileIsReleased(string id, DbConnection connection)
+        {
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(STATEID) FROM NCM_PRODDOCB WHERE STATEID = 'RELEASE FOR PRODUCTION' AND LISTID = '{id}'", commandType: CommandType.Text));
+        }
+
+        private async static Task<int> GetNcFileMaxVersion(string id, DbConnection connection)
+        {
+            return await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT MAX(VERSION) FROM NCM_PRODDOCB WHERE LISTID = '{id}'", commandType: CommandType.Text));
+        }
+
+        private static async Task<Dictionary<NcFileMode, string>> GetMachinePathsDictonary(string machine, DbConnection connection)
         {
             Dictionary<NcFileMode, string> fileModesPathes = new();
             List<(string state, string path)> pathsForMachine = (await connection.QueryAsync<(string state, string path)>(new CommandDefinition($@"
 SELECT PATH AS path, STATEID AS state
 FROM TDM_MACHINESTATEPATH
-WHERE MACHINEID = '{model.Machine}'"))).ToList();
+WHERE MACHINEID = '{machine}'"))).ToList();
             foreach (NcFileMode fileMode in Enum.GetValues<NcFileMode>())
             {
                 fileModesPathes.Add(fileMode, pathsForMachine.Where(p => p.state == GetStateNameFromNcFileMode(fileMode)).First().path);
@@ -95,14 +137,14 @@ WHERE MACHINEID = '{model.Machine}'"))).ToList();
         {
             return fileMode switch
             {
-                NcFileMode.Archive => "ARCHIVED",
+                NcFileMode.Archive => "ARCHIVE",
                 NcFileMode.Developing => "NC DEVELOPING",
-                NcFileMode.Release => "RELEASED FOR PRODUCTION",
+                NcFileMode.Release => "RELEASE FOR PRODUCTION",
                 _ => throw new InvalidOperationException()
             };
         }
 
-        private async static Task SendFile(ListModel model, int version, DbConnection connection)
+        private async static Task SendFile(string sourceFilePath, int version, string machinePath, DbConnection connection)
         {
             // Add entry to TDM
             
@@ -265,7 +307,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private async static Task<string> GetUserNameFromUserId(string creatorId, DbConnection connection)
         {
-            return await connection.ExecuteScalarAsync<string>($"SELECT CONCAT(FIRSTNAME, '', NAME) FROM TMS_USER WHERE USERNAME = '{creatorId}'");
+            return await connection.ExecuteScalarAsync<string>($"SELECT CONCAT(FIRSTNAME, ' ', NAME) FROM TMS_USER WHERE USERNAME = '{creatorId}'");
         }
 
         private async static Task<string> GetMachineGroupIdByMachineIdAsync(string machine, DbConnection connection)
@@ -304,7 +346,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             stringBuilder.Append(model.Clamping == null ? "NULL," : $"'{model.Clamping}',");
             stringBuilder.Append(model.ListStatus == ListStatus.Preparing ? "'TOOL LIST IS PREPARING'," : "'TOOL LIST IS DONE',");
             stringBuilder.Append($"{(model.ListType == null ? (int)ListType.Primary : (int)model.ListType)},");
-            stringBuilder.Append($"'{model.CreatorId}')");
+            stringBuilder.Append($"'{GetUserNameFromUserId(model.CreatorId, connection)}')");
             return stringBuilder.ToString();
         }
 
