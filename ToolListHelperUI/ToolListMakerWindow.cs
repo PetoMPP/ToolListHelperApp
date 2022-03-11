@@ -255,11 +255,21 @@ namespace ToolListHelperUI
                 UserInterfaceLogic.ShowError(errorMessage, "Błąd danych!");
                 return;
             }
+            if (string.IsNullOrEmpty(model.Machine) && !model.SkipMachine &&
+                UserInterfaceLogic.ShowWarning("Nie wybrano maszyny dla listy narzędziowej, czy chcesz kontynuować?", "Brak maszyny!") == DialogResult.No)
+            {
+                return;
+            }
+            if (!model.SkipNcFile && _filePaths.Length > 1 &&
+                UserInterfaceLogic.ShowWarning($"Wybrano więcej niż jeden plik źrodłowy do przesłania do TDM, program wspiera przesyłanie tylko jednego pliku naraz, przez co tylko plik: \"{Path.GetFileName(model.NcFile?.FilePath)}\" zostanie przesłany.\n\nKontynuować?", "Wybrano wiele list do przesłania!") == DialogResult.No)
+            {
+                return;
+            }
             (List<ToolData> invalidTools, List<ToolData> validTools) = await TDMConnector.ValidateTools(model.Tools);
             if (invalidTools.Count > 0)
             {
-                if (MessageBox.Show("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => t.Id ?? t.ItemDescription)
-                    .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                if (UserInterfaceLogic.ShowWarning("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => t.Id ?? t.ItemDescription)
+                    .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!") == DialogResult.No)
                 {
                     return;
                 }
@@ -276,7 +286,6 @@ namespace ToolListHelperUI
         }
         private static async Task<string> ValidateModel(ListModel model)
         {
-            // TODO - Add warning about Machineless model
             string errorMessage = string.Empty;
             int errorCounter = 1;
             if (model.Tools?.Count == 0)

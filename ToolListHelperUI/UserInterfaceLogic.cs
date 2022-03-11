@@ -18,5 +18,10 @@ namespace ToolListHelperUI
             SuccessPrompt successPrompt = new(listId, caller);
             successPrompt.ShowDialog();
         }
+
+        internal static DialogResult ShowWarning(string message, string header)
+        {
+            return MessageBox.Show(message, header, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        }
     }
 }

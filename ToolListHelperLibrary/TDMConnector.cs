@@ -52,12 +52,61 @@ namespace ToolListHelperLibrary
                 await OverwriteTools(model, connection);
                 // Insert Logfile
                 await InsertLog(model, connection, logMessage);
+                if (!model.SkipNcFile)
+                {
+                    await ExecuteFileTransfer(model, connection);
+                }
             }
             catch (Exception error)
             {
                 return (model.Id, error.Message);
             }
             return (model.Id, string.Empty);
+        }
+
+        private async static Task ExecuteFileTransfer(ListModel model, DbConnection connection)
+        {
+            // Get machine paths
+            Dictionary<NcFileMode, string>? machinePaths = await GetMachinePathsDictonary(model, connection);
+            if (model.CreatingMode == CreatingMode.New)
+            {
+                await SendFile(model, 1, machinePaths[model.NcFile.NcFileMode], connection);
+                return;
+            }
+            // Get next Version num
+            // If creating as released for prod and there is already released move it back to archive
+        }
+
+        private static async Task<Dictionary<NcFileMode, string>> GetMachinePathsDictonary(ListModel model, DbConnection connection)
+        {
+            Dictionary<NcFileMode, string> fileModesPathes = new();
+            List<(string state, string path)> pathsForMachine = (await connection.QueryAsync<(string state, string path)>(new CommandDefinition($@"
+SELECT PATH AS path, STATEID AS state
+FROM TDM_MACHINESTATEPATH
+WHERE MACHINEID = '{model.Machine}'"))).ToList();
+            foreach (NcFileMode fileMode in Enum.GetValues<NcFileMode>())
+            {
+                fileModesPathes.Add(fileMode, pathsForMachine.Where(p => p.state == GetStateNameFromNcFileMode(fileMode)).First().path);
+            }
+            return fileModesPathes;
+        }
+
+        private static string GetStateNameFromNcFileMode(NcFileMode fileMode)
+        {
+            return fileMode switch
+            {
+                NcFileMode.Archive => "ARCHIVED",
+                NcFileMode.Developing => "NC DEVELOPING",
+                NcFileMode.Release => "RELEASED FOR PRODUCTION",
+                _ => throw new InvalidOperationException()
+            };
+        }
+
+        private async static Task SendFile(ListModel model, int version, DbConnection connection)
+        {
+            // Add entry to TDM
+            
+            // Copy File to Directory
         }
 
         private static async Task InsertLog(ListModel model, DbConnection connection, string logMessage)
@@ -85,15 +134,11 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         public static (int changeDate, int changeTime) GetChangeDate(int timestamp)
         {
-            // TODO - make it work for more than 2 timezones
             Dictionary<int, int> epochDictonary = CreateEpochDixtonary();
             int changeTime = timestamp % 86400;
-            if (epochDictonary.TryGetValue(timestamp - changeTime - 7200, out int changeDate))
-            {
-                return (changeDate, changeTime + 7200);
-            }
-            changeDate = epochDictonary[timestamp - changeTime - 3600];
-            return (changeDate, changeTime + 3600);
+            int timeDifference = TimeZoneInfo.Local.BaseUtcOffset.Hours * 3600;
+            int changeDate = epochDictonary[timestamp - changeTime - timeDifference];
+            return (changeDate, changeTime + timeDifference);
         }
 
         private static Dictionary<int, int> CreateEpochDixtonary()
@@ -123,7 +168,6 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private static string GenerateInsertToolsStringFromModel(ListModel model)
         {
-            // TODO - Fix Column names
             int timestamp = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
             string header;
             if (model.Tools == null || model.Tools.Count == 0)
@@ -258,8 +302,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             stringBuilder.Append(model.Material == null ? "NULL," : $"'{model.Material}',");
             stringBuilder.Append(model.Machine == null ? "NULL,NULL," : $"'{model.Machine}','{await GetMachineGroupIdByMachineIdAsync(model.Machine, connection)}',");
             stringBuilder.Append(model.Clamping == null ? "NULL," : $"'{model.Clamping}',");
-            // TODO - Fix status string
-            stringBuilder.Append(model.ListStatus == ListStatus.Preparing ? "'TOOL LIST IS PREPARING'," : "'TOOL LIST READY',");
+            stringBuilder.Append(model.ListStatus == ListStatus.Preparing ? "'TOOL LIST IS PREPARING'," : "'TOOL LIST IS DONE',");
             stringBuilder.Append($"{(model.ListType == null ? (int)ListType.Primary : (int)model.ListType)},");
             stringBuilder.Append($"'{model.CreatorId}')");
             return stringBuilder.ToString();
@@ -279,7 +322,6 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         public static async Task<IEnumerable<MaterialData>> GetMaterialsAsync(CancellationToken cancellationToken)
         {
-            // TODO - Verify column names
             using DbConnection connection = GetTDMConnection();
             return await connection.QueryAsync<MaterialData>(new CommandDefinition("SELECT A.MATERIALID AS Id, a.NAME AS Name, (SELECT TOP 1 b.NAME01 FROM TDM_MATERIALGROUP AS b WHERE b.MATERIALGROUPID = a.MATERIALGROUPID) AS ParentGroup FROM TDM_MATERIAL AS a", commandType: CommandType.Text, cancellationToken: cancellationToken));
         }
@@ -361,7 +403,6 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolAssembly(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
-            // TODO - make a loop
             if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(TOOLID) FROM TDM_TOOL WHERE TOOLID = '{tool.Id}'", commandType: CommandType.Text)) > 0)
             {
                 validTools.Add(tool);
@@ -374,7 +415,6 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolItem(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             tool.ItemDescription = CsvOperations.GetDictonaryDescriptionValue(tool.ItemDescription);
-            // TODO - make a loop
             if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(COMPID) FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text)) == 0)
             {
                 invalidTools.Add(tool);
