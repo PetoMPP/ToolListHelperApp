@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolListHelperUI", "ToolLis
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolListHelperLibrary", "ToolListHelperLibrary\ToolListHelperLibrary.csproj", "{846948F1-BDDB-49AD-9BB5-827ADC0170C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolListHelperUnitTests", "ToolListHelperUnitTests\ToolListHelperUnitTests.csproj", "{0AC6F848-137E-46B2-A97F-4480460E42B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolListHelperUnitTests", "ToolListHelperUnitTests\ToolListHelperUnitTests.csproj", "{0AC6F848-137E-46B2-A97F-4480460E42B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

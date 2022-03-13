@@ -110,6 +110,7 @@
             this.autoNameRadioButton = new System.Windows.Forms.RadioButton();
             this.programNameLabel = new System.Windows.Forms.Label();
             this.creatingModePanel = new System.Windows.Forms.Panel();
+            this.listStatusCheckBox = new System.Windows.Forms.CheckBox();
             this.programIdPanel = new System.Windows.Forms.Panel();
             this.programIdTextBoxPanel = new System.Windows.Forms.Panel();
             this.programIdTextBox = new System.Windows.Forms.TextBox();
@@ -118,7 +119,6 @@
             this.creatingModeUpdateRadioButton = new System.Windows.Forms.RadioButton();
             this.creatingModeNewRadioButton = new System.Windows.Forms.RadioButton();
             this.creatingModeLabel = new System.Windows.Forms.Label();
-            this.listStatusCheckBox = new System.Windows.Forms.CheckBox();
             this.descriptionPanel.SuspendLayout();
             this.createPanel.SuspendLayout();
             this.wizardPanel.SuspendLayout();
@@ -259,6 +259,7 @@
             this.shopturnModeRadioButton.TabIndex = 4;
             this.shopturnModeRadioButton.Text = "Kod programu ShopTurn";
             this.shopturnModeRadioButton.UseVisualStyleBackColor = true;
+            this.shopturnModeRadioButton.CheckedChanged += new System.EventHandler(this.FileModeRadioButton_CheckedChanged);
             // 
             // fusionModeRadioButton
             // 
@@ -272,6 +273,7 @@
             this.fusionModeRadioButton.TabIndex = 3;
             this.fusionModeRadioButton.Text = "Plik projektu Fusion";
             this.fusionModeRadioButton.UseVisualStyleBackColor = true;
+            this.fusionModeRadioButton.CheckedChanged += new System.EventHandler(this.FileModeRadioButton_CheckedChanged);
             // 
             // sinumericModeRadioButton
             // 
@@ -287,6 +289,7 @@
             this.sinumericModeRadioButton.TabStop = true;
             this.sinumericModeRadioButton.Text = "Kod NC Sinumeric";
             this.sinumericModeRadioButton.UseVisualStyleBackColor = true;
+            this.sinumericModeRadioButton.CheckedChanged += new System.EventHandler(this.FileModeRadioButton_CheckedChanged);
             // 
             // modeLabel
             // 
@@ -314,6 +317,7 @@
             this.autoModeRadioButton.TabIndex = 1;
             this.autoModeRadioButton.Text = "Wybierz automatycznie";
             this.autoModeRadioButton.UseVisualStyleBackColor = true;
+            this.autoModeRadioButton.CheckedChanged += new System.EventHandler(this.FileModeRadioButton_CheckedChanged);
             // 
             // sourceFilePanel
             // 
@@ -1215,6 +1219,18 @@
             this.creatingModePanel.Size = new System.Drawing.Size(450, 124);
             this.creatingModePanel.TabIndex = 2;
             // 
+            // listStatusCheckBox
+            // 
+            this.listStatusCheckBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listStatusCheckBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
+            this.listStatusCheckBox.Location = new System.Drawing.Point(0, 77);
+            this.listStatusCheckBox.Name = "listStatusCheckBox";
+            this.listStatusCheckBox.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
+            this.listStatusCheckBox.Size = new System.Drawing.Size(225, 47);
+            this.listStatusCheckBox.TabIndex = 5;
+            this.listStatusCheckBox.Text = "Stwórz listę jako gotową";
+            this.listStatusCheckBox.UseVisualStyleBackColor = true;
+            // 
             // programIdPanel
             // 
             this.programIdPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -1314,18 +1330,6 @@
             this.creatingModeLabel.Text = "Wybierz tryb pracy programu";
             this.creatingModeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // listStatusCheckBox
-            // 
-            this.listStatusCheckBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.listStatusCheckBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.listStatusCheckBox.Location = new System.Drawing.Point(0, 77);
-            this.listStatusCheckBox.Name = "listStatusCheckBox";
-            this.listStatusCheckBox.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
-            this.listStatusCheckBox.Size = new System.Drawing.Size(225, 47);
-            this.listStatusCheckBox.TabIndex = 5;
-            this.listStatusCheckBox.Text = "Stwórz listę jako gotową";
-            this.listStatusCheckBox.UseVisualStyleBackColor = true;
-            // 
             // ToolListMakerWindow
             // 
             this.AllowDrop = true;
@@ -1335,12 +1339,13 @@
             this.ClientSize = new System.Drawing.Size(900, 780);
             this.Controls.Add(this.settingsPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MinimumSize = new System.Drawing.Size(10, 0);
             this.Name = "ToolListMakerWindow";
             this.Text = "ToolListMakerWindow";
             this.Shown += new System.EventHandler(this.ToolListMakerWindow_Shown);
+            this.SizeChanged += new System.EventHandler(this.ToolListMakerWindow_Shown);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.SourceFilePathTextBox_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.SourceFilePathTextBox_DragEnter);
-            this.Resize += new System.EventHandler(this.ToolListMakerWindow_Resize);
             this.descriptionPanel.ResumeLayout(false);
             this.createPanel.ResumeLayout(false);
             this.wizardPanel.ResumeLayout(false);

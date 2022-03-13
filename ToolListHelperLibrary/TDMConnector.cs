@@ -55,6 +55,8 @@ namespace ToolListHelperLibrary
                 if (!model.SkipNcFile)
                 {
                     await ExecuteFileTransfer(model, connection);
+                    // TODO - Check if tdm logs file transfers
+                    // await InsertLog(model, connection, logMessage);
                 }
             }
             catch (Exception error)
@@ -68,35 +70,81 @@ namespace ToolListHelperLibrary
         {
             // Get machine paths
             Dictionary<NcFileMode, string>? machinePaths = await GetMachinePathsDictonary(model.Machine ?? string.Empty, connection);
+            NcFileMode ncFileMode = model.NcFile.NcFileMode;
+            string filePath = model.NcFile.FilePath ?? string.Empty;
+            string targetPath;
             if (model.CreatingMode == CreatingMode.New)
             {
-                NcFileMode? ncFileMode = model.NcFile?.NcFileMode;
-                string? filePath = model.NcFile?.FilePath;
-                await SendFile(filePath ?? string.Empty, 1, machinePaths[ncFileMode == null ? NcFileMode.Archive : (NcFileMode)ncFileMode], connection);
+                targetPath = Path.Combine(machinePaths[NcFileMode.Archive], model.Name?.ToUpper() ?? string.Empty) + '.' + CreateVersionString(1) + '.' + Path.GetExtension(filePath);
+                await SendNewFile(model, connection, GetStateNameFromNcFileMode(ncFileMode), filePath, 1, targetPath);
                 return;
             }
             // Get next Version num
             int nextVersion = await GetNcFileMaxVersion(model.Id, connection) + 1;
             // If creating as released for prod and there is already released move it back to archive
-            if (await CheckIfAnyNcFileIsReleased(model.Id, connection))
+            if (ncFileMode == NcFileMode.Release && await CheckIfAnyNcFileIsReleased(model.Id, connection))
             {
                 await MoveReleasedFileToArchive(model, machinePaths, connection);
             }
+            targetPath = Path.Combine(machinePaths[NcFileMode.Archive], model.Name?.ToUpper() ?? string.Empty) + '.' + CreateVersionString(nextVersion) + '.' + Path.GetExtension(filePath);
+            // Copy source file to machine path
+            // Update file state
+            await SendNewFile(model, connection, GetStateNameFromNcFileMode(ncFileMode), filePath, nextVersion, targetPath);
+        }
+
+        private async static Task SendNewFile(ListModel model, DbConnection connection, string targetState, string filePath, int version, string targetPath)
+        {
+            File.Copy(filePath, targetPath);
+            await InsertFileState(model, version, targetState, Path.GetExtension(filePath).ToUpper(), connection);
+        }
+
+        private async static Task InsertFileState(ListModel model, int version, string targetState, string extension, DbConnection connection)
+        {
+            // TODO - Fix column names
+            await connection.ExecuteAsync(new CommandDefinition(@$"
+INSERT INTO NCM_PRODDOCB (FILEID, LISTID, EXTENSION, STATEID, VERSION) 
+VALUES '{model.Name?.ToUpper()}', '{model.Id}', '{extension}', '{targetState}', {version}", commandType: CommandType.Text));
+        }
+
+        private static async Task SendUpdateFile(string id, DbConnection connection, string targetState, string filePath, int version, string targetPath)
+        {
+            File.Move(filePath, targetPath);
+            await SetFileState(id, version, targetState, connection);
         }
 
         private async static Task MoveReleasedFileToArchive(ListModel model, Dictionary<NcFileMode, string> machinePaths, DbConnection connection)
         {
             // Get path of file
-            int version = await GetNcFileMaxVersion(model.Id, connection);
-            string filePath = Path.Combine(machinePaths[NcFileMode.Release], model.Name ?? string.Empty) + '.' + CreateVersionString(version) + '.' + await GetNcFileExtension(model.Id, version, connection);
+            int version = await GetNcFileMaxVersion(model.Id, connection, NcFileMode.Release);
+            string versionString = CreateVersionString(version);
+            string extension = await GetNcFileExtension(model.Id, version, connection);
+            string filePath = Path.Combine(machinePaths[NcFileMode.Release], model.Name ?? string.Empty) + '.' + versionString + '.' + extension;
             // Get target path
-            // Move file
-            // Update file state
+            string targetPath = Path.Combine(machinePaths[NcFileMode.Archive], model.Name ?? string.Empty) + '.' + versionString + '.' + extension;
+            try
+            {
+                await SendUpdateFile(model.Id, connection, GetStateNameFromNcFileMode(NcFileMode.Archive), filePath, version, targetPath);
+            }
+            catch (FileNotFoundException)
+            {
+                await DeleteFileEntry(model.Id, version, connection);
+            }
+        }
+
+
+        private static async Task DeleteFileEntry(string id, int version, DbConnection connection)
+        {
+            await connection.ExecuteAsync(new CommandDefinition($"DELETE FROM NCM_PRODDOCB WHERE LISTID = '{id}' AND VERSION = {version}", commandType: CommandType.Text));
+        }
+
+        private static async Task SetFileState(string id, int version, string state, DbConnection connection)
+        {
+            await connection.ExecuteAsync(new CommandDefinition($"UPDATE NCM_PRODDOCB SET STATEID = '{state}' WHERE LISTID = '{id}' AND VERSION = {version}", commandType: CommandType.Text));
         }
 
         private static async Task<string> GetNcFileExtension(string id, int version, DbConnection connection)
         {
-            return await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT EXTENSION FROM NCM_PRODDOCB WHERE VERSION = {version} AND LISTID = '{id}'"));
+            return await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT EXTENSION FROM NCM_PRODDOCB WHERE VERSION = {version} AND LISTID = '{id}'", commandType: CommandType.Text));
         }
 
         private static string CreateVersionString(int version)
@@ -117,6 +165,10 @@ namespace ToolListHelperLibrary
         private async static Task<int> GetNcFileMaxVersion(string id, DbConnection connection)
         {
             return await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT MAX(VERSION) FROM NCM_PRODDOCB WHERE LISTID = '{id}'", commandType: CommandType.Text));
+        }
+        private async static Task<int> GetNcFileMaxVersion(string id, DbConnection connection, NcFileMode ncFileMode)
+        {
+            return await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT MAX(VERSION) FROM NCM_PRODDOCB WHERE LISTID = '{id}' AND STATEID = '{GetStateNameFromNcFileMode(ncFileMode)}'", commandType: CommandType.Text));
         }
 
         private static async Task<Dictionary<NcFileMode, string>> GetMachinePathsDictonary(string machine, DbConnection connection)
@@ -142,13 +194,6 @@ WHERE MACHINEID = '{machine}'"))).ToList();
                 NcFileMode.Release => "RELEASE FOR PRODUCTION",
                 _ => throw new InvalidOperationException()
             };
-        }
-
-        private async static Task SendFile(string sourceFilePath, int version, string machinePath, DbConnection connection)
-        {
-            // Add entry to TDM
-            
-            // Copy File to Directory
         }
 
         private static async Task InsertLog(ListModel model, DbConnection connection, string logMessage)
@@ -417,7 +462,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             return output;
         }
 
-        public async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> ValidateTools(List<ToolData>? tools)
+        public async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> ValidateToolsAsync(List<ToolData>? tools)
         {
             List<ToolData> invalidTools = new();
             List<ToolData> validTools = new();
@@ -428,22 +473,22 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             using DbConnection connection = GetTDMConnection();
             foreach (ToolData tool in tools)
             {
-                (invalidTools, validTools) = await ValidateTool(invalidTools, validTools, tool, connection);
+                (invalidTools, validTools) = await ValidateToolAsync(invalidTools, validTools, tool, connection);
             }
             return (invalidTools, validTools);
         }
 
-        private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> ValidateTool(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
+        private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> ValidateToolAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             return tool.ToolType switch
             {
-                ToolType.Item => await VerifyToolItem(invalidTools, validTools, tool, connection),
-                ToolType.Assembly => await VerifyToolAssembly(invalidTools, validTools, tool, connection),
+                ToolType.Item => await VerifyToolItemAsync(invalidTools, validTools, tool, connection),
+                ToolType.Assembly => await VerifyToolAssemblyAsync(invalidTools, validTools, tool, connection),
                 _ => throw new ArgumentException("Invalid tool type", nameof(tool)),
             };
         }
 
-        private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolAssembly(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
+        private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolAssemblyAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(TOOLID) FROM TDM_TOOL WHERE TOOLID = '{tool.Id}'", commandType: CommandType.Text)) > 0)
             {
@@ -454,7 +499,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             return (invalidTools, validTools);
         }
 
-        private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolItem(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
+        private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolItemAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             tool.ItemDescription = CsvOperations.GetDictonaryDescriptionValue(tool.ItemDescription);
             if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(COMPID) FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text)) == 0)
@@ -467,16 +512,128 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             return (invalidTools, validTools);
         }
 
-        public async static Task<bool> ValidateUser(string creator)
+        public async static Task<bool> ValidateUserAsync(string creator)
         {
             using DbConnection connection = GetTDMConnection();
             return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(USERID) FROM TMS_USER WHERE USERNAME = '{creator}'"));
         }
 
-        public static async Task<bool> ValidateListId(string id)
+        public static async Task<bool> ValidateListIdAsync(string id)
         {
             using DbConnection connection = GetTDMConnection();
             return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(LISTID) FROM TDM_LIST WHERE LISTID = '{id}'", commandType: CommandType.Text));
+        }
+		
+		public async static Task DeleteNcProgramsAsync(List<string> listsIds)
+        {
+            foreach (string listId in listsIds)
+            {
+                // Get List of NC programs with file locations
+                List<string> filePaths = await GetNcFilesPathsAsync(listId) ?? new();
+                // Delete files ignoring exception if file is not found
+                if (filePaths != null)
+                {
+                    foreach (string filePath in filePaths)
+                    {
+                        try
+                        {
+                            File.Delete(filePath);
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            ;
+                        }
+                    } 
+                }
+                // Delete db entries
+                await DeleteNcProgramsDbDataAsync(listId);
+            }
+        }
+
+		public async static Task<List<string>> VerifyListsIdsAsync(List<string> listsIds)
+        {
+            List<string> verifiedListsIds = new();
+            using DbConnection cnxn = GetTDMConnection();
+            foreach (string listId in listsIds)
+            {
+                string id = await cnxn.ExecuteScalarAsync<string>($"SELECT LISTID FROM TDM_LIST WHERE LISTID = '{listId}'", commandType: CommandType.Text);
+                if (id != null)
+                {
+                    verifiedListsIds.Add(id);
+                }
+            }
+            return verifiedListsIds;
+        }
+
+        private async static Task DeleteNcProgramsDbDataAsync(string listId)
+        {
+            using DbConnection cnxn = GetTDMConnection();
+            await cnxn.ExecuteAsync($"DELETE FROM NCM_PRODDOCB WHERE LISTID = '{listId}'", commandType: CommandType.Text);
+        }
+
+        private async static Task<List<string>?> GetNcFilesPathsAsync(string listId)
+        {
+            List<string> filePaths = new();
+            using DbConnection cnxn = GetTDMConnection();
+            // Get Machine
+            string machineId = await GetMachineIDAsync(cnxn, listId);
+            // Skip looking for files if machine is not specified
+            if (machineId == null)
+            {
+                return null;
+            }
+            // Get file data
+            List<NcProgramFileModel> ncPrograms = await GetNcProgramsDataAsync(cnxn, listId);
+            foreach (NcProgramFileModel ncProgram in ncPrograms)
+            {
+                // Set Machine for nc programs
+                ncProgram.MachineId = machineId;
+                // Get path for machine and status
+                ncProgram.Path = await GetNcProgramPathAsync(cnxn, ncProgram.MachineId, ncProgram.StateId ?? string.Empty);
+                // Create path for file
+                filePaths.Add(CreateFilePath(ncProgram));
+            }
+            return filePaths;
+        }
+
+        private static string CreateFilePath(NcProgramFileModel ncProgram) =>
+            ncProgram.Path + "\\" + ncProgram.FileId + "." + CreateFileVersionIndex(ncProgram.Version) + "." + ncProgram.Extension;
+
+        private static string CreateFileVersionIndex(int version)
+        {
+            string index = version.ToString();
+            while (index.Length < 4)
+            {
+                index = "0" + index;
+            }
+            return index;
+        }
+
+        private async static Task<string> GetNcProgramPathAsync(IDbConnection cnxn, string machineId, string stateId) =>
+            (await cnxn.QueryAsync<string>($@"
+SELECT PATH AS Path
+FROM TDM_MACHINESTATEPATH
+WHERE MACHINEID = '{machineId}' AND STATEID = '{stateId}'")).First();
+
+        private async static Task<List<NcProgramFileModel>> GetNcProgramsDataAsync(IDbConnection cnxn, string listId) =>
+            (await cnxn.QueryAsync<NcProgramFileModel>(@$"
+SELECT FILEID AS FileId, EXTENSION AS Extension, STATEID AS StateId, VERSION AS Version
+FROM NCM_PRODDOCB
+WHERE LISTID = '{listId}'")).ToList();
+
+        private async static Task<string> GetMachineIDAsync(IDbConnection cnxn, string listId) =>
+            (await cnxn.QueryAsync<string>($"SELECT MACHINEID FROM TDM_LIST WHERE LISTID = '{listId}'", commandType: CommandType.Text)).First();
+
+        public async static Task DeleteToolListsAsync(List<string> listsIds)
+        {
+            foreach (string listId in listsIds)
+            {
+                using IDbConnection cnxn = GetTDMConnection();
+                // Delete positions
+                await cnxn.ExecuteAsync($"DELETE FROM TDM_LISTLISTB WHERE LISTID = '{listId}'", commandType: CommandType.Text);
+                // Delete Master Data
+                await cnxn.ExecuteAsync($"DELETE FROM TDM_LIST WHERE LISTID = '{listId}'", commandType: CommandType.Text);
+            }
         }
     }
 }

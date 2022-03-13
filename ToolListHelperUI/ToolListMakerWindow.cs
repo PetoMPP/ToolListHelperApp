@@ -48,15 +48,6 @@ namespace ToolListHelperUI
             };
         }
 
-        private void ToolListMakerWindow_Resize(object sender, EventArgs e)
-        {
-            // Only horizontal adjustments
-            if (Width > 0)
-            {
-                ResizeSectionPanels(); 
-            }
-        }
-
         private void ResizeSectionPanels()
         {
             int width = Width;
@@ -99,6 +90,35 @@ namespace ToolListHelperUI
         private void ToolListMakerWindow_Shown(object sender, EventArgs e)
         {
             ResizeSectionPanels();
+        }
+
+        private void FileModeRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton callingRadio = (RadioButton)sender;
+            if (!(machineTextBox.Text == "MMLCUBEB" ||
+                machineTextBox.Text == "MCTX125A" ||
+                string.IsNullOrEmpty(machineTextBox.Text)))
+            {
+                return;
+            }
+            switch (callingRadio.Name)
+            {
+                case "sinumericModeRadioButton":
+                case "autoModeRadioButton":
+                    machineTextBox.Text = string.Empty;
+                    noMachineRadioButton.Checked = true;
+                    return;
+                case "fusionModeRadioButton":
+                    machineTextBox.Text = "MMLCUBEB";
+                    selectMachineRadioButton.Checked = true;
+                    break;
+                case "shopturnModeRadioButton":
+                    machineTextBox.Text = "MCTX125A";
+                    selectMachineRadioButton.Checked = true;
+                    break;
+                default:
+                    return;
+            }
         }
 
         private void CreatingModeUpdateRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -261,11 +281,11 @@ namespace ToolListHelperUI
                 return;
             }
             if (!model.SkipNcFile && _filePaths.Length > 1 &&
-                UserInterfaceLogic.ShowWarning($"Wybrano więcej niż jeden plik źrodłowy do przesłania do TDM, program wspiera przesyłanie tylko jednego pliku naraz, przez co tylko plik: \"{Path.GetFileName(model.NcFile?.FilePath)}\" zostanie przesłany.\n\nKontynuować?", "Wybrano wiele list do przesłania!") == DialogResult.No)
+                UserInterfaceLogic.ShowWarning($"Wybrano więcej niż jeden plik źrodłowy do przesłania do TDM, program wspiera przesyłanie tylko jednego pliku naraz, przez co tylko plik: \"{Path.GetFileName(model.NcFile.FilePath)}\" zostanie przesłany.\n\nKontynuować?", "Wybrano wiele list do przesłania!") == DialogResult.No)
             {
                 return;
             }
-            (List<ToolData> invalidTools, List<ToolData> validTools) = await TDMConnector.ValidateTools(model.Tools);
+            (List<ToolData> invalidTools, List<ToolData> validTools) = await TDMConnector.ValidateToolsAsync(model.Tools);
             if (invalidTools.Count > 0)
             {
                 if (UserInterfaceLogic.ShowWarning("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => t.Id ?? t.ItemDescription)
@@ -295,13 +315,13 @@ namespace ToolListHelperUI
             }
             if (model.CreatingMode == CreatingMode.Update)
             {
-                if (!await TDMConnector.ValidateListId(model.Id))
+                if (!await TDMConnector.ValidateListIdAsync(model.Id))
                 {
                     errorMessage += $"{errorCounter}. Brak listy o numerze: {model.Id} w TDM!";
                     errorCounter++;
                 }
             }
-            if (!await TDMConnector.ValidateUser(model.CreatorId))
+            if (!await TDMConnector.ValidateUserAsync(model.CreatorId))
             {
                 errorMessage += $"{errorCounter}. Brak użytkownika o nazwie {model.CreatorId} w TDM!";
             }
@@ -385,7 +405,7 @@ namespace ToolListHelperUI
             bool skipClamping = skipClampingRadioButton.Checked;
             string? clamping = skipClamping ? null : noClampingRadioButton.Checked ? null : clampingTextBox.Text;
             bool skipNcFile = skipAddFileRadioButton.Checked;
-            NcFileData? ncFile = skipNcFile ? null : new() { FilePath = _filePaths[0], NcFileMode = addFileAsArchiveRadioButton.Checked ? NcFileMode.Archive : addFileAsDevelopingRadioButton.Checked ? NcFileMode.Developing : NcFileMode.Release };
+            NcFileData ncFile = skipNcFile ? new() {NcFileMode = NcFileMode.None} : new() { FilePath = _filePaths[0], NcFileMode = addFileAsArchiveRadioButton.Checked ? NcFileMode.Archive : addFileAsDevelopingRadioButton.Checked ? NcFileMode.Developing : NcFileMode.Release };
             List<ToolData>? tools = await FileOperations.GetToolsFromFilesAsync(_filePaths, GetFileTypeFromUI());
             string creator = Environment.UserName.ToUpper();
             ListStatus listStatus = listStatusCheckBox.Checked ? ListStatus.Ready : ListStatus.Preparing;
@@ -415,7 +435,6 @@ namespace ToolListHelperUI
 
         private void BrowseFilesButton_Click(object sender, EventArgs e)
         {   
-            // TODO - Fix pathes
             OpenFileDialog dialog = new();
             dialog.Multiselect = true;
             dialog.RestoreDirectory = true;
@@ -430,7 +449,7 @@ namespace ToolListHelperUI
                     dialog.Filter = "Pliki Fusion|*.simpl|Wszystkie pliki|*.*";
                     break;
                 case NcFileType.ShopTurn:
-                    dialog.InitialDirectory = "M:/MCTX";
+                    dialog.InitialDirectory = "M:/MCTX125A";
                     dialog.Filter = "Pliki MPF|*.mpf|Wszystkie pliki|*.*";
                     break;
                 case NcFileType.Auto:

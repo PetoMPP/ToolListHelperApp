@@ -61,11 +61,31 @@ namespace ToolListHelperUI.Properties {
         }
         
         /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Icon podobny do zasobu (Ikona).
+        /// </summary>
+        internal static System.Drawing.Icon icon {
+            get {
+                object obj = ResourceManager.GetObject("icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Logo_Axito_Uhlmann_Group {
             get {
                 object obj = ResourceManager.GetObject("Logo-Axito_Uhlmann_Group", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TLHLOGO {
+            get {
+                object obj = ResourceManager.GetObject("TLHLOGO", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

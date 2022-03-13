@@ -9,7 +9,8 @@
     {
         Developing,
         Release,
-        Archive
+        Archive,
+        None
     }
     public enum NcFileType
     {
