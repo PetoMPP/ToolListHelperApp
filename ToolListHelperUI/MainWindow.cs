@@ -14,11 +14,11 @@ using Microsoft.Office.Interop.Outlook;
 
 namespace ToolListHelperUI
 {
-    public partial class MainWindow : Form, ILoadForm
+    public partial class MainWindow : Form, ILoadForm, ISettingsPass
     {
         private Form? _activeForm;
         private int _settingsCounter = 0;
-        private readonly string _settingPassPhrase = "grzabekus";
+        private string _settingPassPhrase = AppConfigManager.GetSettingsPassPhrase();
         public MainWindow()
         {
             InitializeComponent();
@@ -204,9 +204,14 @@ namespace ToolListHelperUI
             }
             if (_settingsCounter == _settingPassPhrase.Length)
             {
-                LoadFormToUI(new ProgramConfigWindow(), "Konfiguracja programu");
+                LoadFormToUI(new ProgramConfigWindow(this), "Konfiguracja programu");
                 _settingsCounter = 0;
             }
+        }
+
+        public void UpdatePassPhrase()
+        {
+            _settingPassPhrase = AppConfigManager.GetSettingsPassPhrase();
         }
     }
 }
