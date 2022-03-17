@@ -52,12 +52,12 @@ namespace ToolListHelperLibrary
                 await OverwriteTools(model, connection);
                 // Insert Logfile
                 await InsertLog(model, connection, logMessage);
-                if (!model.SkipNcFile)
-                {
-                    await ExecuteFileTransfer(model, connection);
-                    // TODO - Check if tdm logs file transfers
-                    // await InsertLog(model, connection, logMessage);
-                }
+                //if (!model.SkipNcFile)
+                //{
+                //    await ExecuteFileTransfer(model, connection);
+                //    // TODO - Check if tdm logs file transfers
+                //    // await InsertLog(model, connection, logMessage);
+                //}
             }
             catch (Exception error)
             {
@@ -391,7 +391,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             stringBuilder.Append(model.Clamping == null ? "NULL," : $"'{model.Clamping}',");
             stringBuilder.Append(model.ListStatus == ListStatus.Preparing ? "'TOOL LIST IS PREPARING'," : "'TOOL LIST IS DONE',");
             stringBuilder.Append($"{(model.ListType == null ? (int)ListType.Primary : (int)model.ListType)},");
-            stringBuilder.Append($"'{GetUserNameFromUserId(model.CreatorId, connection)}')");
+            stringBuilder.Append($"'{await GetUserNameFromUserId(model.CreatorId, connection)}')");
             return stringBuilder.ToString();
         }
 
