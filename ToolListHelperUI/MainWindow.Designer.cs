@@ -32,25 +32,26 @@
             this.menuPanel = new System.Windows.Forms.Panel();
             this.reportIssuePanel = new System.Windows.Forms.Panel();
             this.reportIssueButton = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.axitoPictureBox = new System.Windows.Forms.PictureBox();
             this.toolListRemoverButton = new System.Windows.Forms.Button();
             this.datronDictatorButton = new System.Windows.Forms.Button();
             this.toolListMakerButton = new System.Windows.Forms.Button();
             this.menuLabel = new System.Windows.Forms.Label();
-            this.logoLabel = new System.Windows.Forms.Label();
+            this.logoPictureBox = new System.Windows.Forms.PictureBox();
             this.currentModuleLabel = new System.Windows.Forms.Label();
             this.mainPanel = new System.Windows.Forms.Panel();
             this.closeAppButton = new System.Windows.Forms.Button();
             this.sidePanel.SuspendLayout();
             this.menuPanel.SuspendLayout();
             this.reportIssuePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axitoPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // sidePanel
             // 
             this.sidePanel.Controls.Add(this.menuPanel);
-            this.sidePanel.Controls.Add(this.logoLabel);
+            this.sidePanel.Controls.Add(this.logoPictureBox);
             this.sidePanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.sidePanel.Location = new System.Drawing.Point(0, 0);
             this.sidePanel.Name = "sidePanel";
@@ -61,7 +62,7 @@
             // 
             this.menuPanel.BackColor = System.Drawing.Color.White;
             this.menuPanel.Controls.Add(this.reportIssuePanel);
-            this.menuPanel.Controls.Add(this.pictureBox1);
+            this.menuPanel.Controls.Add(this.axitoPictureBox);
             this.menuPanel.Controls.Add(this.toolListRemoverButton);
             this.menuPanel.Controls.Add(this.datronDictatorButton);
             this.menuPanel.Controls.Add(this.toolListMakerButton);
@@ -70,7 +71,7 @@
             this.menuPanel.Location = new System.Drawing.Point(0, 100);
             this.menuPanel.Name = "menuPanel";
             this.menuPanel.Size = new System.Drawing.Size(200, 744);
-            this.menuPanel.TabIndex = 2;
+            this.menuPanel.TabIndex = 9;
             // 
             // reportIssuePanel
             // 
@@ -96,18 +97,19 @@
             this.reportIssueButton.TabIndex = 8;
             this.reportIssueButton.Text = "Zgłoś problem";
             this.reportIssueButton.UseVisualStyleBackColor = false;
+            this.reportIssueButton.Click += new System.EventHandler(this.ReportIssueButton_Click);
             // 
-            // pictureBox1
+            // axitoPictureBox
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pictureBox1.Image = global::ToolListHelperUI.Properties.Resources.Logo_Axito_Uhlmann_Group;
-            this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 686);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(10);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(200, 58);
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
+            this.axitoPictureBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.axitoPictureBox.Image = global::ToolListHelperUI.Properties.Resources.Logo_Axito_Uhlmann_Group;
+            this.axitoPictureBox.InitialImage = null;
+            this.axitoPictureBox.Location = new System.Drawing.Point(0, 686);
+            this.axitoPictureBox.Margin = new System.Windows.Forms.Padding(10);
+            this.axitoPictureBox.Name = "axitoPictureBox";
+            this.axitoPictureBox.Size = new System.Drawing.Size(200, 58);
+            this.axitoPictureBox.TabIndex = 7;
+            this.axitoPictureBox.TabStop = false;
             // 
             // toolListRemoverButton
             // 
@@ -122,6 +124,7 @@
             this.toolListRemoverButton.TabIndex = 5;
             this.toolListRemoverButton.Text = "Tool List Remover";
             this.toolListRemoverButton.UseVisualStyleBackColor = false;
+            this.toolListRemoverButton.Click += new System.EventHandler(this.ToolListRemoverButton_Click);
             // 
             // datronDictatorButton
             // 
@@ -136,6 +139,7 @@
             this.datronDictatorButton.TabIndex = 4;
             this.datronDictatorButton.Text = "Datron Dictator";
             this.datronDictatorButton.UseVisualStyleBackColor = false;
+            this.datronDictatorButton.Click += new System.EventHandler(this.DatronDictatorButton_Click);
             // 
             // toolListMakerButton
             // 
@@ -151,6 +155,7 @@
             this.toolListMakerButton.Text = "Tool List Maker";
             this.toolListMakerButton.UseVisualStyleBackColor = false;
             this.toolListMakerButton.Click += new System.EventHandler(this.ToolListMakerButton_ClickAsync);
+            this.toolListMakerButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ToolListMakerButton_MouseDown);
             // 
             // menuLabel
             // 
@@ -167,17 +172,17 @@
             this.menuLabel.Text = "Applications Menu";
             this.menuLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // logoLabel
+            // logoPictureBox
             // 
-            this.logoLabel.BackColor = System.Drawing.Color.White;
-            this.logoLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.logoLabel.Font = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.logoLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.logoLabel.Location = new System.Drawing.Point(0, 0);
-            this.logoLabel.Name = "logoLabel";
-            this.logoLabel.Size = new System.Drawing.Size(200, 100);
-            this.logoLabel.TabIndex = 0;
-            this.logoLabel.Text = "Tool List Helper";
+            this.logoPictureBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.logoPictureBox.Image = global::ToolListHelperUI.Properties.Resources.TLHLOGO;
+            this.logoPictureBox.InitialImage = null;
+            this.logoPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.logoPictureBox.Margin = new System.Windows.Forms.Padding(10);
+            this.logoPictureBox.Name = "logoPictureBox";
+            this.logoPictureBox.Size = new System.Drawing.Size(200, 100);
+            this.logoPictureBox.TabIndex = 8;
+            this.logoPictureBox.TabStop = false;
             // 
             // currentModuleLabel
             // 
@@ -203,7 +208,6 @@
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(904, 784);
             this.mainPanel.TabIndex = 2;
-            this.mainPanel.Resize += new System.EventHandler(this.MainPanel_Resize);
             // 
             // closeAppButton
             // 
@@ -231,12 +235,17 @@
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.currentModuleLabel);
             this.Controls.Add(this.sidePanel);
+            this.Icon = global::ToolListHelperUI.Properties.Resources.icon;
+            this.KeyPreview = true;
             this.Name = "MainWindow";
             this.Text = "Tool List Helper";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
+            this.Resize += new System.EventHandler(this.MainWindow_Resize);
             this.sidePanel.ResumeLayout(false);
             this.menuPanel.ResumeLayout(false);
             this.reportIssuePanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axitoPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -244,17 +253,17 @@
         #endregion
 
         private Panel sidePanel;
-        private Label logoLabel;
-        private Panel menuPanel;
-        private Label menuLabel;
-        private Button toolListMakerButton;
-        private Button toolListRemoverButton;
-        private Button datronDictatorButton;
         private Label currentModuleLabel;
         private Panel mainPanel;
-        private PictureBox pictureBox1;
+        private Button closeAppButton;
+        private Panel menuPanel;
         private Panel reportIssuePanel;
         private Button reportIssueButton;
-        private Button closeAppButton;
+        private PictureBox axitoPictureBox;
+        private Button toolListRemoverButton;
+        private Button datronDictatorButton;
+        private Button toolListMakerButton;
+        private Label menuLabel;
+        private PictureBox logoPictureBox;
     }
 }

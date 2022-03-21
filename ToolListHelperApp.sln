@@ -5,7 +5,9 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolListHelperUI", "ToolListHelperUI\ToolListHelperUI.csproj", "{D986CAA0-38DF-4870-B6E6-DC305D8710CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolListHelperLibrary", "ToolListHelperLibrary\ToolListHelperLibrary.csproj", "{846948F1-BDDB-49AD-9BB5-827ADC0170C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolListHelperLibrary", "ToolListHelperLibrary\ToolListHelperLibrary.csproj", "{846948F1-BDDB-49AD-9BB5-827ADC0170C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolListHelperUnitTests", "ToolListHelperUnitTests\ToolListHelperUnitTests.csproj", "{0AC6F848-137E-46B2-A97F-4480460E42B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{846948F1-BDDB-49AD-9BB5-827ADC0170C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{846948F1-BDDB-49AD-9BB5-827ADC0170C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{846948F1-BDDB-49AD-9BB5-827ADC0170C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AC6F848-137E-46B2-A97F-4480460E42B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC6F848-137E-46B2-A97F-4480460E42B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC6F848-137E-46B2-A97F-4480460E42B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC6F848-137E-46B2-A97F-4480460E42B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

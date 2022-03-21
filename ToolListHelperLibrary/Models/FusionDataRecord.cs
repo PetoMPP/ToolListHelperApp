@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace ToolListHelperLibrary.Models
 {
-    public struct MaterialData
+    public record FusionDataRecord
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string ParentGroup { get; set; }
+        public string Key { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
     }
 }

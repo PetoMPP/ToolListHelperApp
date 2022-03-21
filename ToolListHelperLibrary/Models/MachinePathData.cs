@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace ToolListHelperLibrary.Models
 {
-    public struct MaterialData
+    public struct MachinePathData
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string ParentGroup { get; set; }
+        public string State { get; set; }
+        public string Path { get; set; }
     }
 }
