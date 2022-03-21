@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using ToolListHelperLibrary;
 using ToolListHelperUI.Interfaces;
 using Microsoft.Office.Interop.Outlook;
+using System.Text.RegularExpressions;
 
 namespace ToolListHelperUI
 {
@@ -194,7 +195,14 @@ namespace ToolListHelperUI
                 _settingsCounter = 0;
                 return;
             }
-            if (e.KeyData.ToString() == _settingPassPhrase[_settingsCounter].ToString().ToUpper())
+
+            string key = e.KeyData.ToString();
+            Match match = Regex.Match(key, @"\d");
+            if (match.Success)
+            {
+                key = match.Value;
+            }
+            if (key == _settingPassPhrase[_settingsCounter].ToString().ToUpper())
             {
                 _settingsCounter++;
             }

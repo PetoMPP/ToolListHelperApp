@@ -25,10 +25,10 @@ namespace ToolListHelperUI
 
         private void LoadDataToUI()
         {
-            databaseModeComboBox.SelectedItem = AppConfigManager.GetDatabaseMode();
+            databaseModeComboBox.SelectedIndex = databaseModeComboBox.FindStringExact(AppConfigManager.GetDatabaseMode().ToString());
             databaseStringTestTextBox.Text = AppConfigManager.GetDatabaseStringByMode(DatabaseMode.Test);
             databaseStringProdTextBox.Text = AppConfigManager.GetDatabaseStringByMode(DatabaseMode.Prod);
-            dictonaryModeComboBox.SelectedItem = AppConfigManager.GetDictonaryMode();
+            dictonaryModeComboBox.SelectedItem = dictonaryModeComboBox.FindStringExact(AppConfigManager.GetDictonaryMode().ToString());
             globalDictonaryPathTextBox.Text = AppConfigManager.GetDictonaryPathByMode(DictonaryMode.Global);
             localDictonaryPathTextBox.Text = AppConfigManager.GetDictonaryPathByMode(DictonaryMode.Local);
             passPhraseTextBox.Text = AppConfigManager.GetSettingsPassPhrase();
@@ -52,12 +52,22 @@ namespace ToolListHelperUI
 
         private void ChangeDatabaseModeButton_Click(object sender, EventArgs e)
         {
-            AppConfigManager.SetDatabaseMode(Enum.Parse<DatabaseMode>(databaseModeComboBox.SelectedText));
+            string? mode = databaseModeComboBox.SelectedValue.ToString();
+            if (mode == null)
+            {
+                return;
+            }
+            AppConfigManager.SetDatabaseMode(Enum.Parse<DatabaseMode>(mode));
         }
 
         private void ChangeDictonaryModeButton_Click(object sender, EventArgs e)
         {
-            AppConfigManager.SetDictonaryMode(Enum.Parse<DictonaryMode>(dictonaryModeComboBox.SelectedText));
+            string? mode = dictonaryModeComboBox.SelectedValue.ToString();
+            if (mode == null)
+            {
+                return;
+            }
+            AppConfigManager.SetDictonaryMode(Enum.Parse<DictonaryMode>(mode));
         }
 
         private void ChangeTestDatabaseStringButton_Click(object sender, EventArgs e)
