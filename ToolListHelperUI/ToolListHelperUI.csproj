@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>ToolListHelperUI.Program</StartupObject>
     <NeutralLanguage>en-001</NeutralLanguage>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,10 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
