@@ -9,6 +9,8 @@
     <StartupObject>ToolListHelperUI.Program</StartupObject>
     <NeutralLanguage>en-001</NeutralLanguage>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

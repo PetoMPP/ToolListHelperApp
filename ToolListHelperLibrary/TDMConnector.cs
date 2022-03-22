@@ -439,7 +439,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
         public static async Task<IEnumerable<ClampingData>> GetClampingsAsync(CancellationToken cancellationToken)
         {
             using DbConnection connection = GetTDMConnection();
-            return await connection.QueryAsync<ClampingData>(new CommandDefinition("SELECT DISTINCT(FIXTURE) AS Name FROM TDM_LIST", commandType: CommandType.Text, cancellationToken: cancellationToken));
+            return await connection.QueryAsync<ClampingData>(new CommandDefinition("SELECT DISTINCT(FIXTURE) AS Name FROM TDM_LIST WHERE FIXTURE IS NOT NULL", commandType: CommandType.Text, cancellationToken: cancellationToken));
         }
 
         public static async Task<IEnumerable<MaterialData>> GetMaterialsAsync(CancellationToken cancellationToken)
