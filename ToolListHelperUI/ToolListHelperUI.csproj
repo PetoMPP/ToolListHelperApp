@@ -9,6 +9,8 @@
     <StartupObject>ToolListHelperUI.Program</StartupObject>
     <NeutralLanguage>en-001</NeutralLanguage>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <Authors>PetoMPP</Authors>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

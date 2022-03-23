@@ -550,7 +550,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
         public async static Task<bool> ValidateUserAsync(string creator)
         {
             using DbConnection connection = GetTDMConnection();
-            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(USERID) FROM TMS_USER WHERE USERNAME = '{creator}'"));
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(USERID) FROM TMS_USER WHERE USERID = '{creator}'"));
         }
 
         public static async Task<bool> ValidateListIdAsync(string id)
