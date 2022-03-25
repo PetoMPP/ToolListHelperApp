@@ -21,7 +21,6 @@ namespace ToolListHelperUI
         private string[] _filePaths = Array.Empty<string>();
         public ToolListMakerWindow()
         {
-            InitializeComponent();
             _sectionPanels = new()
             {
                 wizardPanel,
@@ -46,6 +45,7 @@ namespace ToolListHelperUI
                 skipMaterialRadioButton,
                 skipClampingRadioButton
             };
+            InitializeComponent();
         }
 
         private void ResizeSectionPanels()
