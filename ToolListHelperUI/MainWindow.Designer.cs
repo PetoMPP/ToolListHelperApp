@@ -116,7 +116,7 @@
             this.toolListRemoverButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.toolListRemoverButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
             this.toolListRemoverButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.toolListRemoverButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.toolListRemoverButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.toolListRemoverButton.Location = new System.Drawing.Point(10, 200);
             this.toolListRemoverButton.Margin = new System.Windows.Forms.Padding(10);
             this.toolListRemoverButton.Name = "toolListRemoverButton";
@@ -131,7 +131,7 @@
             this.datronDictatorButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.datronDictatorButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
             this.datronDictatorButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.datronDictatorButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.datronDictatorButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.datronDictatorButton.Location = new System.Drawing.Point(10, 130);
             this.datronDictatorButton.Margin = new System.Windows.Forms.Padding(10);
             this.datronDictatorButton.Name = "datronDictatorButton";
@@ -146,7 +146,7 @@
             this.toolListMakerButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.toolListMakerButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
             this.toolListMakerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.toolListMakerButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.toolListMakerButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.toolListMakerButton.Location = new System.Drawing.Point(10, 60);
             this.toolListMakerButton.Margin = new System.Windows.Forms.Padding(10);
             this.toolListMakerButton.Name = "toolListMakerButton";

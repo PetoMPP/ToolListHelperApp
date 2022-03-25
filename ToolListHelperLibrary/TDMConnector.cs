@@ -387,7 +387,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private async static Task<string> GetUserNameFromUserId(string creatorId, DbConnection connection)
         {
-            return await connection.ExecuteScalarAsync<string>($"SELECT CONCAT(FIRSTNAME, ' ', NAME) FROM TMS_USER WHERE USERNAME = '{creatorId}'");
+            return await connection.ExecuteScalarAsync<string>($"SELECT CONCAT(FIRSTNAME, ' ', NAME) FROM TMS_USER WHERE USERID = '{creatorId}'");
         }
 
         private async static Task<string> GetMachineGroupIdByMachineIdAsync(string machine, DbConnection connection)

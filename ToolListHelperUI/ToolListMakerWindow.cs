@@ -53,8 +53,12 @@ namespace ToolListHelperUI
             int width = Width;
             descriptionPanel.Width = width;
             int halfWidth = width / 2;
-            foreach (Panel panel in _sectionPanels)
+            foreach (Panel? panel in _sectionPanels)
             {
+                if (panel == null)
+                {
+                    continue;
+                }
                 ResizeSectionPanel(halfWidth, panel);
             }
         }
