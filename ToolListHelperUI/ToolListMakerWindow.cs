@@ -21,6 +21,7 @@ namespace ToolListHelperUI
         private string[] _filePaths = Array.Empty<string>();
         public ToolListMakerWindow()
         {
+            // HACK - Some programmers have issues when lists are initialized after InitializeComponent()
             _sectionPanels = new()
             {
                 wizardPanel,
@@ -46,6 +47,30 @@ namespace ToolListHelperUI
                 skipClampingRadioButton
             };
             InitializeComponent();
+            _sectionPanels = new()
+            {
+                wizardPanel,
+                createPanel,
+                modePanel,
+                creatingModePanel,
+                programNamePanel,
+                programDescriptionPanel,
+                machinePanel,
+                sourceFilePanel,
+                listTypePanel,
+                addFilePanel,
+                materialPanel,
+                clampingPanel
+            };
+            _updateRadioButtons = new()
+            {
+                skipNameRadioButton,
+                skipProgramDescriptionRadioButton,
+                skipMachineRadioButton,
+                skipListTypeRadioButton,
+                skipMaterialRadioButton,
+                skipClampingRadioButton
+            };
         }
 
         private void ResizeSectionPanels()

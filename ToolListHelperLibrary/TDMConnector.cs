@@ -405,6 +405,12 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
                 await OverwriteTools(model, connection);
                 // Insert Logfile
                 await InsertLog(model, connection, logMessage);
+                if (!model.SkipNcFile)
+                {
+                    await ExecuteFileTransfer(model, connection);
+                    // TODO - Check if tdm logs file transfers
+                    // await InsertLog(model, connection, logMessage);
+                }
             }
             catch (Exception error)
             {
