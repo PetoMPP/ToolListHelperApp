@@ -1,6 +1,6 @@
 ﻿namespace ToolListHelperUI
 {
-    partial class ToolListMakerWindow
+    partial class ToolListMaker
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolListMakerWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ToolListMaker));
             this.dataWizardButton = new System.Windows.Forms.Button();
             this.descriptionPanel = new System.Windows.Forms.Panel();
             this.moduleDescriptionLabel = new System.Windows.Forms.Label();

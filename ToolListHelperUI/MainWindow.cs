@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using ToolListHelperLibrary;
 using ToolListHelperUI.Interfaces;
 using Microsoft.Office.Interop.Outlook;
+using ToolListHelperUI.ToolListManagerClasses;
 
 namespace ToolListHelperUI
 {
@@ -27,7 +28,7 @@ namespace ToolListHelperUI
 
         private async void ToolListMakerButton_ClickAsync(object sender, EventArgs e)
         {
-            if (_activeForm?.GetType() == typeof(ToolListMakerWindow))
+            if (_activeForm?.GetType() == typeof(ToolListMaker))
             {
                 return;
             }
@@ -39,7 +40,7 @@ namespace ToolListHelperUI
                 EnableMenuButtons();
                 return;
             }
-            LoadFormToUI(new ToolListMakerWindow(), "Tool List Maker");
+            LoadFormToUI(new ToolListMaker(), "Tool List Maker");
             EnableMenuButtons();
         }
 
@@ -100,7 +101,7 @@ namespace ToolListHelperUI
         {
             if (e.Button == MouseButtons.Middle)
             {
-                LoadFormToUI(new ToolListMakerWindow(), "Tool List Maker");
+                LoadFormToUI(new ToolListMaker(), "Tool List Maker");
             }
         }
 
@@ -111,7 +112,7 @@ namespace ToolListHelperUI
             {
                 return;
             }
-            if (_activeForm.GetType() == typeof(ToolListMakerWindow))
+            if (_activeForm.GetType() == typeof(ToolListMaker))
             {
                 _activeForm.Width = mainPanel.VerticalScroll.Visible ? mainPanel.Width - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Width - (SystemInformation.Border3DSize.Width * 2);
             }
@@ -204,7 +205,7 @@ namespace ToolListHelperUI
             }
             if (_settingsCounter == _settingPassPhrase.Length)
             {
-                LoadFormToUI(new ProgramConfigWindow(this), "Konfiguracja programu");
+                LoadFormToUI(new ProgramConfig(this), "Konfiguracja programu");
                 _settingsCounter = 0;
             }
         }
@@ -212,6 +213,15 @@ namespace ToolListHelperUI
         public void UpdatePassPhrase()
         {
             _settingPassPhrase = AppConfigManager.GetSettingsPassPhrase();
+        }
+
+        private void ToolListManagerButton_Click(object sender, EventArgs e)
+        {
+            if (_activeForm?.GetType() == typeof(ToolListManager))
+            {
+                return;
+            }
+            LoadFormToUI(new ToolListManager(), "Tool List Manager");
         }
     }
 }

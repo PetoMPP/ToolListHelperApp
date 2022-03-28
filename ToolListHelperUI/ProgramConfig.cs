@@ -12,10 +12,10 @@ using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI
 {
-    public partial class ProgramConfigWindow : Form
+    public partial class ProgramConfig : Form
     {
         private readonly ISettingsPass _settingsPass;
-        public ProgramConfigWindow(ISettingsPass settingsPass)
+        public ProgramConfig(ISettingsPass settingsPass)
         {
             InitializeComponent();
             WireUpComboBoxes();

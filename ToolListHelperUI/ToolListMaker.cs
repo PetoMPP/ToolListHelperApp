@@ -13,13 +13,13 @@ using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI
 {
-    public partial class ToolListMakerWindow : Form, IBrowseData
+    public partial class ToolListMaker : Form, IBrowseData
     {
         private readonly List<Panel> _sectionPanels;
         private readonly List<RadioButton> _updateRadioButtons;
         private string? _filePathString;
         private string[] _filePaths = Array.Empty<string>();
-        public ToolListMakerWindow()
+        public ToolListMaker()
         {
             InitializeComponent();
             _sectionPanels = new()

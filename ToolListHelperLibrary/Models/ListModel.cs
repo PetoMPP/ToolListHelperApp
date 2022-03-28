@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ToolListHelperLibrary.Models
 {
-    public struct ListModel
+    public class ListModel
     {
         public CreatingMode CreatingMode { get; set; }
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
         public string? Name { get; set; }
         public bool SkipName { get; set; }
         public string? Description { get; set; }
@@ -22,10 +22,10 @@ namespace ToolListHelperLibrary.Models
         public bool SkipMaterial { get; set; }
         public string? Clamping { get; set; }
         public bool SkipClamping { get; set; }
-        public NcFileData NcFile { get; set; }// = new() { FilePath = string.Empty, NcFileMode = NcFileMode.None };
+        public NcFileData NcFile { get; set; }
         public bool SkipNcFile { get; set; }
         public List<ToolData>? Tools { get; set; }
-        public string CreatorId { get; set; }
+        public string CreatorId { get; set; } = string.Empty;
         public ListStatus ListStatus { get; set; }
     }
 }

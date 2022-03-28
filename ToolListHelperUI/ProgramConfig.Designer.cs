@@ -1,6 +1,6 @@
 ﻿namespace ToolListHelperUI
 {
-    partial class ProgramConfigWindow
+    partial class ProgramConfig
     {
         /// <summary>
         /// Required designer variable.

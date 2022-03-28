@@ -13,7 +13,7 @@ namespace ToolListHelperLibrary
 {
     public class TDMConnector
     {
-        private static DbConnection GetTDMConnection(int timeout = 15)
+        internal static DbConnection GetTDMConnection(int timeout = 15)
         {
             return new SqlConnection(AppConfigManager.GetConnectionString(timeout));
         }
@@ -52,12 +52,12 @@ namespace ToolListHelperLibrary
                 await OverwriteTools(model, connection);
                 // Insert Logfile
                 await InsertLog(model, connection, logMessage);
-                //if (!model.SkipNcFile)
-                //{
-                //    await ExecuteFileTransfer(model, connection);
-                //    // TODO - Check if tdm logs file transfers
-                //    // await InsertLog(model, connection, logMessage);
-                //}
+                if (!model.SkipNcFile)
+                {
+                    await ExecuteFileTransfer(model, connection);
+                    // TODO - Check if tdm logs file transfers
+                    // await InsertLog(model, connection, logMessage);
+                }
             }
             catch (Exception error)
             {
