@@ -71,7 +71,7 @@ namespace ToolListHelperLibrary
             // Get machine paths
             if (model.SkipMachine)
             {
-                model.Machine = await GetMachineIDAsync(connection, model.Id);
+                model.Machine = await GetMachineIdAsync(connection, model.Id);
             }
             if (model.SkipName)
             {
@@ -83,7 +83,7 @@ namespace ToolListHelperLibrary
             string targetPath;
             if (model.CreatingMode == CreatingMode.New)
             {
-                targetPath = Path.Combine(machinePaths[NcFileMode.Archive], model.Name?.ToUpper() ?? string.Empty) + '.' + CreateVersionString(1) + '.' + Path.GetExtension(filePath);
+                targetPath = Path.Combine(machinePaths[ncFileMode], model.Name?.ToUpper() ?? string.Empty) + '.' + CreateVersionString(1) + Path.GetExtension(filePath);
                 await SendNewFile(model, connection, GetStateNameFromNcFileMode(ncFileMode), filePath, 1, targetPath);
                 return;
             }
@@ -617,7 +617,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             List<string> filePaths = new();
             using DbConnection cnxn = GetTDMConnection();
             // Get Machine
-            string machineId = await GetMachineIDAsync(cnxn, listId);
+            string machineId = await GetMachineIdAsync(cnxn, listId);
             // Skip looking for files if machine is not specified
             if (machineId == null)
             {
@@ -662,7 +662,7 @@ SELECT FILEID AS FileId, EXTENSION AS Extension, STATEID AS StateId, VERSION AS 
 FROM NCM_PRODDOCB
 WHERE LISTID = '{listId}'")).ToList();
 
-        private async static Task<string> GetMachineIDAsync(IDbConnection cnxn, string listId) =>
+        private async static Task<string> GetMachineIdAsync(IDbConnection cnxn, string listId) =>
             (await cnxn.QueryAsync<string>($"SELECT MACHINEID FROM TDM_LIST WHERE LISTID = '{listId}'", commandType: CommandType.Text)).First();
 
         public async static Task DeleteToolListsAsync(List<string> listsIds)
