@@ -531,7 +531,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolAssemblyAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
-            if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(TOOLID) FROM TDM_TOOL WHERE TOOLID = '{tool.Id}'", commandType: CommandType.Text)) > 0)
+            if (await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(TOOLID) FROM TDM_TOOL WHERE TOOLID = '{tool.Id}'", commandType: CommandType.Text)))
             {
                 validTools.Add(tool);
                 return (invalidTools, validTools);
@@ -543,13 +543,13 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolItemAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             tool.ItemDescription = CsvOperations.GetDictonaryDescriptionValue(tool.ItemDescription);
-            if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(COMPID) FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text)) == 0)
+            if (await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(COMPID) FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text)))
             {
-                invalidTools.Add(tool);
-                return (validTools, invalidTools);
+                tool.Id = await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT COMPID FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text));
+                validTools.Add(tool);
+                return (invalidTools, validTools);
             }
-            tool.Id = await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT COMPID FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text));
-            validTools.Add(tool);
+            invalidTools.Add(tool);
             return (invalidTools, validTools);
         }
 

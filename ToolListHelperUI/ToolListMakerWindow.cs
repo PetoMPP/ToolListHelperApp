@@ -317,7 +317,7 @@ namespace ToolListHelperUI
             (List<ToolData> invalidTools, List<ToolData> validTools) = await TDMConnector.ValidateToolsAsync(model.Tools);
             if (invalidTools.Count > 0)
             {
-                if (UserInterfaceLogic.ShowWarning("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => t.Id ?? t.ItemDescription)
+                if (UserInterfaceLogic.ShowWarning("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => string.IsNullOrEmpty(t.Id) ? t.ItemDescription : t.Id)
                     .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!") == DialogResult.No)
                 {
                     return;
