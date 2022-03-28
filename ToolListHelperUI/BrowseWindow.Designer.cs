@@ -32,8 +32,6 @@
             this.buttonsPanel = new System.Windows.Forms.Panel();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.browseDataGridView = new System.Windows.Forms.DataGridView();
-            this.statusLabel = new System.Windows.Forms.Label();
             this.textBoxesPanel = new System.Windows.Forms.Panel();
             this.textBox3Panel = new System.Windows.Forms.Panel();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -41,12 +39,14 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1Panel = new System.Windows.Forms.Panel();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.browseDataGridView = new System.Windows.Forms.DataGridView();
+            this.statusLabel = new System.Windows.Forms.Label();
             this.buttonsPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.browseDataGridView)).BeginInit();
             this.textBoxesPanel.SuspendLayout();
             this.textBox3Panel.SuspendLayout();
             this.textBox2Panel.SuspendLayout();
             this.textBox1Panel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.browseDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonsPanel
@@ -87,47 +87,6 @@
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.OkButton_Click);
-            // 
-            // browseDataGridView
-            // 
-            this.browseDataGridView.AllowUserToAddRows = false;
-            this.browseDataGridView.AllowUserToDeleteRows = false;
-            this.browseDataGridView.AllowUserToOrderColumns = true;
-            this.browseDataGridView.AllowUserToResizeRows = false;
-            this.browseDataGridView.BackgroundColor = System.Drawing.Color.White;
-            this.browseDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.browseDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.browseDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.browseDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.browseDataGridView.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.browseDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.browseDataGridView.MultiSelect = false;
-            this.browseDataGridView.Name = "browseDataGridView";
-            this.browseDataGridView.ReadOnly = true;
-            this.browseDataGridView.RowHeadersVisible = false;
-            this.browseDataGridView.RowTemplate.Height = 25;
-            this.browseDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.browseDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.browseDataGridView.Size = new System.Drawing.Size(450, 521);
-            this.browseDataGridView.TabIndex = 1;
-            this.browseDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.BrowseDataGridView_CellMouseDoubleClick);
-            this.browseDataGridView.SelectionChanged += new System.EventHandler(this.BrowseDataGridView_SelectionChanged);
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.Location = new System.Drawing.Point(1, 250);
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(426, 20);
-            this.statusLabel.TabIndex = 2;
-            this.statusLabel.Text = "Ładowanie danych..";
-            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBoxesPanel
             // 
@@ -201,21 +160,61 @@
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
+            // browseDataGridView
+            // 
+            this.browseDataGridView.AllowUserToAddRows = false;
+            this.browseDataGridView.AllowUserToDeleteRows = false;
+            this.browseDataGridView.AllowUserToOrderColumns = true;
+            this.browseDataGridView.AllowUserToResizeRows = false;
+            this.browseDataGridView.BackgroundColor = System.Drawing.Color.White;
+            this.browseDataGridView.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.browseDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.browseDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.browseDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.browseDataGridView.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
+            this.browseDataGridView.Location = new System.Drawing.Point(0, 35);
+            this.browseDataGridView.MultiSelect = false;
+            this.browseDataGridView.Name = "browseDataGridView";
+            this.browseDataGridView.ReadOnly = true;
+            this.browseDataGridView.RowHeadersVisible = false;
+            this.browseDataGridView.RowTemplate.Height = 25;
+            this.browseDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.browseDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.browseDataGridView.Size = new System.Drawing.Size(450, 486);
+            this.browseDataGridView.TabIndex = 4;
+            this.browseDataGridView.SelectionChanged += new System.EventHandler(this.BrowseDataGridView_SelectionChanged);
+            this.browseDataGridView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.BrowseDataGridView_MouseDoubleClick);
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Location = new System.Drawing.Point(12, 270);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(426, 20);
+            this.statusLabel.TabIndex = 5;
+            this.statusLabel.Text = "Ładowanie danych..";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // BrowseWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(450, 561);
-            this.Controls.Add(this.textBoxesPanel);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.browseDataGridView);
+            this.Controls.Add(this.textBoxesPanel);
             this.Controls.Add(this.buttonsPanel);
             this.Name = "BrowseWindow";
             this.Text = "BrowseWindow";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.BrowseWindow_FormClosed);
             this.buttonsPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.browseDataGridView)).EndInit();
             this.textBoxesPanel.ResumeLayout(false);
             this.textBox3Panel.ResumeLayout(false);
             this.textBox3Panel.PerformLayout();
@@ -223,6 +222,7 @@
             this.textBox2Panel.PerformLayout();
             this.textBox1Panel.ResumeLayout(false);
             this.textBox1Panel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.browseDataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -230,10 +230,8 @@
         #endregion
 
         private Panel buttonsPanel;
-        private DataGridView browseDataGridView;
         private Button cancelButton;
         private Button okButton;
-        private Label statusLabel;
         private Panel textBoxesPanel;
         private Panel textBox3Panel;
         private TextBox textBox3;
@@ -241,5 +239,7 @@
         private TextBox textBox2;
         private Panel textBox1Panel;
         private TextBox textBox1;
+        private DataGridView browseDataGridView;
+        private Label statusLabel;
     }
 }

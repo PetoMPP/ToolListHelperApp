@@ -69,6 +69,14 @@ namespace ToolListHelperLibrary
         private async static Task ExecuteFileTransfer(ListModel model, DbConnection connection)
         {
             // Get machine paths
+            if (model.SkipMachine)
+            {
+                model.Machine = await GetMachineIDAsync(connection, model.Id);
+            }
+            if (model.SkipName)
+            {
+                model.Name = await GetListNameAsync(connection, model.Id);
+            }
             Dictionary<NcFileMode, string>? machinePaths = await GetMachinePathsDictonary(model.Machine ?? string.Empty, connection);
             NcFileMode ncFileMode = model.NcFile.NcFileMode;
             string filePath = model.NcFile.FilePath ?? string.Empty;
@@ -86,29 +94,44 @@ namespace ToolListHelperLibrary
             {
                 await MoveReleasedFileToArchive(model, machinePaths, connection);
             }
-            targetPath = Path.Combine(machinePaths[NcFileMode.Archive], model.Name?.ToUpper() ?? string.Empty) + '.' + CreateVersionString(nextVersion) + '.' + Path.GetExtension(filePath);
+            targetPath = Path.Combine(machinePaths[ncFileMode], model.Name?.ToUpper() ?? string.Empty) + '.' + CreateVersionString(nextVersion) + Path.GetExtension(filePath);
             // Copy source file to machine path
             // Update file state
             await SendNewFile(model, connection, GetStateNameFromNcFileMode(ncFileMode), filePath, nextVersion, targetPath);
         }
 
+        private static async Task<string?> GetListNameAsync(DbConnection connection, string id)
+        {
+            return await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT NCPROGRAM FROM TDM_LIST WHERE LISTID = '{id}'"));
+        }
+
         private async static Task SendNewFile(ListModel model, DbConnection connection, string targetState, string filePath, int version, string targetPath)
         {
-            File.Copy(filePath, targetPath);
-            await InsertFileState(model, version, targetState, Path.GetExtension(filePath).ToUpper(), connection);
+            File.Copy(filePath, targetPath, true);
+            await InsertFileState(model, version, targetState, Path.GetExtension(filePath).ToUpper().Substring(1), connection);
         }
 
         private async static Task InsertFileState(ListModel model, int version, string targetState, string extension, DbConnection connection)
         {
-            // TODO - Fix column names
+            // Determine if entry is for group or machine
+            string? machine = null;
+            string? machineGroup = await connection.ExecuteScalarAsync<string?>(new CommandDefinition($"SELECT TOP 1 MACHINEGROUPID FROM TDM_MACHINEGROUPSTATEPATH WHERE MACHINEGROUPID = '{await GetMachineGroupIdByMachineIdAsync(model.Machine ?? string.Empty, connection)}'"));
+            if (machineGroup == null)
+            {
+                machine = $"'{model.Machine}'";
+            }
+            else
+            {
+                machineGroup = $"'{machineGroup}'";
+            }
             await connection.ExecuteAsync(new CommandDefinition(@$"
-INSERT INTO NCM_PRODDOCB (FILEID, LISTID, EXTENSION, STATEID, VERSION) 
-VALUES '{model.Name?.ToUpper()}', '{model.Id}', '{extension}', '{targetState}', {version}", commandType: CommandType.Text));
+INSERT INTO NCM_PRODDOCB (FILEID, LISTID, EXTENSION, STATEID, VERSION, INDEXID, TIMESTAMP, USERID, MACHINEID, MACHINEGROUPID) 
+VALUES ('{model.Name?.ToUpper()}', '{model.Id}', '{extension}', '{targetState}', {version}, '0', '{DateTimeOffset.Now.ToUnixTimeSeconds()}', '{model.CreatorId}', {machine ?? "NULL"}, {machineGroup ?? "NULL"})", commandType: CommandType.Text));
         }
 
         private static async Task SendUpdateFile(string id, DbConnection connection, string targetState, string filePath, int version, string targetPath)
         {
-            File.Move(filePath, targetPath);
+            File.Move(filePath, targetPath, true);
             await SetFileState(id, version, targetState, connection);
         }
 
@@ -150,7 +173,7 @@ VALUES '{model.Name?.ToUpper()}', '{model.Id}', '{extension}', '{targetState}', 
         private static string CreateVersionString(int version)
         {
             string versionString = version.ToString();
-            for (int i = versionString.Length; i < 5; i++)
+            for (int i = versionString.Length; i < 4; i++)
             {
                 versionString = "0" + versionString;
             }
@@ -174,13 +197,20 @@ VALUES '{model.Name?.ToUpper()}', '{model.Id}', '{extension}', '{targetState}', 
         private static async Task<Dictionary<NcFileMode, string>> GetMachinePathsDictonary(string machine, DbConnection connection)
         {
             Dictionary<NcFileMode, string> fileModesPathes = new();
-            List<(string state, string path)> pathsForMachine = (await connection.QueryAsync<(string state, string path)>(new CommandDefinition($@"
+            List<MachinePathData> pathsForMachine = (await connection.QueryAsync<MachinePathData>(new CommandDefinition($@"
+SELECT PATH AS path, STATEID AS state
+FROM TDM_MACHINEGROUPSTATEPATH
+WHERE MACHINEGROUPID = '{await GetMachineGroupIdByMachineIdAsync(machine, connection)}'"))).ToList();
+            if (pathsForMachine.Count == 0)
+            {
+                pathsForMachine = (await connection.QueryAsync<MachinePathData>(new CommandDefinition($@"
 SELECT PATH AS path, STATEID AS state
 FROM TDM_MACHINESTATEPATH
-WHERE MACHINEID = '{machine}'"))).ToList();
-            foreach (NcFileMode fileMode in Enum.GetValues<NcFileMode>())
+WHERE MACHINEID = '{machine}'"))).AsList();
+            }
+            foreach (NcFileMode fileMode in Enum.GetValues<NcFileMode>().Except(new List<NcFileMode>() { NcFileMode.None }))
             {
-                fileModesPathes.Add(fileMode, pathsForMachine.Where(p => p.state == GetStateNameFromNcFileMode(fileMode)).First().path);
+                fileModesPathes.Add(fileMode, pathsForMachine.Where(p => p.State == GetStateNameFromNcFileMode(fileMode)).First().Path);
             }
             return fileModesPathes;
         }
@@ -192,6 +222,7 @@ WHERE MACHINEID = '{machine}'"))).ToList();
                 NcFileMode.Archive => "ARCHIVE",
                 NcFileMode.Developing => "NC DEVELOPING",
                 NcFileMode.Release => "RELEASE FOR PRODUCTION",
+                NcFileMode.Retransmission => "RETRANSSMISION",
                 _ => throw new InvalidOperationException()
             };
         }
@@ -340,6 +371,10 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
                 {
                     stringBuilder.Append("FIXTURE = NULL,");
                 }
+            }
+            if (model.ListStatus == ListStatus.Ready)
+            {
+                stringBuilder.Append("STATEID1 = 'TOOL LIST IS DONE',");
             }
             if (!model.SkipListType)
             {

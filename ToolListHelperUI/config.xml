@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<connectionStrings>
+		<TDMPROD connectionString="Server=uhlplvm03;Database=TDMPROD;User Id=tms;Password=tms;"/>
+		<TDMTEST connectionString="Server=uhlplvm03;Database=TDMTEST;User Id=tms;Password=tms;"/>
+	</connectionStrings>
+	<appSettings>
+		<GlobalDictonaryRelativePath value="DatronDataDictonary.csv"/>
+		<LocalDictonaryAbsolutePath value=""/>
+		<DictonaryMode value="Global"/>
+		<DatabaseMode value="Prod"/>
+		<SettingsPassPhrase value="admin"/>
+	</appSettings>
+</configuration>

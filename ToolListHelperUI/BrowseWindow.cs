@@ -246,15 +246,6 @@ namespace ToolListHelperUI
                 okButton.Enabled = false;
             }
         }
-
-        private void BrowseDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (browseDataGridView.HitTest(e.X, e.Y).Type == DataGridViewHitTestType.Cell)
-            {
-                SendDataToCaller();
-            }
-        }
-
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
             FilterDataGrid();
@@ -363,6 +354,14 @@ namespace ToolListHelperUI
                 filteredData.AddRange(_initialData.Cast<MachineData>().Where(p => Regex.IsMatch(p.ParentGroup, textBox3.Text)));
             }
             ReloadDataGridData(filteredData);
+        }
+
+        private void BrowseDataGridView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (browseDataGridView.HitTest(e.X, e.Y).Type == DataGridViewHitTestType.Cell)
+            {
+                SendDataToCaller();
+            }
         }
     }
 }

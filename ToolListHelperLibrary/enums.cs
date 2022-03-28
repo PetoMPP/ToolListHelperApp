@@ -10,6 +10,7 @@
         Developing,
         Release,
         Archive,
+        Retransmission,
         None
     }
     public enum NcFileType
