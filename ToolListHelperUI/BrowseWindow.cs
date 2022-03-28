@@ -221,8 +221,8 @@ namespace ToolListHelperUI
                 BrowsingMode.ProgramId => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
                 BrowsingMode.ProgramName => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
                 BrowsingMode.ProgramDescription => browseDataGridView.SelectedRows[0].Cells["Description"].Value.ToString(),
-                BrowsingMode.Machine => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
-                BrowsingMode.Material => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
+                BrowsingMode.Machine => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
+                BrowsingMode.Material => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
                 BrowsingMode.Clamping => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
                 _ => null,
             };
