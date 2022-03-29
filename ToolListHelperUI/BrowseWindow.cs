@@ -284,9 +284,9 @@ namespace ToolListHelperUI
             }
             filteredData.AddRange(_initialData.Cast<ProgramData>()
                 .Where(p => 
-                Regex.IsMatch(p.Id, textBox1.Text, RegexOptions.IgnoreCase) && 
-                Regex.IsMatch(p.Name, textBox2.Text, RegexOptions.IgnoreCase) && 
-                Regex.IsMatch(p.Description ?? string.Empty, textBox3.Text, RegexOptions.IgnoreCase)));
+                Regex.IsMatch(p.Id, Regex.Escape(textBox1.Text), RegexOptions.IgnoreCase) && 
+                Regex.IsMatch(p.Name, Regex.Escape(textBox2.Text), RegexOptions.IgnoreCase) && 
+                Regex.IsMatch(p.Description ?? string.Empty, Regex.Escape(textBox3.Text), RegexOptions.IgnoreCase)));
             ReloadDataGridData(filteredData);
         }
 
@@ -336,7 +336,7 @@ namespace ToolListHelperUI
             }
             filteredData.AddRange(_initialData.Cast<ClampingData>()
                 .Where(p => 
-                Regex.IsMatch(p.Name, textBox1.Text, RegexOptions.IgnoreCase)));
+                Regex.IsMatch(p.Name, Regex.Escape(textBox1.Text), RegexOptions.IgnoreCase)));
             ReloadDataGridData(filteredData);
         }
 
@@ -350,9 +350,9 @@ namespace ToolListHelperUI
             }
             filteredData.AddRange(_initialData.Cast<MaterialData>()
                 .Where(p => 
-                Regex.IsMatch(p.Id, textBox1.Text, RegexOptions.IgnoreCase) &&
-                Regex.IsMatch(p.Name, textBox2.Text, RegexOptions.IgnoreCase) &&
-                Regex.IsMatch(p.ParentGroup, textBox3.Text, RegexOptions.IgnoreCase)));
+                Regex.IsMatch(p.Id, Regex.Escape(textBox1.Text), RegexOptions.IgnoreCase) &&
+                Regex.IsMatch(p.Name, Regex.Escape(textBox2.Text), RegexOptions.IgnoreCase) &&
+                Regex.IsMatch(p.ParentGroup, Regex.Escape(textBox3.Text), RegexOptions.IgnoreCase)));
             ReloadDataGridData(filteredData);
         }
 
@@ -366,9 +366,9 @@ namespace ToolListHelperUI
             }
             filteredData.AddRange(_initialData.Cast<MachineData>()
                 .Where(p =>
-                Regex.IsMatch(p.Id, textBox1.Text, RegexOptions.IgnoreCase) &&
-                Regex.IsMatch(p.Name, textBox2.Text, RegexOptions.IgnoreCase) &&
-                Regex.IsMatch(p.ParentGroup, textBox3.Text, RegexOptions.IgnoreCase)));
+                Regex.IsMatch(p.Id, Regex.Escape(textBox1.Text), RegexOptions.IgnoreCase) &&
+                Regex.IsMatch(p.Name, Regex.Escape(textBox2.Text), RegexOptions.IgnoreCase) &&
+                Regex.IsMatch(p.ParentGroup, Regex.Escape(textBox3.Text), RegexOptions.IgnoreCase)));
             ReloadDataGridData(filteredData);
         }
 
