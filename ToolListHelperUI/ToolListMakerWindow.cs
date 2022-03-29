@@ -135,7 +135,7 @@ namespace ToolListHelperUI
                 case "sinumericModeRadioButton":
                 case "autoModeRadioButton":
                     machineTextBox.Text = string.Empty;
-                    noMachineRadioButton.Checked = true;
+                    autoMachineRadioButton.Checked = true;
                     return;
                 case "fusionModeRadioButton":
                     machineTextBox.Text = "MMLCUBEB";
@@ -426,7 +426,7 @@ namespace ToolListHelperUI
             bool skipDescription = skipProgramDescriptionRadioButton.Checked;
             string? description = skipDescription ? null : noProgramDescriptionRadioButton.Checked ? null : programDescriptionTextBox.Text;
             bool skipMachine = skipMachineRadioButton.Checked;
-            string? machine = skipMachine ? null : noMachineRadioButton.Checked ? null : machineTextBox.Text;
+            string? machine = skipMachine ? null : autoMachineRadioButton.Checked ? await FileOperations.GetMachineFromFilesAsync(_filePaths, GetFileTypeFromUI()) : machineTextBox.Text;
             bool skipListType = skipListTypeRadioButton.Checked;
             ListType? listType = skipListType ? null : primaryTypeRadioButton.Checked ? ListType.Primary : ListType.Secondary;
             bool skipMaterial = skipMaterialRadioButton.Checked;
@@ -483,7 +483,7 @@ namespace ToolListHelperUI
                     break;
                 case NcFileType.Auto:
                     dialog.InitialDirectory = "M:/";
-                    dialog.Filter = "Pliki MPF/SPF|*.mpf;*.spf|Pliki Fusion|*.simpl|Wszystkie pliki|*.*";
+                    dialog.Filter = "Pliki kodu maszynowego|*.mpf;*.spf;*.simpl|Pliki MPF/SPF|*.mpf;*.spf|Pliki Fusion|*.simpl|Wszystkie pliki|*.*";
                     break;
             }
             dialog.ShowDialog();

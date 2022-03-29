@@ -87,7 +87,7 @@
             this.browseMachinePanel = new System.Windows.Forms.Panel();
             this.browseMachineButton = new System.Windows.Forms.Button();
             this.selectMachineRadioButton = new System.Windows.Forms.RadioButton();
-            this.noMachineRadioButton = new System.Windows.Forms.RadioButton();
+            this.autoMachineRadioButton = new System.Windows.Forms.RadioButton();
             this.machineLabel = new System.Windows.Forms.Label();
             this.programDescriptionPanel = new System.Windows.Forms.Panel();
             this.skipProgramDescriptionRadioButton = new System.Windows.Forms.RadioButton();
@@ -277,7 +277,6 @@
             // 
             // sinumericModeRadioButton
             // 
-            this.sinumericModeRadioButton.Checked = true;
             this.sinumericModeRadioButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sinumericModeRadioButton.ForeColor = System.Drawing.Color.Black;
             this.sinumericModeRadioButton.Location = new System.Drawing.Point(225, 30);
@@ -286,7 +285,6 @@
             this.sinumericModeRadioButton.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
             this.sinumericModeRadioButton.Size = new System.Drawing.Size(225, 47);
             this.sinumericModeRadioButton.TabIndex = 2;
-            this.sinumericModeRadioButton.TabStop = true;
             this.sinumericModeRadioButton.Text = "Kod NC Sinumeric";
             this.sinumericModeRadioButton.UseVisualStyleBackColor = true;
             this.sinumericModeRadioButton.CheckedChanged += new System.EventHandler(this.FileModeRadioButton_CheckedChanged);
@@ -306,7 +304,7 @@
             // 
             // autoModeRadioButton
             // 
-            this.autoModeRadioButton.Enabled = false;
+            this.autoModeRadioButton.Checked = true;
             this.autoModeRadioButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.autoModeRadioButton.ForeColor = System.Drawing.Color.Black;
             this.autoModeRadioButton.Location = new System.Drawing.Point(0, 30);
@@ -315,6 +313,7 @@
             this.autoModeRadioButton.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
             this.autoModeRadioButton.Size = new System.Drawing.Size(225, 47);
             this.autoModeRadioButton.TabIndex = 1;
+            this.autoModeRadioButton.TabStop = true;
             this.autoModeRadioButton.Text = "Wybierz automatycznie";
             this.autoModeRadioButton.UseVisualStyleBackColor = true;
             this.autoModeRadioButton.CheckedChanged += new System.EventHandler(this.FileModeRadioButton_CheckedChanged);
@@ -711,7 +710,6 @@
             // 
             // addFileAsArchiveRadioButton
             // 
-            this.addFileAsArchiveRadioButton.Enabled = false;
             this.addFileAsArchiveRadioButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.addFileAsArchiveRadioButton.ForeColor = System.Drawing.Color.Black;
             this.addFileAsArchiveRadioButton.Location = new System.Drawing.Point(225, 77);
@@ -827,7 +825,7 @@
             this.machinePanel.Controls.Add(this.skipMachineRadioButton);
             this.machinePanel.Controls.Add(this.machineInputPanel);
             this.machinePanel.Controls.Add(this.selectMachineRadioButton);
-            this.machinePanel.Controls.Add(this.noMachineRadioButton);
+            this.machinePanel.Controls.Add(this.autoMachineRadioButton);
             this.machinePanel.Controls.Add(this.machineLabel);
             this.machinePanel.Location = new System.Drawing.Point(0, 656);
             this.machinePanel.Margin = new System.Windows.Forms.Padding(0);
@@ -921,20 +919,20 @@
             this.selectMachineRadioButton.UseVisualStyleBackColor = true;
             this.selectMachineRadioButton.CheckedChanged += new System.EventHandler(this.WireUpRadioButtons_CheckedChanged);
             // 
-            // noMachineRadioButton
+            // autoMachineRadioButton
             // 
-            this.noMachineRadioButton.Checked = true;
-            this.noMachineRadioButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.noMachineRadioButton.ForeColor = System.Drawing.Color.Black;
-            this.noMachineRadioButton.Location = new System.Drawing.Point(0, 30);
-            this.noMachineRadioButton.Margin = new System.Windows.Forms.Padding(0);
-            this.noMachineRadioButton.Name = "noMachineRadioButton";
-            this.noMachineRadioButton.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
-            this.noMachineRadioButton.Size = new System.Drawing.Size(225, 47);
-            this.noMachineRadioButton.TabIndex = 1;
-            this.noMachineRadioButton.TabStop = true;
-            this.noMachineRadioButton.Text = "Nie dodawaj maszyny";
-            this.noMachineRadioButton.UseVisualStyleBackColor = true;
+            this.autoMachineRadioButton.Checked = true;
+            this.autoMachineRadioButton.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.autoMachineRadioButton.ForeColor = System.Drawing.Color.Black;
+            this.autoMachineRadioButton.Location = new System.Drawing.Point(0, 30);
+            this.autoMachineRadioButton.Margin = new System.Windows.Forms.Padding(0);
+            this.autoMachineRadioButton.Name = "autoMachineRadioButton";
+            this.autoMachineRadioButton.Padding = new System.Windows.Forms.Padding(11, 0, 2, 0);
+            this.autoMachineRadioButton.Size = new System.Drawing.Size(225, 47);
+            this.autoMachineRadioButton.TabIndex = 1;
+            this.autoMachineRadioButton.TabStop = true;
+            this.autoMachineRadioButton.Text = "Automatycznie z pliku";
+            this.autoMachineRadioButton.UseVisualStyleBackColor = true;
             // 
             // machineLabel
             // 
@@ -1451,7 +1449,7 @@
         private Panel browseMachinePanel;
         private Button browseMachineButton;
         private RadioButton selectMachineRadioButton;
-        private RadioButton noMachineRadioButton;
+        private RadioButton autoMachineRadioButton;
         private Label machineLabel;
         private Panel machineTextBoxPanel;
         private TextBox machineTextBox;

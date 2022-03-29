@@ -31,21 +31,68 @@ namespace ToolListHelperLibrary
                 _ => throw new InvalidDataException()
             };
         }
+        public static async Task<string> GetMachineFromFilesAsync(string[] filePaths, NcFileType ncFileType)
+        {
+            string data = string.Empty;
+            foreach (string filePath in filePaths)
+            {
+                data += await File.ReadAllTextAsync(filePath);
+            }
+            return ncFileType switch
+            {
+                NcFileType.Sinumeric => GetMachineSinumeric(data),
+                NcFileType.Fusion => "MMLCUBEB",
+                NcFileType.ShopTurn => "MCTX125A",
+                NcFileType.Auto => GetMachineAuto(data),
+                _ => throw new InvalidDataException(),
+            };
+        }
+
+        private static string GetMachineSinumeric(string data)
+        {
+            if (Regex.IsMatch(data, @"DMF260"))
+            {
+                return "MDMF260";
+            }
+            if (Regex.IsMatch(data, @"DMC60"))
+            {
+                return "MFSTMS1_DMC60H";
+            }
+            if (Regex.IsMatch(data, @"CTX"))
+            {
+                return "MCTX125A";
+            }
+            return string.Empty;
+        }
+
+        private static string GetMachineAuto(string data)
+        {
+            if (data.StartsWith("F_HEAD"))
+            {
+                return "MCTX125A";
+            }
+            List<ToolData> sinuData = GetToolDataSinumeric(data);
+            List<ToolData> fusionData = GetToolDataFusion(data);
+            if (sinuData.Count > fusionData.Count)
+            {
+                return GetMachineSinumeric(data);
+            }
+            return "MMLCUBEB";
+        }
 
         private static List<ToolData> GetToolDataAuto(string data)
         {
+            if (data.StartsWith("F_HEAD"))
+            {
+                return GetToolDataShopTurn(data);
+            }
             List<ToolData> sinuData = GetToolDataSinumeric(data);
             List<ToolData> fusionData = GetToolDataFusion(data);
-            List<ToolData> shopTurnData = GetToolDataShopTurn(data);
-            if (sinuData.Count > fusionData.Count && sinuData.Count > shopTurnData.Count)
+            if (sinuData.Count > fusionData.Count)
             {
                 return sinuData;
             }
-            if (fusionData.Count > shopTurnData.Count)
-            {
-                return fusionData;
-            }
-            return shopTurnData;
+            return fusionData;
         }
 
         public static List<ToolData> GetToolDataShopTurn(string data)
@@ -107,5 +154,6 @@ namespace ToolListHelperLibrary
             }
             return(errorMessage, errorCounter);
         }
+
     }
 }
