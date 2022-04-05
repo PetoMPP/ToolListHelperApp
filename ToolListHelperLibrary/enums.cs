@@ -45,4 +45,9 @@
         Preparing,
         Ready
     }
+    public enum ApplicationTheme
+    {
+        Light,
+        Dark
+    }
 }
