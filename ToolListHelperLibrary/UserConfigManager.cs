@@ -14,7 +14,7 @@ namespace ToolListHelperLibrary
         {
             return ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoaming);
         }
-        public static ApplicationTheme GetUserCurrentTheme()
+        public static ApplicationTheme GetCurrentUserTheme()
         {
             Configuration userConfig = GetUserConfig();
             return Enum.Parse<ApplicationTheme>(userConfig.GetSection(ApplicationThemeConfigName).ToString() ?? ApplicationTheme.Light.ToString());

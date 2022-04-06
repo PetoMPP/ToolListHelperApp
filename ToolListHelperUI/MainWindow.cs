@@ -20,10 +20,13 @@ namespace ToolListHelperUI
         private Form? _activeForm;
         private int _settingsCounter = 0;
         private string _settingPassPhrase = AppConfigManager.GetSettingsPassPhrase();
+        private ApplicationTheme _applicationTheme;
         public MainWindow()
         {
             InitializeComponent();
             Text += $" © {DateTimeOffset.Now.Year} PetoMPP";
+            _applicationTheme = UserConfigManager.GetCurrentUserTheme();
+            LoadTheme();
         }
 
         private async void ToolListMakerButton_ClickAsync(object sender, EventArgs e)
@@ -220,6 +223,22 @@ namespace ToolListHelperUI
         public void UpdatePassPhrase()
         {
             _settingPassPhrase = AppConfigManager.GetSettingsPassPhrase();
+        }
+
+        private void ThemeSwitchPictureBox_Click(object sender, EventArgs e)
+        {
+            _applicationTheme = _applicationTheme == ApplicationTheme.Light ? ApplicationTheme.Dark : ApplicationTheme.Light;
+            LoadTheme();
+        }
+
+        public void LoadTheme()
+        {
+            // Change ForeColors Primary
+            // Change ForeColors Secondary
+            // Change BackColors Primary
+            // Change BackColors Secondary
+            // Change Theme Switch PictureSource
+            themeSwitchPictureBox.Image = Image.FromFile("Resources")
         }
     }
 }

@@ -30,6 +30,7 @@
         {
             this.sidePanel = new System.Windows.Forms.Panel();
             this.menuPanel = new System.Windows.Forms.Panel();
+            this.themeSwitchPanel = new System.Windows.Forms.Panel();
             this.reportIssuePanel = new System.Windows.Forms.Panel();
             this.reportIssueButton = new System.Windows.Forms.Button();
             this.axitoPictureBox = new System.Windows.Forms.PictureBox();
@@ -41,11 +42,14 @@
             this.currentModuleLabel = new System.Windows.Forms.Label();
             this.mainPanel = new System.Windows.Forms.Panel();
             this.closeAppButton = new System.Windows.Forms.Button();
+            this.themeSwitchPictureBox = new System.Windows.Forms.PictureBox();
             this.sidePanel.SuspendLayout();
             this.menuPanel.SuspendLayout();
+            this.themeSwitchPanel.SuspendLayout();
             this.reportIssuePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axitoPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.themeSwitchPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // sidePanel
@@ -61,6 +65,7 @@
             // menuPanel
             // 
             this.menuPanel.BackColor = System.Drawing.Color.White;
+            this.menuPanel.Controls.Add(this.themeSwitchPanel);
             this.menuPanel.Controls.Add(this.reportIssuePanel);
             this.menuPanel.Controls.Add(this.axitoPictureBox);
             this.menuPanel.Controls.Add(this.toolListRemoverButton);
@@ -72,6 +77,16 @@
             this.menuPanel.Name = "menuPanel";
             this.menuPanel.Size = new System.Drawing.Size(200, 744);
             this.menuPanel.TabIndex = 9;
+            // 
+            // themeSwitchPanel
+            // 
+            this.themeSwitchPanel.Controls.Add(this.themeSwitchPictureBox);
+            this.themeSwitchPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.themeSwitchPanel.Location = new System.Drawing.Point(0, 555);
+            this.themeSwitchPanel.Name = "themeSwitchPanel";
+            this.themeSwitchPanel.Padding = new System.Windows.Forms.Padding(10, 10, 10, 20);
+            this.themeSwitchPanel.Size = new System.Drawing.Size(200, 51);
+            this.themeSwitchPanel.TabIndex = 10;
             // 
             // reportIssuePanel
             // 
@@ -225,6 +240,18 @@
             this.closeAppButton.Visible = false;
             this.closeAppButton.Click += new System.EventHandler(this.CloseAppButton_Click);
             // 
+            // themeSwitchPictureBox
+            // 
+            this.themeSwitchPictureBox.BackColor = System.Drawing.Color.Red;
+            this.themeSwitchPictureBox.InitialImage = null;
+            this.themeSwitchPictureBox.Location = new System.Drawing.Point(59, 13);
+            this.themeSwitchPictureBox.Name = "themeSwitchPictureBox";
+            this.themeSwitchPictureBox.Size = new System.Drawing.Size(72, 25);
+            this.themeSwitchPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.themeSwitchPictureBox.TabIndex = 0;
+            this.themeSwitchPictureBox.TabStop = false;
+            this.themeSwitchPictureBox.Click += new System.EventHandler(this.ThemeSwitchPictureBox_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -243,9 +270,12 @@
             this.Resize += new System.EventHandler(this.MainWindow_Resize);
             this.sidePanel.ResumeLayout(false);
             this.menuPanel.ResumeLayout(false);
+            this.themeSwitchPanel.ResumeLayout(false);
+            this.themeSwitchPanel.PerformLayout();
             this.reportIssuePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axitoPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.themeSwitchPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -265,5 +295,7 @@
         private Button toolListMakerButton;
         private Label menuLabel;
         private PictureBox logoPictureBox;
+        private Panel themeSwitchPanel;
+        private PictureBox themeSwitchPictureBox;
     }
 }
