@@ -15,4 +15,9 @@ namespace ToolListHelperUI
         Material,
         Clamping
     }
+    public enum ApplicationTheme
+    {
+        Light,
+        Dark
+    }
 }

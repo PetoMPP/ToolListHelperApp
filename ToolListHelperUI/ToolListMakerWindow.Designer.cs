@@ -163,12 +163,13 @@
             this.dataWizardButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
             this.dataWizardButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dataWizardButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.dataWizardButton.ForeColor = System.Drawing.Color.White;
+            this.dataWizardButton.ForeColor = System.Drawing.Color.Transparent;
             this.dataWizardButton.Location = new System.Drawing.Point(80, 10);
             this.dataWizardButton.Margin = new System.Windows.Forms.Padding(10);
             this.dataWizardButton.Name = "dataWizardButton";
             this.dataWizardButton.Size = new System.Drawing.Size(330, 60);
             this.dataWizardButton.TabIndex = 4;
+            this.dataWizardButton.Tag = "UnchangeableColor";
             this.dataWizardButton.Text = "Uruchom kreator";
             this.dataWizardButton.UseVisualStyleBackColor = false;
             // 
@@ -183,7 +184,7 @@
             // 
             // moduleDescriptionLabel
             // 
-            this.moduleDescriptionLabel.BackColor = System.Drawing.Color.White;
+            this.moduleDescriptionLabel.BackColor = System.Drawing.Color.Transparent;
             this.moduleDescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.moduleDescriptionLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.moduleDescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -198,7 +199,7 @@
             // 
             // createPanel
             // 
-            this.createPanel.BackColor = System.Drawing.Color.White;
+            this.createPanel.BackColor = System.Drawing.Color.Transparent;
             this.createPanel.Controls.Add(this.createListButton);
             this.createPanel.Location = new System.Drawing.Point(450, 80);
             this.createPanel.Name = "createPanel";
@@ -213,19 +214,20 @@
             this.createListButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
             this.createListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.createListButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.createListButton.ForeColor = System.Drawing.Color.White;
+            this.createListButton.ForeColor = System.Drawing.Color.Transparent;
             this.createListButton.Location = new System.Drawing.Point(40, 10);
             this.createListButton.Margin = new System.Windows.Forms.Padding(10);
             this.createListButton.Name = "createListButton";
             this.createListButton.Size = new System.Drawing.Size(330, 60);
             this.createListButton.TabIndex = 4;
+            this.createListButton.Tag = "UnchangeableColor";
             this.createListButton.Text = "Stwórz listę z podanych informacji";
             this.createListButton.UseVisualStyleBackColor = false;
             this.createListButton.Click += new System.EventHandler(this.CreateListButton_Click);
             // 
             // wizardPanel
             // 
-            this.wizardPanel.BackColor = System.Drawing.Color.White;
+            this.wizardPanel.BackColor = System.Drawing.Color.Transparent;
             this.wizardPanel.Controls.Add(this.dataWizardButton);
             this.wizardPanel.Location = new System.Drawing.Point(0, 80);
             this.wizardPanel.Name = "wizardPanel";
@@ -235,7 +237,7 @@
             // 
             // modePanel
             // 
-            this.modePanel.BackColor = System.Drawing.Color.White;
+            this.modePanel.BackColor = System.Drawing.Color.Transparent;
             this.modePanel.Controls.Add(this.shopturnModeRadioButton);
             this.modePanel.Controls.Add(this.fusionModeRadioButton);
             this.modePanel.Controls.Add(this.sinumericModeRadioButton);
@@ -291,6 +293,7 @@
             // 
             // modeLabel
             // 
+            this.modeLabel.BackColor = System.Drawing.Color.Transparent;
             this.modeLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.modeLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.modeLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -320,7 +323,7 @@
             // 
             // sourceFilePanel
             // 
-            this.sourceFilePanel.BackColor = System.Drawing.Color.White;
+            this.sourceFilePanel.BackColor = System.Drawing.Color.Transparent;
             this.sourceFilePanel.Controls.Add(this.browseFilesButtonPanel);
             this.sourceFilePanel.Controls.Add(this.sourceFilePathPanel);
             this.sourceFilePanel.Controls.Add(this.sourceFileLabel);
@@ -378,6 +381,7 @@
             // 
             // sourceFileLabel
             // 
+            this.sourceFileLabel.BackColor = System.Drawing.Color.Transparent;
             this.sourceFileLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.sourceFileLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sourceFileLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -391,7 +395,7 @@
             // 
             // settingsPanel
             // 
-            this.settingsPanel.BackColor = System.Drawing.Color.White;
+            this.settingsPanel.BackColor = System.Drawing.Color.Transparent;
             this.settingsPanel.Controls.Add(this.wizardPanel);
             this.settingsPanel.Controls.Add(this.descriptionPanel);
             this.settingsPanel.Controls.Add(this.createPanel);
@@ -414,7 +418,7 @@
             // 
             // clampingPanel
             // 
-            this.clampingPanel.BackColor = System.Drawing.Color.White;
+            this.clampingPanel.BackColor = System.Drawing.Color.Transparent;
             this.clampingPanel.Controls.Add(this.skipClampingRadioButton);
             this.clampingPanel.Controls.Add(this.clampingInputPanel);
             this.clampingPanel.Controls.Add(this.selectClampingRadioButton);
@@ -542,7 +546,7 @@
             // 
             // materialPanel
             // 
-            this.materialPanel.BackColor = System.Drawing.Color.White;
+            this.materialPanel.BackColor = System.Drawing.Color.Transparent;
             this.materialPanel.Controls.Add(this.skipMaterialRadioButton);
             this.materialPanel.Controls.Add(this.materialInputPanel);
             this.materialPanel.Controls.Add(this.selectMaterialRadioButton);
@@ -670,7 +674,7 @@
             // 
             // addFilePanel
             // 
-            this.addFilePanel.BackColor = System.Drawing.Color.White;
+            this.addFilePanel.BackColor = System.Drawing.Color.Transparent;
             this.addFilePanel.Controls.Add(this.addFileAsReleasedRadioButton);
             this.addFilePanel.Controls.Add(this.addFileAsDevelopingRadioButton);
             this.addFilePanel.Controls.Add(this.addFileAsArchiveRadioButton);
@@ -751,7 +755,7 @@
             // 
             // listTypePanel
             // 
-            this.listTypePanel.BackColor = System.Drawing.Color.White;
+            this.listTypePanel.BackColor = System.Drawing.Color.Transparent;
             this.listTypePanel.Controls.Add(this.skipListTypeRadioButton);
             this.listTypePanel.Controls.Add(this.secondaryRadioButton);
             this.listTypePanel.Controls.Add(this.primaryTypeRadioButton);
@@ -821,7 +825,7 @@
             // 
             // machinePanel
             // 
-            this.machinePanel.BackColor = System.Drawing.Color.White;
+            this.machinePanel.BackColor = System.Drawing.Color.Transparent;
             this.machinePanel.Controls.Add(this.skipMachineRadioButton);
             this.machinePanel.Controls.Add(this.machineInputPanel);
             this.machinePanel.Controls.Add(this.selectMachineRadioButton);
@@ -949,7 +953,7 @@
             // 
             // programDescriptionPanel
             // 
-            this.programDescriptionPanel.BackColor = System.Drawing.Color.White;
+            this.programDescriptionPanel.BackColor = System.Drawing.Color.Transparent;
             this.programDescriptionPanel.Controls.Add(this.skipProgramDescriptionRadioButton);
             this.programDescriptionPanel.Controls.Add(this.programDescriptionInputPanel);
             this.programDescriptionPanel.Controls.Add(this.manualProgramDescriptionRadioButton);
@@ -1077,7 +1081,7 @@
             // 
             // programNamePanel
             // 
-            this.programNamePanel.BackColor = System.Drawing.Color.White;
+            this.programNamePanel.BackColor = System.Drawing.Color.Transparent;
             this.programNamePanel.Controls.Add(this.skipNameRadioButton);
             this.programNamePanel.Controls.Add(this.programNameInputPanel);
             this.programNamePanel.Controls.Add(this.manualNameRadioButton);
@@ -1205,7 +1209,7 @@
             // 
             // creatingModePanel
             // 
-            this.creatingModePanel.BackColor = System.Drawing.Color.White;
+            this.creatingModePanel.BackColor = System.Drawing.Color.Transparent;
             this.creatingModePanel.Controls.Add(this.listStatusCheckBox);
             this.creatingModePanel.Controls.Add(this.programIdPanel);
             this.creatingModePanel.Controls.Add(this.creatingModeUpdateRadioButton);

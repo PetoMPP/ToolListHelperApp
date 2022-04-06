@@ -13,7 +13,7 @@ using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI
 {
-    public partial class ToolListMakerWindow : Form, IBrowseData
+    public partial class ToolListMakerWindow : Form, IBrowseData, IThemeLoader
     {
         private readonly List<Panel> _sectionPanels;
         private readonly List<RadioButton> _updateRadioButtons;
@@ -528,6 +528,67 @@ namespace ToolListHelperUI
             if (e.Data.GetDataPresent(DataFormats.FileDrop, false) == true)
             {
                 e.Effect = DragDropEffects.All;
+            }
+        }
+
+        public void LoadTheme(ApplicationTheme applicationTheme)
+        {
+            switch (applicationTheme)
+            {
+                case ApplicationTheme.Light:
+                    // TODO - Do recursive ofType
+                    BackColor = ApplicationThemeProperties.LightPrimaryBack;
+                    foreach (Label label in Controls.OfType<Label>())
+                    {
+                        label.ForeColor = ApplicationThemeProperties.LightPrimaryFore;
+                    }
+                    foreach (RadioButton radio in Controls.OfType<RadioButton>())
+                    {
+                        radio.ForeColor = ApplicationThemeProperties.LightSecondaryFore;
+                    }
+                    foreach (TextBox textBox in Controls.OfType<TextBox>())
+                    {
+                        textBox.ForeColor = ApplicationThemeProperties.LightSecondaryFore;
+                        textBox.BackColor = ApplicationThemeProperties.LightSecondaryBack;
+                    }
+                    foreach (Button button in Controls.OfType<Button>().Where(b => b.Tag.ToString()?.Length == 0))
+                    {
+                        button.ForeColor = ApplicationThemeProperties.LightPrimaryFore;
+                        button.BackColor = ApplicationThemeProperties.LightPrimaryBack;
+                        button.FlatAppearance.BorderColor = ApplicationThemeProperties.LightPrimaryFore;
+                    }
+                    foreach (CheckBox checkBox in Controls.OfType<CheckBox>())
+                    {
+                        checkBox.ForeColor = ApplicationThemeProperties.LightPrimaryFore;
+                    }
+                    break;
+                case ApplicationTheme.Dark:
+                    // TODO - Do recursive ofType
+                    BackColor = ApplicationThemeProperties.DarkPrimaryBack;
+                    foreach (Label label in Controls.OfType<Label>())
+                    {
+                        label.ForeColor = ApplicationThemeProperties.DarkPrimaryFore;
+                    }
+                    foreach (RadioButton radio in Controls.OfType<RadioButton>())
+                    {
+                        radio.ForeColor = ApplicationThemeProperties.DarkSecondaryFore;
+                    }
+                    foreach (TextBox textBox in Controls.OfType<TextBox>())
+                    {
+                        textBox.ForeColor = ApplicationThemeProperties.DarkSecondaryFore;
+                        textBox.BackColor = ApplicationThemeProperties.DarkSecondaryBack;
+                    }
+                    foreach (Button button in Controls.OfType<Button>().Where(b => b.Tag.ToString()?.Length == 0))
+                    {
+                        button.ForeColor = ApplicationThemeProperties.DarkPrimaryFore;
+                        button.BackColor = ApplicationThemeProperties.DarkPrimaryBack;
+                        button.FlatAppearance.BorderColor = ApplicationThemeProperties.DarkPrimaryFore;
+                    }
+                    foreach (CheckBox checkBox in Controls.OfType<CheckBox>())
+                    {
+                        checkBox.ForeColor = ApplicationThemeProperties.DarkPrimaryFore;
+                    }
+                    break;
             }
         }
     }

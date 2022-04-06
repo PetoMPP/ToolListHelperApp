@@ -228,17 +228,70 @@ namespace ToolListHelperUI
         private void ThemeSwitchPictureBox_Click(object sender, EventArgs e)
         {
             _applicationTheme = _applicationTheme == ApplicationTheme.Light ? ApplicationTheme.Dark : ApplicationTheme.Light;
+            UserConfigManager.SetCurrentUserTheme(_applicationTheme);
             LoadTheme();
         }
 
         public void LoadTheme()
         {
-            // Change ForeColors Primary
-            // Change ForeColors Secondary
-            // Change BackColors Primary
-            // Change BackColors Secondary
-            // Change Theme Switch PictureSource
-            themeSwitchPictureBox.Image = Image.FromFile("Resources")
+            if (_activeForm != null)
+            {
+                try
+                {
+                    ((IThemeLoader)_activeForm).LoadTheme(_applicationTheme);
+                }
+                catch (System.Exception error)
+                {
+                    UserInterfaceLogic.ShowError(error.Message, "Błąd motywu!");
+                }
+            }
+            switch (_applicationTheme)
+            {
+                case ApplicationTheme.Light:
+                    logoPictureBox.BackColor = ApplicationThemeProperties.LightPrimaryBack;
+                    menuLabel.ForeColor = ApplicationThemeProperties.LightPrimaryBack;
+                    menuLabel.BackColor = ApplicationThemeProperties.LightPrimaryFore;
+                    menuPanel.BackColor = ApplicationThemeProperties.LightPrimaryBack;
+                    toolListMakerButton.BackColor = ApplicationThemeProperties.LightSecondaryBack;
+                    toolListMakerButton.ForeColor = ApplicationThemeProperties.LightSecondaryFore;
+                    toolListMakerButton.FlatAppearance.BorderColor = ApplicationThemeProperties.LightSecondaryBorderColor;
+                    datronDictatorButton.BackColor = ApplicationThemeProperties.LightSecondaryBack;
+                    datronDictatorButton.ForeColor = ApplicationThemeProperties.LightSecondaryFore;
+                    datronDictatorButton.FlatAppearance.BorderColor = ApplicationThemeProperties.LightSecondaryBorderColor;
+                    toolListRemoverButton.BackColor = ApplicationThemeProperties.LightSecondaryBack;
+                    toolListRemoverButton.ForeColor = ApplicationThemeProperties.LightSecondaryFore;
+                    toolListRemoverButton.FlatAppearance.BorderColor = ApplicationThemeProperties.LightSecondaryBorderColor;
+                    reportIssueButton.BackColor = ApplicationThemeProperties.LightSecondaryBack;
+                    reportIssueButton.ForeColor = ApplicationThemeProperties.LightSecondaryFore;
+                    reportIssueButton.FlatAppearance.BorderColor = ApplicationThemeProperties.LightSecondaryBorderColor;
+                    currentModuleLabel.BackColor = ApplicationThemeProperties.LightPrimaryBack;
+                    currentModuleLabel.ForeColor = ApplicationThemeProperties.LightPrimaryFore;
+                    mainPanel.BackColor = ApplicationThemeProperties.LightPrimaryBack;
+                    //themeSwitchPictureBox.Image = Properties.Resources.Logo_Axito_Uhlmann_Group;
+                    break;
+                case ApplicationTheme.Dark:
+                    logoPictureBox.BackColor = ApplicationThemeProperties.DarkPrimaryBack;
+                    menuLabel.ForeColor = ApplicationThemeProperties.DarkPrimaryBack;
+                    menuLabel.BackColor = ApplicationThemeProperties.DarkPrimaryFore;
+                    menuPanel.BackColor = ApplicationThemeProperties.DarkPrimaryBack;
+                    toolListMakerButton.BackColor = ApplicationThemeProperties.DarkSecondaryBack;
+                    toolListMakerButton.ForeColor = ApplicationThemeProperties.DarkSecondaryFore;
+                    toolListMakerButton.FlatAppearance.BorderColor = ApplicationThemeProperties.DarkSecondaryBorderColor;
+                    datronDictatorButton.BackColor = ApplicationThemeProperties.DarkSecondaryBack;
+                    datronDictatorButton.ForeColor = ApplicationThemeProperties.DarkSecondaryFore;
+                    datronDictatorButton.FlatAppearance.BorderColor = ApplicationThemeProperties.DarkSecondaryBorderColor;
+                    toolListRemoverButton.BackColor = ApplicationThemeProperties.DarkSecondaryBack;
+                    toolListRemoverButton.ForeColor = ApplicationThemeProperties.DarkSecondaryFore;
+                    toolListRemoverButton.FlatAppearance.BorderColor = ApplicationThemeProperties.DarkSecondaryBorderColor;
+                    reportIssueButton.BackColor = ApplicationThemeProperties.DarkSecondaryBack;
+                    reportIssueButton.ForeColor = ApplicationThemeProperties.DarkSecondaryFore;
+                    reportIssueButton.FlatAppearance.BorderColor = ApplicationThemeProperties.DarkSecondaryBorderColor;
+                    currentModuleLabel.BackColor = ApplicationThemeProperties.DarkPrimaryBack;
+                    currentModuleLabel.ForeColor = ApplicationThemeProperties.DarkPrimaryFore;
+                    mainPanel.BackColor = ApplicationThemeProperties.DarkPrimaryBack;
+                    //themeSwitchPictureBox.Image = Properties.Resources.Logo_Axito_Uhlmann_Group;
+                    break;
+            }
         }
     }
 }

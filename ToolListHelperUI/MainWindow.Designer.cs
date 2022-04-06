@@ -31,6 +31,7 @@
             this.sidePanel = new System.Windows.Forms.Panel();
             this.menuPanel = new System.Windows.Forms.Panel();
             this.themeSwitchPanel = new System.Windows.Forms.Panel();
+            this.themeSwitchPictureBox = new System.Windows.Forms.PictureBox();
             this.reportIssuePanel = new System.Windows.Forms.Panel();
             this.reportIssueButton = new System.Windows.Forms.Button();
             this.axitoPictureBox = new System.Windows.Forms.PictureBox();
@@ -42,14 +43,13 @@
             this.currentModuleLabel = new System.Windows.Forms.Label();
             this.mainPanel = new System.Windows.Forms.Panel();
             this.closeAppButton = new System.Windows.Forms.Button();
-            this.themeSwitchPictureBox = new System.Windows.Forms.PictureBox();
             this.sidePanel.SuspendLayout();
             this.menuPanel.SuspendLayout();
             this.themeSwitchPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.themeSwitchPictureBox)).BeginInit();
             this.reportIssuePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axitoPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.themeSwitchPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // sidePanel
@@ -80,6 +80,7 @@
             // 
             // themeSwitchPanel
             // 
+            this.themeSwitchPanel.BackColor = System.Drawing.Color.Transparent;
             this.themeSwitchPanel.Controls.Add(this.themeSwitchPictureBox);
             this.themeSwitchPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.themeSwitchPanel.Location = new System.Drawing.Point(0, 555);
@@ -88,8 +89,21 @@
             this.themeSwitchPanel.Size = new System.Drawing.Size(200, 51);
             this.themeSwitchPanel.TabIndex = 10;
             // 
+            // themeSwitchPictureBox
+            // 
+            this.themeSwitchPictureBox.BackColor = System.Drawing.Color.Red;
+            this.themeSwitchPictureBox.InitialImage = null;
+            this.themeSwitchPictureBox.Location = new System.Drawing.Point(59, 13);
+            this.themeSwitchPictureBox.Name = "themeSwitchPictureBox";
+            this.themeSwitchPictureBox.Size = new System.Drawing.Size(72, 25);
+            this.themeSwitchPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.themeSwitchPictureBox.TabIndex = 0;
+            this.themeSwitchPictureBox.TabStop = false;
+            this.themeSwitchPictureBox.Click += new System.EventHandler(this.ThemeSwitchPictureBox_Click);
+            // 
             // reportIssuePanel
             // 
+            this.reportIssuePanel.BackColor = System.Drawing.Color.Transparent;
             this.reportIssuePanel.Controls.Add(this.reportIssueButton);
             this.reportIssuePanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.reportIssuePanel.Location = new System.Drawing.Point(0, 606);
@@ -116,6 +130,7 @@
             // 
             // axitoPictureBox
             // 
+            this.axitoPictureBox.BackColor = System.Drawing.Color.Transparent;
             this.axitoPictureBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.axitoPictureBox.Image = global::ToolListHelperUI.Properties.Resources.Logo_Axito_Uhlmann_Group;
             this.axitoPictureBox.InitialImage = null;
@@ -216,7 +231,7 @@
             // 
             this.mainPanel.AutoScroll = true;
             this.mainPanel.BackColor = System.Drawing.Color.White;
-            this.mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(200, 60);
             this.mainPanel.MinimumSize = new System.Drawing.Size(10, 10);
@@ -240,18 +255,6 @@
             this.closeAppButton.Visible = false;
             this.closeAppButton.Click += new System.EventHandler(this.CloseAppButton_Click);
             // 
-            // themeSwitchPictureBox
-            // 
-            this.themeSwitchPictureBox.BackColor = System.Drawing.Color.Red;
-            this.themeSwitchPictureBox.InitialImage = null;
-            this.themeSwitchPictureBox.Location = new System.Drawing.Point(59, 13);
-            this.themeSwitchPictureBox.Name = "themeSwitchPictureBox";
-            this.themeSwitchPictureBox.Size = new System.Drawing.Size(72, 25);
-            this.themeSwitchPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.themeSwitchPictureBox.TabIndex = 0;
-            this.themeSwitchPictureBox.TabStop = false;
-            this.themeSwitchPictureBox.Click += new System.EventHandler(this.ThemeSwitchPictureBox_Click);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -272,10 +275,10 @@
             this.menuPanel.ResumeLayout(false);
             this.themeSwitchPanel.ResumeLayout(false);
             this.themeSwitchPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.themeSwitchPictureBox)).EndInit();
             this.reportIssuePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axitoPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.themeSwitchPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
