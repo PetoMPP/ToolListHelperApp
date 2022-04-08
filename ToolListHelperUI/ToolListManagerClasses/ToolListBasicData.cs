@@ -26,7 +26,20 @@ namespace ToolListHelperUI.ToolListManagerClasses
         {
             leftPanel.Width = Width / 2;
             rightPanel.Width = Width / 2;
-            rightPanel.Location = new(Width / 2, rightPanel.Location.Y);
+            foreach (Control control in leftPanel.Controls)
+            {
+                foreach (Panel panel in control.Controls.OfType<Panel>())
+                {
+                    panel.Width = Width / 4;
+                }
+            }
+            foreach (Control control in rightPanel.Controls)
+            {
+                foreach (Panel panel in control.Controls.OfType<Panel>())
+                {
+                    panel.Width = Width / 4;
+                }
+            }
         }
     }
 }

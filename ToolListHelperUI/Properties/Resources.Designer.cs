@@ -61,6 +61,26 @@ namespace ToolListHelperUI.Properties {
         }
         
         /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap bookcase {
+            get {
+                object obj = ResourceManager.GetObject("bookcase", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap engineering {
+            get {
+                object obj = ResourceManager.GetObject("engineering", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Icon podobny do zasobu (Ikona).
         /// </summary>
         internal static System.Drawing.Icon icon {
@@ -86,6 +106,16 @@ namespace ToolListHelperUI.Properties {
         internal static System.Drawing.Bitmap TLHLOGO {
             get {
                 object obj = ResourceManager.GetObject("TLHLOGO", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Wyszukuje zlokalizowany zasób typu System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap work_list {
+            get {
+                object obj = ResourceManager.GetObject("work-list", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

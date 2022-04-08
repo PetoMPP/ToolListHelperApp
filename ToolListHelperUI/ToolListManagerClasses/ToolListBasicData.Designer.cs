@@ -217,6 +217,7 @@
             this.leftPanel.Controls.Add(this.materialPanel);
             this.leftPanel.Controls.Add(this.operationPanel);
             this.leftPanel.Controls.Add(this.ncProgramPanel);
+            this.leftPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.leftPanel.Location = new System.Drawing.Point(0, 0);
             this.leftPanel.Name = "leftPanel";
             this.leftPanel.Size = new System.Drawing.Size(450, 620);
@@ -824,6 +825,7 @@
             this.rightPanel.Controls.Add(this.machinePanel);
             this.rightPanel.Controls.Add(this.drawingPanel);
             this.rightPanel.Controls.Add(this.listDescriptionPanel);
+            this.rightPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.rightPanel.Location = new System.Drawing.Point(450, 0);
             this.rightPanel.Name = "rightPanel";
             this.rightPanel.Size = new System.Drawing.Size(450, 620);
@@ -1064,6 +1066,9 @@
             this.listTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.listTypeComboBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listTypeComboBox.FormattingEnabled = true;
+            this.listTypeComboBox.Items.AddRange(new object[] {
+            "Primary",
+            "Secondary"});
             this.listTypeComboBox.Location = new System.Drawing.Point(11, 11);
             this.listTypeComboBox.Name = "listTypeComboBox";
             this.listTypeComboBox.Size = new System.Drawing.Size(203, 25);

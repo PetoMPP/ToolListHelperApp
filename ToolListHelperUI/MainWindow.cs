@@ -12,6 +12,7 @@ using ToolListHelperLibrary;
 using ToolListHelperUI.Interfaces;
 using Microsoft.Office.Interop.Outlook;
 using System.Text.RegularExpressions;
+using ToolListHelperUI.ToolListManagerClasses;
 
 namespace ToolListHelperUI
 {

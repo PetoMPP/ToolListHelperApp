@@ -21,6 +21,8 @@ namespace ToolListHelperUI.ToolListManagerClasses
         private static readonly Font _activeButtonFont = new("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
         private Form? _activeForm;
         private readonly ToolListBasicData _basicDataForm = new();
+        private readonly ToolListList _toolListForm = new();
+        private readonly ToolListFileManager _fileManagerForm = new();
         public ToolListManager()
         {
             InitializeComponent();
@@ -37,10 +39,12 @@ namespace ToolListHelperUI.ToolListManagerClasses
             }
             if (callingLabel.Name == nameof(toolListLabel))
             {
+                LoadForm(_toolListForm);
                 return;
             }
             if (callingLabel.Name == nameof(fileManagementLabel))
             {
+                LoadForm(_fileManagerForm);
                 return;
             }
             if (callingLabel.Name == nameof(documentsLabel))
@@ -64,6 +68,7 @@ namespace ToolListHelperUI.ToolListManagerClasses
         {
             _activeForm = form;
             _activeForm.TopLevel = false;
+            viewPanel.Controls.Clear();
             viewPanel.Controls.Add(_activeForm);
             _activeForm.BringToFront();
             _activeForm.Show();
@@ -96,12 +101,37 @@ namespace ToolListHelperUI.ToolListManagerClasses
         private void ToolListManager_Resize(object sender, EventArgs e)
         {
             viewPanel.Size = viewPanel.ClientRectangle.Size;
+            ResizeActionButtons();
+            int labelWidth = Width / 5;
+            basicDataLabel.Width = labelWidth;
+            basicDataLabel.Location = new(GetLabelXCoordinate(labelWidth, 0), basicDataLabel.Location.Y);
+            toolListLabel.Width = labelWidth;
+            toolListLabel.Location = new(GetLabelXCoordinate(labelWidth, 1), toolListLabel.Location.Y);
+            fileManagementLabel.Width = labelWidth;
+            fileManagementLabel.Location = new(GetLabelXCoordinate(labelWidth, 2), fileManagementLabel.Location.Y);
+            documentsLabel.Width = labelWidth;
+            documentsLabel.Location = new(GetLabelXCoordinate(labelWidth, 3), documentsLabel.Location.Y);
             if (_activeForm == null)
             {
                 return;
             }
             _activeForm.Width = viewPanel.VerticalScroll.Visible ? viewPanel.Width - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : viewPanel.Width - (SystemInformation.Border3DSize.Width * 2);
             _activeForm.Height = viewPanel.VerticalScroll.Visible ? viewPanel.Height - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : viewPanel.Height - (SystemInformation.Border3DSize.Width * 2);
+        }
+
+        private static int GetLabelXCoordinate(int labelWidth, int position)
+        {
+            int spacingWidth = labelWidth / 4;
+            return (spacingWidth + labelWidth) * position + spacingWidth / 2;
+        }
+
+        private void ResizeActionButtons()
+        {
+            selectedListLabel.Width = Width / 3;
+            int buttonWidth = (buttonsPanel.Width - 10 - buttonsPanel.Padding.Right - buttonsPanel.Padding.Left) / 3;
+            saveListButton.Width = buttonWidth;
+            loadListButton.Width = buttonWidth;
+            deleteListButton.Width = buttonWidth;
         }
     }
 }
