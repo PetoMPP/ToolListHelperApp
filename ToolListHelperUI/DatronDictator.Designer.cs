@@ -81,7 +81,7 @@
             // 
             // moduleDescriptionLabel
             // 
-            this.moduleDescriptionLabel.BackColor = System.Drawing.Color.White;
+            this.moduleDescriptionLabel.BackColor = System.Drawing.Color.Transparent;
             this.moduleDescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.moduleDescriptionLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.moduleDescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -123,6 +123,7 @@
             this.dictonaryDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dictonaryDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dictonaryDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dictonaryDataGridView.EnableHeadersVisualStyles = false;
             this.dictonaryDataGridView.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
             this.dictonaryDataGridView.Location = new System.Drawing.Point(0, 50);
             this.dictonaryDataGridView.Name = "dictonaryDataGridView";
@@ -165,6 +166,7 @@
             this.deleteSelectedButton.Name = "deleteSelectedButton";
             this.deleteSelectedButton.Size = new System.Drawing.Size(203, 28);
             this.deleteSelectedButton.TabIndex = 2;
+            this.deleteSelectedButton.Tag = "ColorfulForeRed";
             this.deleteSelectedButton.Text = "Usuń zaznaczenie";
             this.deleteSelectedButton.UseVisualStyleBackColor = true;
             this.deleteSelectedButton.Click += new System.EventHandler(this.DeleteSelectedButton_Click);
@@ -188,6 +190,7 @@
             this.saveChangesButton.Name = "saveChangesButton";
             this.saveChangesButton.Size = new System.Drawing.Size(203, 28);
             this.saveChangesButton.TabIndex = 2;
+            this.saveChangesButton.Tag = "ColorfulForeGreen";
             this.saveChangesButton.Text = "Zapisz Zmiany";
             this.saveChangesButton.UseVisualStyleBackColor = true;
             this.saveChangesButton.Click += new System.EventHandler(this.SaveChangesButton_Click);
@@ -336,11 +339,12 @@
             this.importDictonaryButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.importDictonaryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.importDictonaryButton.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.importDictonaryButton.ForeColor = System.Drawing.Color.Blue;
+            this.importDictonaryButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.importDictonaryButton.Location = new System.Drawing.Point(11, 11);
             this.importDictonaryButton.Name = "importDictonaryButton";
             this.importDictonaryButton.Size = new System.Drawing.Size(203, 28);
             this.importDictonaryButton.TabIndex = 2;
+            this.importDictonaryButton.Tag = "ColorfulForeBlue";
             this.importDictonaryButton.Text = "Importuj słownik z pliku *.txt";
             this.importDictonaryButton.UseVisualStyleBackColor = true;
             this.importDictonaryButton.Click += new System.EventHandler(this.ImportDictonaryButton_Click);
@@ -364,6 +368,7 @@
             this.reloadDictonaryButton.Name = "reloadDictonaryButton";
             this.reloadDictonaryButton.Size = new System.Drawing.Size(203, 28);
             this.reloadDictonaryButton.TabIndex = 2;
+            this.reloadDictonaryButton.Tag = "ColorfulForePurple";
             this.reloadDictonaryButton.Text = "Ponownie załaduj słownik";
             this.reloadDictonaryButton.UseVisualStyleBackColor = true;
             this.reloadDictonaryButton.Click += new System.EventHandler(this.ReloadDictonaryButton_Click);

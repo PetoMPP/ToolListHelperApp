@@ -345,6 +345,8 @@
             // browseFilesButton
             // 
             this.browseFilesButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.browseFilesButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseFilesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseFilesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseFilesButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
             this.browseFilesButton.Location = new System.Drawing.Point(11, 0);
@@ -368,6 +370,7 @@
             // sourceFilePathTextBox
             // 
             this.sourceFilePathTextBox.AllowDrop = true;
+            this.sourceFilePathTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.sourceFilePathTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sourceFilePathTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sourceFilePathTextBox.Location = new System.Drawing.Point(11, 11);
@@ -467,6 +470,7 @@
             // 
             // clampingTextBox
             // 
+            this.clampingTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.clampingTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.clampingTextBox.Enabled = false;
             this.clampingTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -489,6 +493,8 @@
             // 
             this.browseClampingButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseClampingButton.Enabled = false;
+            this.browseClampingButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseClampingButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseClampingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseClampingButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseClampingButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -595,6 +601,7 @@
             // 
             // materialTextBox
             // 
+            this.materialTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.materialTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialTextBox.Enabled = false;
             this.materialTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -617,6 +624,8 @@
             // 
             this.browseMaterialButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseMaterialButton.Enabled = false;
+            this.browseMaterialButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseMaterialButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseMaterialButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseMaterialButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseMaterialButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -874,6 +883,7 @@
             // 
             // machineTextBox
             // 
+            this.machineTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.machineTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.machineTextBox.Enabled = false;
             this.machineTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -896,6 +906,8 @@
             // 
             this.browseMachineButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseMachineButton.Enabled = false;
+            this.browseMachineButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseMachineButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseMachineButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseMachineButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseMachineButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -1002,6 +1014,7 @@
             // 
             // programDescriptionTextBox
             // 
+            this.programDescriptionTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.programDescriptionTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.programDescriptionTextBox.Enabled = false;
             this.programDescriptionTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -1024,6 +1037,8 @@
             // 
             this.browseProgramDescriptionButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseProgramDescriptionButton.Enabled = false;
+            this.browseProgramDescriptionButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseProgramDescriptionButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseProgramDescriptionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseProgramDescriptionButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseProgramDescriptionButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -1130,6 +1145,7 @@
             // 
             // programNameTextBox
             // 
+            this.programNameTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.programNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.programNameTextBox.Enabled = false;
             this.programNameTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -1152,6 +1168,8 @@
             // 
             this.browseProgramNameButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseProgramNameButton.Enabled = false;
+            this.browseProgramNameButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseProgramNameButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseProgramNameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseProgramNameButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseProgramNameButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -1255,6 +1273,7 @@
             // 
             // programIdTextBox
             // 
+            this.programIdTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.programIdTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.programIdTextBox.Enabled = false;
             this.programIdTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -1277,6 +1296,8 @@
             // 
             this.browseProgramIdButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseProgramIdButton.Enabled = false;
+            this.browseProgramIdButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseProgramIdButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseProgramIdButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseProgramIdButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseProgramIdButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));

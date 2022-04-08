@@ -121,13 +121,19 @@
   <data name="icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="TLHLOGO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="TLHLOGO_Light" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TLHLOGO.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Logo-Axito_Uhlmann_Group" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Logo-Axito_Uhlmann_Group.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="dolfamex special" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\dolfamex special.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lamp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lamp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lamp_off" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\lamp_off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="THLLOGO_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\logosvg (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
