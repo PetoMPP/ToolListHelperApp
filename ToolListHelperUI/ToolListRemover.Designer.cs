@@ -36,6 +36,8 @@ namespace ToolListHelperUI
             this.listIdsTextBox = new System.Windows.Forms.TextBox();
             this.toolListsLabel = new System.Windows.Forms.Label();
             this.actionsPanel = new System.Windows.Forms.Panel();
+            this.deleteToolListsPanel = new System.Windows.Forms.Panel();
+            this.deleteToolListsButton = new System.Windows.Forms.Button();
             this.optionsPanel = new System.Windows.Forms.Panel();
             this.deleteNcFilesOnlyCheckBox = new System.Windows.Forms.CheckBox();
             this.deletingOptionsLabel = new System.Windows.Forms.Label();
@@ -43,8 +45,6 @@ namespace ToolListHelperUI
             this.separatedByCommaRadioButton = new System.Windows.Forms.RadioButton();
             this.separatorLabel = new System.Windows.Forms.Label();
             this.optionsLabel = new System.Windows.Forms.Label();
-            this.deleteToolListsPanel = new System.Windows.Forms.Panel();
-            this.deleteToolListsButton = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
             this.mainSplitContainer.Panel1.SuspendLayout();
@@ -52,8 +52,8 @@ namespace ToolListHelperUI
             this.mainSplitContainer.SuspendLayout();
             this.toolListListBoxPanel.SuspendLayout();
             this.actionsPanel.SuspendLayout();
-            this.optionsPanel.SuspendLayout();
             this.deleteToolListsPanel.SuspendLayout();
+            this.optionsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // programLabel
@@ -139,6 +139,34 @@ namespace ToolListHelperUI
             this.actionsPanel.Padding = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.actionsPanel.Size = new System.Drawing.Size(501, 203);
             this.actionsPanel.TabIndex = 9;
+            // 
+            // deleteToolListsPanel
+            // 
+            this.deleteToolListsPanel.Controls.Add(this.deleteToolListsButton);
+            this.deleteToolListsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.deleteToolListsPanel.Location = new System.Drawing.Point(4, 0);
+            this.deleteToolListsPanel.Name = "deleteToolListsPanel";
+            this.deleteToolListsPanel.Padding = new System.Windows.Forms.Padding(20);
+            this.deleteToolListsPanel.Size = new System.Drawing.Size(493, 203);
+            this.deleteToolListsPanel.TabIndex = 12;
+            // 
+            // deleteToolListsButton
+            // 
+            this.deleteToolListsButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.deleteToolListsButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
+            this.deleteToolListsButton.FlatAppearance.BorderSize = 2;
+            this.deleteToolListsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
+            this.deleteToolListsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.deleteToolListsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.deleteToolListsButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.deleteToolListsButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
+            this.deleteToolListsButton.Location = new System.Drawing.Point(20, 20);
+            this.deleteToolListsButton.Name = "deleteToolListsButton";
+            this.deleteToolListsButton.Size = new System.Drawing.Size(453, 163);
+            this.deleteToolListsButton.TabIndex = 0;
+            this.deleteToolListsButton.Text = "Usuń Listy Narzędziowe!";
+            this.deleteToolListsButton.UseVisualStyleBackColor = true;
+            this.deleteToolListsButton.Click += new System.EventHandler(this.DeleteToolListsButton_Click);
             // 
             // optionsPanel
             // 
@@ -228,33 +256,6 @@ namespace ToolListHelperUI
             this.optionsLabel.Text = "Opcje:";
             this.optionsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // deleteToolListsPanel
-            // 
-            this.deleteToolListsPanel.Controls.Add(this.deleteToolListsButton);
-            this.deleteToolListsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.deleteToolListsPanel.Location = new System.Drawing.Point(4, 0);
-            this.deleteToolListsPanel.Name = "deleteToolListsPanel";
-            this.deleteToolListsPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.deleteToolListsPanel.Size = new System.Drawing.Size(493, 203);
-            this.deleteToolListsPanel.TabIndex = 12;
-            // 
-            // deleteToolListsButton
-            // 
-            this.deleteToolListsButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.deleteToolListsButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.deleteToolListsButton.FlatAppearance.BorderSize = 2;
-            this.deleteToolListsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
-            this.deleteToolListsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.deleteToolListsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteToolListsButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.deleteToolListsButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.deleteToolListsButton.Location = new System.Drawing.Point(20, 20);
-            this.deleteToolListsButton.Name = "deleteToolListsButton";
-            this.deleteToolListsButton.Size = new System.Drawing.Size(453, 163);
-            this.deleteToolListsButton.TabIndex = 0;
-            this.deleteToolListsButton.Text = "Usuń Listy Narzędziowe!";
-            this.deleteToolListsButton.UseVisualStyleBackColor = true;
-            // 
             // ToolListRemover
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -274,9 +275,9 @@ namespace ToolListHelperUI
             this.toolListListBoxPanel.ResumeLayout(false);
             this.toolListListBoxPanel.PerformLayout();
             this.actionsPanel.ResumeLayout(false);
+            this.deleteToolListsPanel.ResumeLayout(false);
             this.optionsPanel.ResumeLayout(false);
             this.optionsPanel.PerformLayout();
-            this.deleteToolListsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

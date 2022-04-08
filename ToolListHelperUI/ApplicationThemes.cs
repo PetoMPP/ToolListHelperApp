@@ -18,7 +18,7 @@ namespace ToolListHelperUI
         public static Color DarkRedFore { get; } = Color.FromArgb(255, 0, 0);
         public static Color DarkGreenFore { get; } = Color.FromArgb(0, 255, 0);
         public static Color DarkPurpleFore { get; } = Color.FromArgb(200, 200, 255);
-        public static Color DarkBlueFore { get; } = Color.FromArgb(99, 99, 255);
+        public static Color DarkBlueFore { get; } = Color.FromArgb(100, 160, 255);
         public static Color LightPrimaryFore { get; } = Color.FromArgb(1, 112, 184);
         public static Color LightSecondaryFore { get; } = Color.Black;
         public static Color LightPrimaryBack { get; } = Color.White;
@@ -47,7 +47,7 @@ namespace ToolListHelperUI
                     foreach (TextBox textBox in UserInterfaceLogic.GetAllControls<TextBox>(form))
                     {
                         textBox.ForeColor = LightSecondaryFore;
-                        textBox.BackColor = LightSecondaryBack;
+                        textBox.BackColor = LightPrimaryBack;
                     }
                     foreach (Button button in UserInterfaceLogic.GetAllControls<Button>(form).Where(b => b.Tag?.ToString() != "UnchangeableColor"))
                     {
