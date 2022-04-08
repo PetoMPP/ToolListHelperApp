@@ -297,5 +297,10 @@ namespace ToolListHelperUI
                     break;
             }
         }
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
     }
 }

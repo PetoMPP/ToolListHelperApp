@@ -270,6 +270,7 @@
             this.KeyPreview = true;
             this.Name = "MainWindow";
             this.Text = "Tool List Helper";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
             this.Resize += new System.EventHandler(this.MainWindow_Resize);
             this.sidePanel.ResumeLayout(false);
