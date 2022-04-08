@@ -20,10 +20,13 @@ namespace ToolListHelperUI
         private Form? _activeForm;
         private int _settingsCounter = 0;
         private string _settingPassPhrase = AppConfigManager.GetSettingsPassPhrase();
+        private ApplicationTheme _applicationTheme;
         public MainWindow()
         {
             InitializeComponent();
             Text += $" © {DateTimeOffset.Now.Year} PetoMPP";
+            _applicationTheme = UserConfigManager.GetCurrentUserTheme();
+            LoadTheme();
         }
 
         private async void ToolListMakerButton_ClickAsync(object sender, EventArgs e)
@@ -220,6 +223,79 @@ namespace ToolListHelperUI
         public void UpdatePassPhrase()
         {
             _settingPassPhrase = AppConfigManager.GetSettingsPassPhrase();
+        }
+
+        private void ThemeSwitchPictureBox_Click(object sender, EventArgs e)
+        {
+            _applicationTheme = _applicationTheme == ApplicationTheme.Light ? ApplicationTheme.Dark : ApplicationTheme.Light;
+            UserConfigManager.SetCurrentUserTheme(_applicationTheme);
+            LoadTheme();
+        }
+
+        public void LoadTheme()
+        {
+            if (_activeForm != null)
+            {
+                try
+                {
+                    ((IThemeLoader)_activeForm).LoadTheme(_applicationTheme);
+                }
+                catch (System.Exception error)
+                {
+                    UserInterfaceLogic.ShowError(error.Message, "Błąd motywu!");
+                }
+            }
+            switch (_applicationTheme)
+            {
+                case ApplicationTheme.Light:
+                    logoPictureBox.BackColor = ApplicationThemes.LightPrimaryBack;
+                    logoPictureBox.Image = Properties.Resources.TLHLOGO_Light;
+                    menuLabel.ForeColor = ApplicationThemes.LightPrimaryBack;
+                    menuLabel.BackColor = ApplicationThemes.LightPrimaryFore;
+                    menuPanel.BackColor = ApplicationThemes.LightPrimaryBack;
+                    toolListMakerButton.BackColor = ApplicationThemes.LightSecondaryBack;
+                    toolListMakerButton.ForeColor = ApplicationThemes.LightSecondaryFore;
+                    toolListMakerButton.FlatAppearance.BorderColor = ApplicationThemes.LightSecondaryBorderColor;
+                    datronDictatorButton.BackColor = ApplicationThemes.LightSecondaryBack;
+                    datronDictatorButton.ForeColor = ApplicationThemes.LightSecondaryFore;
+                    datronDictatorButton.FlatAppearance.BorderColor = ApplicationThemes.LightSecondaryBorderColor;
+                    toolListRemoverButton.BackColor = ApplicationThemes.LightSecondaryBack;
+                    toolListRemoverButton.ForeColor = ApplicationThemes.LightSecondaryFore;
+                    toolListRemoverButton.FlatAppearance.BorderColor = ApplicationThemes.LightSecondaryBorderColor;
+                    reportIssueButton.BackColor = ApplicationThemes.LightSecondaryBack;
+                    reportIssueButton.ForeColor = ApplicationThemes.LightSecondaryFore;
+                    reportIssueButton.FlatAppearance.BorderColor = ApplicationThemes.LightSecondaryBorderColor;
+                    currentModuleLabel.BackColor = ApplicationThemes.LightPrimaryBack;
+                    currentModuleLabel.ForeColor = ApplicationThemes.LightPrimaryFore;
+                    mainPanel.BackColor = ApplicationThemes.LightPrimaryBack;
+                    themeSwitchPictureBox.Image = Properties.Resources.lamp;
+                    themeSwitchPictureBox.BackColor = ApplicationThemes.LightPrimaryBack;
+                    break;
+                case ApplicationTheme.Dark:
+                    logoPictureBox.BackColor = ApplicationThemes.DarkPrimaryBack;
+                    logoPictureBox.Image = Properties.Resources.THLLOGO_Dark;
+                    menuLabel.ForeColor = ApplicationThemes.DarkPrimaryBack;
+                    menuLabel.BackColor = ApplicationThemes.DarkPrimaryFore;
+                    menuPanel.BackColor = ApplicationThemes.DarkPrimaryBack;
+                    toolListMakerButton.BackColor = ApplicationThemes.DarkSecondaryBack;
+                    toolListMakerButton.ForeColor = ApplicationThemes.DarkSecondaryFore;
+                    toolListMakerButton.FlatAppearance.BorderColor = ApplicationThemes.DarkSecondaryBorderColor;
+                    datronDictatorButton.BackColor = ApplicationThemes.DarkSecondaryBack;
+                    datronDictatorButton.ForeColor = ApplicationThemes.DarkSecondaryFore;
+                    datronDictatorButton.FlatAppearance.BorderColor = ApplicationThemes.DarkSecondaryBorderColor;
+                    toolListRemoverButton.BackColor = ApplicationThemes.DarkSecondaryBack;
+                    toolListRemoverButton.ForeColor = ApplicationThemes.DarkSecondaryFore;
+                    toolListRemoverButton.FlatAppearance.BorderColor = ApplicationThemes.DarkSecondaryBorderColor;
+                    reportIssueButton.BackColor = ApplicationThemes.DarkSecondaryBack;
+                    reportIssueButton.ForeColor = ApplicationThemes.DarkSecondaryFore;
+                    reportIssueButton.FlatAppearance.BorderColor = ApplicationThemes.DarkSecondaryBorderColor;
+                    currentModuleLabel.BackColor = ApplicationThemes.DarkPrimaryBack;
+                    currentModuleLabel.ForeColor = ApplicationThemes.DarkPrimaryFore;
+                    mainPanel.BackColor = ApplicationThemes.DarkPrimaryBack;
+                    themeSwitchPictureBox.Image = Properties.Resources.lamp_off;
+                    themeSwitchPictureBox.BackColor = ApplicationThemes.DarkPrimaryBack;
+                    break;
+            }
         }
     }
 }

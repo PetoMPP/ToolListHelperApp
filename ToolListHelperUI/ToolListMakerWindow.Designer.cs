@@ -163,12 +163,13 @@
             this.dataWizardButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
             this.dataWizardButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dataWizardButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.dataWizardButton.ForeColor = System.Drawing.Color.White;
+            this.dataWizardButton.ForeColor = System.Drawing.Color.Transparent;
             this.dataWizardButton.Location = new System.Drawing.Point(80, 10);
             this.dataWizardButton.Margin = new System.Windows.Forms.Padding(10);
             this.dataWizardButton.Name = "dataWizardButton";
             this.dataWizardButton.Size = new System.Drawing.Size(330, 60);
             this.dataWizardButton.TabIndex = 4;
+            this.dataWizardButton.Tag = "UnchangeableColor";
             this.dataWizardButton.Text = "Uruchom kreator";
             this.dataWizardButton.UseVisualStyleBackColor = false;
             // 
@@ -183,7 +184,7 @@
             // 
             // moduleDescriptionLabel
             // 
-            this.moduleDescriptionLabel.BackColor = System.Drawing.Color.White;
+            this.moduleDescriptionLabel.BackColor = System.Drawing.Color.Transparent;
             this.moduleDescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.moduleDescriptionLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.moduleDescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -198,7 +199,7 @@
             // 
             // createPanel
             // 
-            this.createPanel.BackColor = System.Drawing.Color.White;
+            this.createPanel.BackColor = System.Drawing.Color.Transparent;
             this.createPanel.Controls.Add(this.createListButton);
             this.createPanel.Location = new System.Drawing.Point(450, 80);
             this.createPanel.Name = "createPanel";
@@ -213,19 +214,20 @@
             this.createListButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
             this.createListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.createListButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.createListButton.ForeColor = System.Drawing.Color.White;
+            this.createListButton.ForeColor = System.Drawing.Color.Transparent;
             this.createListButton.Location = new System.Drawing.Point(40, 10);
             this.createListButton.Margin = new System.Windows.Forms.Padding(10);
             this.createListButton.Name = "createListButton";
             this.createListButton.Size = new System.Drawing.Size(330, 60);
             this.createListButton.TabIndex = 4;
+            this.createListButton.Tag = "UnchangeableColor";
             this.createListButton.Text = "Stwórz listę z podanych informacji";
             this.createListButton.UseVisualStyleBackColor = false;
             this.createListButton.Click += new System.EventHandler(this.CreateListButton_Click);
             // 
             // wizardPanel
             // 
-            this.wizardPanel.BackColor = System.Drawing.Color.White;
+            this.wizardPanel.BackColor = System.Drawing.Color.Transparent;
             this.wizardPanel.Controls.Add(this.dataWizardButton);
             this.wizardPanel.Location = new System.Drawing.Point(0, 80);
             this.wizardPanel.Name = "wizardPanel";
@@ -235,7 +237,7 @@
             // 
             // modePanel
             // 
-            this.modePanel.BackColor = System.Drawing.Color.White;
+            this.modePanel.BackColor = System.Drawing.Color.Transparent;
             this.modePanel.Controls.Add(this.shopturnModeRadioButton);
             this.modePanel.Controls.Add(this.fusionModeRadioButton);
             this.modePanel.Controls.Add(this.sinumericModeRadioButton);
@@ -291,6 +293,7 @@
             // 
             // modeLabel
             // 
+            this.modeLabel.BackColor = System.Drawing.Color.Transparent;
             this.modeLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.modeLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.modeLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -320,7 +323,7 @@
             // 
             // sourceFilePanel
             // 
-            this.sourceFilePanel.BackColor = System.Drawing.Color.White;
+            this.sourceFilePanel.BackColor = System.Drawing.Color.Transparent;
             this.sourceFilePanel.Controls.Add(this.browseFilesButtonPanel);
             this.sourceFilePanel.Controls.Add(this.sourceFilePathPanel);
             this.sourceFilePanel.Controls.Add(this.sourceFileLabel);
@@ -342,6 +345,8 @@
             // browseFilesButton
             // 
             this.browseFilesButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.browseFilesButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseFilesButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseFilesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseFilesButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
             this.browseFilesButton.Location = new System.Drawing.Point(11, 0);
@@ -365,6 +370,7 @@
             // sourceFilePathTextBox
             // 
             this.sourceFilePathTextBox.AllowDrop = true;
+            this.sourceFilePathTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.sourceFilePathTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sourceFilePathTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sourceFilePathTextBox.Location = new System.Drawing.Point(11, 11);
@@ -378,6 +384,7 @@
             // 
             // sourceFileLabel
             // 
+            this.sourceFileLabel.BackColor = System.Drawing.Color.Transparent;
             this.sourceFileLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.sourceFileLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.sourceFileLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -391,7 +398,7 @@
             // 
             // settingsPanel
             // 
-            this.settingsPanel.BackColor = System.Drawing.Color.White;
+            this.settingsPanel.BackColor = System.Drawing.Color.Transparent;
             this.settingsPanel.Controls.Add(this.wizardPanel);
             this.settingsPanel.Controls.Add(this.descriptionPanel);
             this.settingsPanel.Controls.Add(this.createPanel);
@@ -414,7 +421,7 @@
             // 
             // clampingPanel
             // 
-            this.clampingPanel.BackColor = System.Drawing.Color.White;
+            this.clampingPanel.BackColor = System.Drawing.Color.Transparent;
             this.clampingPanel.Controls.Add(this.skipClampingRadioButton);
             this.clampingPanel.Controls.Add(this.clampingInputPanel);
             this.clampingPanel.Controls.Add(this.selectClampingRadioButton);
@@ -463,6 +470,7 @@
             // 
             // clampingTextBox
             // 
+            this.clampingTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.clampingTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.clampingTextBox.Enabled = false;
             this.clampingTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -485,6 +493,8 @@
             // 
             this.browseClampingButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseClampingButton.Enabled = false;
+            this.browseClampingButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseClampingButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseClampingButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseClampingButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseClampingButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -542,7 +552,7 @@
             // 
             // materialPanel
             // 
-            this.materialPanel.BackColor = System.Drawing.Color.White;
+            this.materialPanel.BackColor = System.Drawing.Color.Transparent;
             this.materialPanel.Controls.Add(this.skipMaterialRadioButton);
             this.materialPanel.Controls.Add(this.materialInputPanel);
             this.materialPanel.Controls.Add(this.selectMaterialRadioButton);
@@ -591,6 +601,7 @@
             // 
             // materialTextBox
             // 
+            this.materialTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.materialTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialTextBox.Enabled = false;
             this.materialTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -613,6 +624,8 @@
             // 
             this.browseMaterialButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseMaterialButton.Enabled = false;
+            this.browseMaterialButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseMaterialButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseMaterialButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseMaterialButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseMaterialButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -670,7 +683,7 @@
             // 
             // addFilePanel
             // 
-            this.addFilePanel.BackColor = System.Drawing.Color.White;
+            this.addFilePanel.BackColor = System.Drawing.Color.Transparent;
             this.addFilePanel.Controls.Add(this.addFileAsReleasedRadioButton);
             this.addFilePanel.Controls.Add(this.addFileAsDevelopingRadioButton);
             this.addFilePanel.Controls.Add(this.addFileAsArchiveRadioButton);
@@ -751,7 +764,7 @@
             // 
             // listTypePanel
             // 
-            this.listTypePanel.BackColor = System.Drawing.Color.White;
+            this.listTypePanel.BackColor = System.Drawing.Color.Transparent;
             this.listTypePanel.Controls.Add(this.skipListTypeRadioButton);
             this.listTypePanel.Controls.Add(this.secondaryRadioButton);
             this.listTypePanel.Controls.Add(this.primaryTypeRadioButton);
@@ -821,7 +834,7 @@
             // 
             // machinePanel
             // 
-            this.machinePanel.BackColor = System.Drawing.Color.White;
+            this.machinePanel.BackColor = System.Drawing.Color.Transparent;
             this.machinePanel.Controls.Add(this.skipMachineRadioButton);
             this.machinePanel.Controls.Add(this.machineInputPanel);
             this.machinePanel.Controls.Add(this.selectMachineRadioButton);
@@ -870,6 +883,7 @@
             // 
             // machineTextBox
             // 
+            this.machineTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.machineTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.machineTextBox.Enabled = false;
             this.machineTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -892,6 +906,8 @@
             // 
             this.browseMachineButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseMachineButton.Enabled = false;
+            this.browseMachineButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseMachineButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseMachineButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseMachineButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseMachineButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -949,7 +965,7 @@
             // 
             // programDescriptionPanel
             // 
-            this.programDescriptionPanel.BackColor = System.Drawing.Color.White;
+            this.programDescriptionPanel.BackColor = System.Drawing.Color.Transparent;
             this.programDescriptionPanel.Controls.Add(this.skipProgramDescriptionRadioButton);
             this.programDescriptionPanel.Controls.Add(this.programDescriptionInputPanel);
             this.programDescriptionPanel.Controls.Add(this.manualProgramDescriptionRadioButton);
@@ -998,6 +1014,7 @@
             // 
             // programDescriptionTextBox
             // 
+            this.programDescriptionTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.programDescriptionTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.programDescriptionTextBox.Enabled = false;
             this.programDescriptionTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -1020,6 +1037,8 @@
             // 
             this.browseProgramDescriptionButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseProgramDescriptionButton.Enabled = false;
+            this.browseProgramDescriptionButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseProgramDescriptionButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseProgramDescriptionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseProgramDescriptionButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseProgramDescriptionButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -1077,7 +1096,7 @@
             // 
             // programNamePanel
             // 
-            this.programNamePanel.BackColor = System.Drawing.Color.White;
+            this.programNamePanel.BackColor = System.Drawing.Color.Transparent;
             this.programNamePanel.Controls.Add(this.skipNameRadioButton);
             this.programNamePanel.Controls.Add(this.programNameInputPanel);
             this.programNamePanel.Controls.Add(this.manualNameRadioButton);
@@ -1126,6 +1145,7 @@
             // 
             // programNameTextBox
             // 
+            this.programNameTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.programNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.programNameTextBox.Enabled = false;
             this.programNameTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -1148,6 +1168,8 @@
             // 
             this.browseProgramNameButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseProgramNameButton.Enabled = false;
+            this.browseProgramNameButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseProgramNameButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseProgramNameButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseProgramNameButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseProgramNameButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
@@ -1205,7 +1227,7 @@
             // 
             // creatingModePanel
             // 
-            this.creatingModePanel.BackColor = System.Drawing.Color.White;
+            this.creatingModePanel.BackColor = System.Drawing.Color.Transparent;
             this.creatingModePanel.Controls.Add(this.listStatusCheckBox);
             this.creatingModePanel.Controls.Add(this.programIdPanel);
             this.creatingModePanel.Controls.Add(this.creatingModeUpdateRadioButton);
@@ -1251,6 +1273,7 @@
             // 
             // programIdTextBox
             // 
+            this.programIdTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(165)))), ((int)(((byte)(235)))));
             this.programIdTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.programIdTextBox.Enabled = false;
             this.programIdTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -1273,6 +1296,8 @@
             // 
             this.browseProgramIdButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.browseProgramIdButton.Enabled = false;
+            this.browseProgramIdButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gainsboro;
+            this.browseProgramIdButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
             this.browseProgramIdButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.browseProgramIdButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.browseProgramIdButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));

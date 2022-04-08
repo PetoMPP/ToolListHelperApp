@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ToolListHelperLibrary;
+using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI
 {
-    public partial class ToolListRemover : Form
+    public partial class ToolListRemover : Form, IThemeLoader
     {
         public ToolListRemover()
         {
             InitializeComponent();
+            LoadTheme(Enum.Parse<ApplicationTheme>(Properties.Settings.Default.ApplicationTheme));
         }
 
         private void ExitButton_Click(object sender, EventArgs e) => Close();
@@ -77,6 +79,11 @@ namespace ToolListHelperUI
             }
 
             return listsIds;
+        }
+
+        public void LoadTheme(ApplicationTheme applicationTheme)
+        {
+            ApplicationThemes.ApplyTheme(this, applicationTheme);
         }
     }
 }

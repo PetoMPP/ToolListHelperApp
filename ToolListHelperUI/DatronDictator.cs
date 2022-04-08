@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ToolListHelperLibrary;
+using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI
 {
-    public partial class DatronDictator : Form
+    public partial class DatronDictator : Form, IThemeLoader
     {
         private Dictionary<string, string> _localDict = new();
         private readonly List<Control> _quaterControls;
@@ -37,6 +38,7 @@ namespace ToolListHelperUI
             };
             LoadFileDictonary();
             LoadDataToUI();
+            LoadTheme(Enum.Parse<ApplicationTheme>(Properties.Settings.Default.ApplicationTheme));
         }
 
         private void LoadFileDictonary()
@@ -187,6 +189,10 @@ namespace ToolListHelperUI
                 }
             }
             dictonaryDataGridView.Columns[0].Width = quaterWidth - 4;
+        }
+        public void LoadTheme(ApplicationTheme applicationTheme)
+        {
+            ApplicationThemes.ApplyTheme(this, applicationTheme);
         }
     }
 }

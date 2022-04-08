@@ -30,6 +30,7 @@
         {
             this.sidePanel = new System.Windows.Forms.Panel();
             this.menuPanel = new System.Windows.Forms.Panel();
+            this.themeSwitchPanel = new System.Windows.Forms.Panel();
             this.reportIssuePanel = new System.Windows.Forms.Panel();
             this.reportIssueButton = new System.Windows.Forms.Button();
             this.axitoPictureBox = new System.Windows.Forms.PictureBox();
@@ -38,6 +39,7 @@
             this.toolListMakerButton = new System.Windows.Forms.Button();
             this.menuLabel = new System.Windows.Forms.Label();
             this.logoPictureBox = new System.Windows.Forms.PictureBox();
+            this.themeSwitchPictureBox = new System.Windows.Forms.PictureBox();
             this.currentModuleLabel = new System.Windows.Forms.Label();
             this.mainPanel = new System.Windows.Forms.Panel();
             this.closeAppButton = new System.Windows.Forms.Button();
@@ -46,6 +48,7 @@
             this.reportIssuePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axitoPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.themeSwitchPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // sidePanel
@@ -61,6 +64,7 @@
             // menuPanel
             // 
             this.menuPanel.BackColor = System.Drawing.Color.White;
+            this.menuPanel.Controls.Add(this.themeSwitchPanel);
             this.menuPanel.Controls.Add(this.reportIssuePanel);
             this.menuPanel.Controls.Add(this.axitoPictureBox);
             this.menuPanel.Controls.Add(this.toolListRemoverButton);
@@ -73,11 +77,22 @@
             this.menuPanel.Size = new System.Drawing.Size(200, 744);
             this.menuPanel.TabIndex = 9;
             // 
+            // themeSwitchPanel
+            // 
+            this.themeSwitchPanel.BackColor = System.Drawing.Color.Transparent;
+            this.themeSwitchPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.themeSwitchPanel.Location = new System.Drawing.Point(0, 530);
+            this.themeSwitchPanel.Name = "themeSwitchPanel";
+            this.themeSwitchPanel.Padding = new System.Windows.Forms.Padding(10, 10, 10, 20);
+            this.themeSwitchPanel.Size = new System.Drawing.Size(200, 70);
+            this.themeSwitchPanel.TabIndex = 10;
+            // 
             // reportIssuePanel
             // 
+            this.reportIssuePanel.BackColor = System.Drawing.Color.Transparent;
             this.reportIssuePanel.Controls.Add(this.reportIssueButton);
             this.reportIssuePanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.reportIssuePanel.Location = new System.Drawing.Point(0, 606);
+            this.reportIssuePanel.Location = new System.Drawing.Point(0, 600);
             this.reportIssuePanel.Name = "reportIssuePanel";
             this.reportIssuePanel.Padding = new System.Windows.Forms.Padding(10, 10, 10, 20);
             this.reportIssuePanel.Size = new System.Drawing.Size(200, 80);
@@ -101,13 +116,14 @@
             // 
             // axitoPictureBox
             // 
+            this.axitoPictureBox.BackColor = System.Drawing.Color.Transparent;
             this.axitoPictureBox.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.axitoPictureBox.Image = global::ToolListHelperUI.Properties.Resources.Logo_Axito_Uhlmann_Group;
             this.axitoPictureBox.InitialImage = null;
-            this.axitoPictureBox.Location = new System.Drawing.Point(0, 686);
+            this.axitoPictureBox.Location = new System.Drawing.Point(0, 680);
             this.axitoPictureBox.Margin = new System.Windows.Forms.Padding(10);
             this.axitoPictureBox.Name = "axitoPictureBox";
-            this.axitoPictureBox.Size = new System.Drawing.Size(200, 58);
+            this.axitoPictureBox.Size = new System.Drawing.Size(200, 64);
             this.axitoPictureBox.TabIndex = 7;
             this.axitoPictureBox.TabStop = false;
             // 
@@ -175,14 +191,27 @@
             // logoPictureBox
             // 
             this.logoPictureBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.logoPictureBox.Image = global::ToolListHelperUI.Properties.Resources.TLHLOGO;
-            this.logoPictureBox.InitialImage = null;
+            this.logoPictureBox.Image = global::ToolListHelperUI.Properties.Resources.TLHLOGO_Light;
+            this.logoPictureBox.InitialImage = global::ToolListHelperUI.Properties.Resources.TLHLOGO_Light;
             this.logoPictureBox.Location = new System.Drawing.Point(0, 0);
             this.logoPictureBox.Margin = new System.Windows.Forms.Padding(10);
             this.logoPictureBox.Name = "logoPictureBox";
             this.logoPictureBox.Size = new System.Drawing.Size(200, 100);
             this.logoPictureBox.TabIndex = 8;
             this.logoPictureBox.TabStop = false;
+            // 
+            // themeSwitchPictureBox
+            // 
+            this.themeSwitchPictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.themeSwitchPictureBox.Image = global::ToolListHelperUI.Properties.Resources.lamp;
+            this.themeSwitchPictureBox.InitialImage = global::ToolListHelperUI.Properties.Resources.lamp;
+            this.themeSwitchPictureBox.Location = new System.Drawing.Point(200, 3);
+            this.themeSwitchPictureBox.Name = "themeSwitchPictureBox";
+            this.themeSwitchPictureBox.Size = new System.Drawing.Size(54, 54);
+            this.themeSwitchPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.themeSwitchPictureBox.TabIndex = 0;
+            this.themeSwitchPictureBox.TabStop = false;
+            this.themeSwitchPictureBox.Click += new System.EventHandler(this.ThemeSwitchPictureBox_Click);
             // 
             // currentModuleLabel
             // 
@@ -192,6 +221,7 @@
             this.currentModuleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
             this.currentModuleLabel.Location = new System.Drawing.Point(200, 0);
             this.currentModuleLabel.Name = "currentModuleLabel";
+            this.currentModuleLabel.Padding = new System.Windows.Forms.Padding(60, 0, 0, 0);
             this.currentModuleLabel.Size = new System.Drawing.Size(904, 60);
             this.currentModuleLabel.TabIndex = 1;
             this.currentModuleLabel.Text = "Uruchom aplikację korzystając z menu po lewej";
@@ -201,7 +231,7 @@
             // 
             this.mainPanel.AutoScroll = true;
             this.mainPanel.BackColor = System.Drawing.Color.White;
-            this.mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.mainPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(200, 60);
             this.mainPanel.MinimumSize = new System.Drawing.Size(10, 10);
@@ -231,6 +261,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1104, 844);
+            this.Controls.Add(this.themeSwitchPictureBox);
             this.Controls.Add(this.closeAppButton);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.currentModuleLabel);
@@ -246,6 +277,7 @@
             this.reportIssuePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axitoPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.themeSwitchPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -265,5 +297,7 @@
         private Button toolListMakerButton;
         private Label menuLabel;
         private PictureBox logoPictureBox;
+        private Panel themeSwitchPanel;
+        private PictureBox themeSwitchPictureBox;
     }
 }

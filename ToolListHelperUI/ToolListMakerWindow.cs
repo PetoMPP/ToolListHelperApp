@@ -13,7 +13,7 @@ using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI
 {
-    public partial class ToolListMakerWindow : Form, IBrowseData
+    public partial class ToolListMakerWindow : Form, IBrowseData, IThemeLoader
     {
         private readonly List<Panel> _sectionPanels;
         private readonly List<RadioButton> _updateRadioButtons;
@@ -71,6 +71,7 @@ namespace ToolListHelperUI
                 skipMaterialRadioButton,
                 skipClampingRadioButton
             };
+            LoadTheme(Enum.Parse<ApplicationTheme>(Properties.Settings.Default.ApplicationTheme));
         }
 
         private void ResizeSectionPanels()
@@ -529,6 +530,11 @@ namespace ToolListHelperUI
             {
                 e.Effect = DragDropEffects.All;
             }
+        }
+
+        public void LoadTheme(ApplicationTheme applicationTheme)
+        {
+            ApplicationThemes.ApplyTheme(this, applicationTheme);
         }
     }
 }

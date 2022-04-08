@@ -56,7 +56,10 @@ namespace ToolListHelperLibrary
             foreach (string line in File.ReadAllLines(fileName))
             {
                 string[] values = line.Split(": ");
-                output[values[0]] = values[1];
+                if (values.Length > 1)
+                {
+                    output[values[0]] = values[1];
+                }
             }
             return output;
         }
