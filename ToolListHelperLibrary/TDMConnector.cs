@@ -107,7 +107,20 @@ namespace ToolListHelperLibrary
 
         private async static Task SendNewFile(ListModel model, DbConnection connection, string targetState, string filePath, int version, string targetPath)
         {
-            File.Copy(filePath, targetPath, true);
+            try
+            {
+                File.Copy(filePath, targetPath, true);
+            }
+            catch (IOException)
+            {
+                NetworkShare.ConnectToShare(@"\\MMS251107S1\IMPORTCAM", @"MMS251107S1\Fastems", "!FMS1operator!");
+                File.Copy(filePath, targetPath, true);
+                //File.SetAttributes(targetPath, FileAttributes.ReadOnly);
+                //File.SetCreationTime(targetPath, DateTime.Now);
+                //File.SetLastAccessTime(targetPath, DateTime.Now);
+                //File.SetLastWriteTime(targetPath, DateTime.Now);
+                NetworkShare.DisconnectFromShare(@"\\MMS251107S1\IMPORTCAM", true);
+            }
             await InsertFileState(model, version, targetState, Path.GetExtension(filePath).ToUpper().Substring(1), connection);
         }
 
@@ -131,7 +144,16 @@ VALUES ('{model.Name?.ToUpper()}', '{model.Id}', '{extension}', '{targetState}',
 
         private static async Task SendUpdateFile(string id, DbConnection connection, string targetState, string filePath, int version, string targetPath)
         {
-            File.Move(filePath, targetPath, true);
+            try
+            {
+                File.Move(filePath, targetPath, true);
+            }
+            catch (IOException)
+            {
+                NetworkShare.ConnectToShare(@"\\MMS251107S1\IMPORTCAM", @"MMS251107S1\Fastems", "!FMS1operator!");
+                File.Move(filePath, targetPath, true);
+                NetworkShare.DisconnectFromShare(@"\\MMS251107S1\IMPORTCAM", true);
+            }
             await SetFileState(id, version, targetState, connection);
         }
 
