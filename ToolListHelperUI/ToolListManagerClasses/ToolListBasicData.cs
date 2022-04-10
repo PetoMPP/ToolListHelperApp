@@ -41,5 +41,33 @@ namespace ToolListHelperUI.ToolListManagerClasses
                 }
             }
         }
+
+        private void ProgramNameTextBox_MouseEnter(object sender, EventArgs e)
+        {
+            //programNameButton.Visible = true;
+        }
+
+        private void ProgramNameTextBox_MouseLeave(object sender, EventArgs e)
+        {
+            //programNameButton.Visible = false;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            var vart = leftPanel.Controls.OfType<Panel>().Select(p => p.Controls).Where(c => c.GetType() == typeof(TextBox));
+            foreach (TextBox textBox in leftPanel.Controls)
+            {
+                Button button = new()
+                {
+                    Size = new(21, 21),
+                    Location = new(2, textBox.ClientSize.Width - 22),
+                    Cursor = Cursors.Default,
+                    Text = "▼",
+                    ForeColor = Color.FromArgb(1, 112, 184)
+                };
+                button.FlatAppearance.BorderColor = Color.FromArgb(1, 112, 184);
+            }
+            base.OnLoad(e);
+        }
     }
 }

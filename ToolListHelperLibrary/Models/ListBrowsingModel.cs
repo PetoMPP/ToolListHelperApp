@@ -15,5 +15,6 @@ namespace ToolListHelperLibrary.Models
         public string WorkpieceClass { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public List<NcFileData> NcFiles { get; set; } = new();
+        public List<LogEntry> LogEntries { get; set; } = new();
     }
 }
