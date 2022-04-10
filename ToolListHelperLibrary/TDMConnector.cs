@@ -71,7 +71,7 @@ namespace ToolListHelperLibrary
             // Get machine paths
             if (model.SkipMachine)
             {
-                model.Machine = await GetMachineIDAsync(connection, model.Id);
+                model.Machine = await GetMachineIdAsync(connection, model.Id);
             }
             if (model.SkipName)
             {
@@ -83,7 +83,7 @@ namespace ToolListHelperLibrary
             string targetPath;
             if (model.CreatingMode == CreatingMode.New)
             {
-                targetPath = Path.Combine(machinePaths[NcFileMode.Archive], model.Name?.ToUpper() ?? string.Empty) + '.' + CreateVersionString(1) + '.' + Path.GetExtension(filePath);
+                targetPath = Path.Combine(machinePaths[ncFileMode], model.Name?.ToUpper() ?? string.Empty) + '.' + CreateVersionString(1) + Path.GetExtension(filePath);
                 await SendNewFile(model, connection, GetStateNameFromNcFileMode(ncFileMode), filePath, 1, targetPath);
                 return;
             }
@@ -387,7 +387,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private async static Task<string> GetUserNameFromUserId(string creatorId, DbConnection connection)
         {
-            return await connection.ExecuteScalarAsync<string>($"SELECT CONCAT(FIRSTNAME, ' ', NAME) FROM TMS_USER WHERE USERNAME = '{creatorId}'");
+            return await connection.ExecuteScalarAsync<string>($"SELECT CONCAT(FIRSTNAME, ' ', NAME) FROM TMS_USER WHERE USERID = '{creatorId}'");
         }
 
         private async static Task<string> GetMachineGroupIdByMachineIdAsync(string machine, DbConnection connection)
@@ -405,6 +405,12 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
                 await OverwriteTools(model, connection);
                 // Insert Logfile
                 await InsertLog(model, connection, logMessage);
+                if (!model.SkipNcFile)
+                {
+                    await ExecuteFileTransfer(model, connection);
+                    // TODO - Check if tdm logs file transfers
+                    // await InsertLog(model, connection, logMessage);
+                }
             }
             catch (Exception error)
             {
@@ -439,7 +445,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
         public static async Task<IEnumerable<ClampingData>> GetClampingsAsync(CancellationToken cancellationToken)
         {
             using DbConnection connection = GetTDMConnection();
-            return await connection.QueryAsync<ClampingData>(new CommandDefinition("SELECT DISTINCT(FIXTURE) AS Name FROM TDM_LIST", commandType: CommandType.Text, cancellationToken: cancellationToken));
+            return await connection.QueryAsync<ClampingData>(new CommandDefinition("SELECT DISTINCT(FIXTURE) AS Name FROM TDM_LIST WHERE FIXTURE IS NOT NULL", commandType: CommandType.Text, cancellationToken: cancellationToken));
         }
 
         public static async Task<IEnumerable<MaterialData>> GetMaterialsAsync(CancellationToken cancellationToken)
@@ -525,7 +531,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
 
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolAssemblyAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
-            if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(TOOLID) FROM TDM_TOOL WHERE TOOLID = '{tool.Id}'", commandType: CommandType.Text)) > 0)
+            if (await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(TOOLID) FROM TDM_TOOL WHERE TOOLID = '{tool.Id}'", commandType: CommandType.Text)))
             {
                 validTools.Add(tool);
                 return (invalidTools, validTools);
@@ -537,20 +543,20 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolItemAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             tool.ItemDescription = CsvOperations.GetDictonaryDescriptionValue(tool.ItemDescription);
-            if (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT COUNT(COMPID) FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text)) == 0)
+            if (await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(COMPID) FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text)))
             {
-                invalidTools.Add(tool);
-                return (validTools, invalidTools);
+                tool.Id = await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT COMPID FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text));
+                validTools.Add(tool);
+                return (invalidTools, validTools);
             }
-            tool.Id = await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT COMPID FROM TDM_COMP WHERE NAME2 = '{tool.ItemDescription}'", commandType: CommandType.Text));
-            validTools.Add(tool);
+            invalidTools.Add(tool);
             return (invalidTools, validTools);
         }
 
         public async static Task<bool> ValidateUserAsync(string creator)
         {
             using DbConnection connection = GetTDMConnection();
-            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(USERID) FROM TMS_USER WHERE USERNAME = '{creator}'"));
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(USERID) FROM TMS_USER WHERE USERID = '{creator}'"));
         }
 
         public static async Task<bool> ValidateListIdAsync(string id)
@@ -611,7 +617,7 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             List<string> filePaths = new();
             using DbConnection cnxn = GetTDMConnection();
             // Get Machine
-            string machineId = await GetMachineIDAsync(cnxn, listId);
+            string machineId = await GetMachineIdAsync(cnxn, listId);
             // Skip looking for files if machine is not specified
             if (machineId == null)
             {
@@ -656,7 +662,7 @@ SELECT FILEID AS FileId, EXTENSION AS Extension, STATEID AS StateId, VERSION AS 
 FROM NCM_PRODDOCB
 WHERE LISTID = '{listId}'")).ToList();
 
-        private async static Task<string> GetMachineIDAsync(IDbConnection cnxn, string listId) =>
+        private async static Task<string> GetMachineIdAsync(IDbConnection cnxn, string listId) =>
             (await cnxn.QueryAsync<string>($"SELECT MACHINEID FROM TDM_LIST WHERE LISTID = '{listId}'", commandType: CommandType.Text)).First();
 
         public async static Task DeleteToolListsAsync(List<string> listsIds)

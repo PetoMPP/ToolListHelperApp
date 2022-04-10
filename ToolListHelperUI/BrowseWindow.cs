@@ -129,6 +129,7 @@ namespace ToolListHelperUI
             try
             {
                 IEnumerable<MaterialData> materials = await TDMConnector.GetMaterialsAsync(_cancellationToken);
+                _initialData.AddRange(materials.Cast<object>());
                 browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(materials);
                 AdjustUI();
             }
@@ -153,6 +154,7 @@ namespace ToolListHelperUI
             try
             {
                 IEnumerable<MachineData> machines = await TDMConnector.GetMachinesAsync(_cancellationToken);
+                _initialData.AddRange(machines.Cast<object>());
                 browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(machines);
                 AdjustUI();
             }
@@ -177,6 +179,7 @@ namespace ToolListHelperUI
             try
             {
                 IEnumerable<ProgramData> programs = await TDMConnector.GetProgramsAsync(_cancellationToken);
+                _initialData.AddRange(programs.Cast<object>());
                 browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(programs);
                 AdjustUI();
             }
@@ -218,8 +221,8 @@ namespace ToolListHelperUI
                 BrowsingMode.ProgramId => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
                 BrowsingMode.ProgramName => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
                 BrowsingMode.ProgramDescription => browseDataGridView.SelectedRows[0].Cells["Description"].Value.ToString(),
-                BrowsingMode.Machine => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
-                BrowsingMode.Material => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
+                BrowsingMode.Machine => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
+                BrowsingMode.Material => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
                 BrowsingMode.Clamping => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
                 _ => null,
             };
@@ -249,6 +252,7 @@ namespace ToolListHelperUI
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
             FilterDataGrid();
+            AdjustUI();
         }
 
         private void FilterDataGrid()
@@ -276,24 +280,48 @@ namespace ToolListHelperUI
             if (string.IsNullOrWhiteSpace(textBox1.Text) && string.IsNullOrWhiteSpace(textBox2.Text) && string.IsNullOrWhiteSpace(textBox3.Text))
             {
                 ReloadDataGridData(_initialData);
+                return;
             }
-            if (!string.IsNullOrWhiteSpace(textBox1.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<ProgramData>().Where(p => Regex.IsMatch(p.Id, textBox1.Text)));
-            }
-            if (!string.IsNullOrWhiteSpace(textBox2.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<ProgramData>().Where(p => Regex.IsMatch(p.Name, textBox2.Text)));
-            }
-            if (!string.IsNullOrWhiteSpace(textBox3.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<ProgramData>().Where(p => Regex.IsMatch(p.Description, textBox3.Text)));
-            }
+            filteredData.AddRange(_initialData.Cast<ProgramData>()
+                .Where(p => 
+                Regex.IsMatch(p.Id, textBox1.Text, RegexOptions.IgnoreCase) && 
+                Regex.IsMatch(p.Name, textBox2.Text, RegexOptions.IgnoreCase) && 
+                Regex.IsMatch(p.Description ?? string.Empty, textBox3.Text, RegexOptions.IgnoreCase)));
             ReloadDataGridData(filteredData);
         }
 
         private void ReloadDataGridData<T>(List<T> filteredData)
         {
+            if (typeof(T) == typeof(object))
+            {
+                //filteredData = _mode switch
+                //{
+                //    BrowsingMode.Machine => filteredData.Cast<MachineData>().ToList(),
+                //    BrowsingMode.Material => filteredData.Cast<MaterialData>().ToList(),
+                //    BrowsingMode.Clamping => filteredData.Cast<ClampingData>().ToList(),
+                //    _ => filteredData.Cast<ProgramData>().ToList(),
+                //};
+                switch (_mode)
+                {
+                    case BrowsingMode.Machine:
+                        browseDataGridView.DataSource = null;
+                        browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(filteredData.Cast<MachineData>());
+                        break;
+                    case BrowsingMode.Material:
+                        browseDataGridView.DataSource = null;
+                        browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(filteredData.Cast<MaterialData>());
+                        break;
+                    case BrowsingMode.Clamping:
+                        browseDataGridView.DataSource = null;
+                        browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(filteredData.Cast<ClampingData>());
+                        break;
+                    default:
+                        browseDataGridView.DataSource = null;
+                        browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(filteredData.Cast<ProgramData>());
+                        break;
+                }
+                return;
+            }
             browseDataGridView.DataSource = null;
             browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(filteredData);
         }
@@ -304,11 +332,11 @@ namespace ToolListHelperUI
             if (string.IsNullOrWhiteSpace(textBox1.Text))
             {
                 ReloadDataGridData(_initialData);
+                return;
             }
-            if (!string.IsNullOrWhiteSpace(textBox1.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<ClampingData>().Where(p => Regex.IsMatch(p.Name, textBox1.Text)));
-            }
+            filteredData.AddRange(_initialData.Cast<ClampingData>()
+                .Where(p => 
+                Regex.IsMatch(p.Name, textBox1.Text, RegexOptions.IgnoreCase)));
             ReloadDataGridData(filteredData);
         }
 
@@ -318,19 +346,13 @@ namespace ToolListHelperUI
             if (string.IsNullOrWhiteSpace(textBox1.Text) && string.IsNullOrWhiteSpace(textBox2.Text) && string.IsNullOrWhiteSpace(textBox3.Text))
             {
                 ReloadDataGridData(_initialData);
+                return;
             }
-            if (!string.IsNullOrWhiteSpace(textBox1.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<MaterialData>().Where(p => Regex.IsMatch(p.Id, textBox1.Text)));
-            }
-            if (!string.IsNullOrWhiteSpace(textBox2.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<MaterialData>().Where(p => Regex.IsMatch(p.Name, textBox2.Text)));
-            }
-            if (!string.IsNullOrWhiteSpace(textBox3.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<MaterialData>().Where(p => Regex.IsMatch(p.ParentGroup, textBox3.Text)));
-            }
+            filteredData.AddRange(_initialData.Cast<MaterialData>()
+                .Where(p => 
+                Regex.IsMatch(p.Id, textBox1.Text, RegexOptions.IgnoreCase) &&
+                Regex.IsMatch(p.Name, textBox2.Text, RegexOptions.IgnoreCase) &&
+                Regex.IsMatch(p.ParentGroup, textBox3.Text, RegexOptions.IgnoreCase)));
             ReloadDataGridData(filteredData);
         }
 
@@ -340,19 +362,13 @@ namespace ToolListHelperUI
             if (string.IsNullOrWhiteSpace(textBox1.Text) && string.IsNullOrWhiteSpace(textBox2.Text) && string.IsNullOrWhiteSpace(textBox3.Text))
             {
                 ReloadDataGridData(_initialData);
+                return;
             }
-            if (!string.IsNullOrWhiteSpace(textBox1.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<MachineData>().Where(p => Regex.IsMatch(p.Id, textBox1.Text)));
-            }
-            if (!string.IsNullOrWhiteSpace(textBox2.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<MachineData>().Where(p => Regex.IsMatch(p.Name, textBox2.Text)));
-            }
-            if (!string.IsNullOrWhiteSpace(textBox3.Text))
-            {
-                filteredData.AddRange(_initialData.Cast<MachineData>().Where(p => Regex.IsMatch(p.ParentGroup, textBox3.Text)));
-            }
+            filteredData.AddRange(_initialData.Cast<MachineData>()
+                .Where(p =>
+                Regex.IsMatch(p.Id, textBox1.Text, RegexOptions.IgnoreCase) &&
+                Regex.IsMatch(p.Name, textBox2.Text, RegexOptions.IgnoreCase) &&
+                Regex.IsMatch(p.ParentGroup, textBox3.Text, RegexOptions.IgnoreCase)));
             ReloadDataGridData(filteredData);
         }
 

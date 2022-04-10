@@ -21,6 +21,31 @@ namespace ToolListHelperUI
         private string[] _filePaths = Array.Empty<string>();
         public ToolListMaker()
         {
+            // HACK - Some programmers have issues when lists are initialized after InitializeComponent()
+            _sectionPanels = new()
+            {
+                wizardPanel,
+                createPanel,
+                modePanel,
+                creatingModePanel,
+                programNamePanel,
+                programDescriptionPanel,
+                machinePanel,
+                sourceFilePanel,
+                listTypePanel,
+                addFilePanel,
+                materialPanel,
+                clampingPanel
+            };
+            _updateRadioButtons = new()
+            {
+                skipNameRadioButton,
+                skipProgramDescriptionRadioButton,
+                skipMachineRadioButton,
+                skipListTypeRadioButton,
+                skipMaterialRadioButton,
+                skipClampingRadioButton
+            };
             InitializeComponent();
             _sectionPanels = new()
             {
@@ -53,8 +78,12 @@ namespace ToolListHelperUI
             int width = Width;
             descriptionPanel.Width = width;
             int halfWidth = width / 2;
-            foreach (Panel panel in _sectionPanels)
+            foreach (Panel? panel in _sectionPanels)
             {
+                if (panel == null)
+                {
+                    continue;
+                }
                 ResizeSectionPanel(halfWidth, panel);
             }
         }
@@ -288,7 +317,7 @@ namespace ToolListHelperUI
             (List<ToolData> invalidTools, List<ToolData> validTools) = await TDMConnector.ValidateToolsAsync(model.Tools);
             if (invalidTools.Count > 0)
             {
-                if (UserInterfaceLogic.ShowWarning("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => t.Id ?? t.ItemDescription)
+                if (UserInterfaceLogic.ShowWarning("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => string.IsNullOrEmpty(t.Id) ? t.ItemDescription : t.Id)
                     .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!") == DialogResult.No)
                 {
                     return;
