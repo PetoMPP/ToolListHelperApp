@@ -13,7 +13,7 @@ using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI
 {
-    public partial class ToolListMakerWindow : Form, IBrowseData, IThemeLoader
+    public partial class ToolListMaker : Form, IBrowseData, IThemeLoader
     {
         private readonly List<Panel> _sectionPanels;
         private readonly List<RadioButton> _updateRadioButtons;

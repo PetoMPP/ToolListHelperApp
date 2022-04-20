@@ -383,6 +383,7 @@
             this.Controls.Add(this.leftPanel);
             this.Controls.Add(this.descriptionPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MinimumSize = new System.Drawing.Size(10, 0);
             this.Name = "DatronDictator";
             this.Text = "DatronDictator";
             this.Resize += new System.EventHandler(this.DatronDictator_Resize);

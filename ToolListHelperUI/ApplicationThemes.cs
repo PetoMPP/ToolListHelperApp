@@ -19,6 +19,7 @@ namespace ToolListHelperUI
         public static Color DarkGreenFore { get; } = Color.FromArgb(0, 255, 0);
         public static Color DarkPurpleFore { get; } = Color.FromArgb(200, 200, 255);
         public static Color DarkBlueFore { get; } = Color.FromArgb(100, 160, 255);
+        public static Color DarkSelectionPrimary { get; } = Color.DeepPink;
         public static Color LightPrimaryFore { get; } = Color.FromArgb(1, 112, 184);
         public static Color LightSecondaryFore { get; } = Color.Black;
         public static Color LightPrimaryBack { get; } = Color.White;
@@ -30,13 +31,21 @@ namespace ToolListHelperUI
         public static Color LightGreenFore { get; } = Color.FromArgb(0, 192, 0);
         public static Color LightPurpleFore { get; } = Color.FromArgb(128, 128, 255);
         public static Color LightBlueFore { get; } = Color.FromArgb(0, 0, 255);
-        public static void ApplyTheme(Form form, ApplicationTheme applicationTheme)
+        public static Color LightSelectionPrimary { get; } = Color.Pink;
+        public static void ApplyTheme(Form form, ApplicationTheme applicationTheme, Form[]? subForms = null)
         {
             switch (applicationTheme)
             {
                 case ApplicationTheme.Light:
                     form.BackColor = LightPrimaryBack;
-                    foreach (Label label in UserInterfaceLogic.GetAllControls<Label>(form))
+                    if (subForms != null)
+                    {
+                        foreach (var subForm in subForms)
+                        {
+                            subForm.BackColor = LightPrimaryBack;
+                        }
+                    }
+                    foreach (Label label in UserInterfaceLogic.GetAllControls<Label>(form).Where(l => l.Tag?.ToString() != "UnchangeableColor"))
                     {
                         label.ForeColor = LightPrimaryFore;
                     }
@@ -80,15 +89,31 @@ namespace ToolListHelperUI
                         dataGrid.BackgroundColor = LightPrimaryBack;
                         dataGrid.ForeColor = LightPrimaryFore;
                         dataGrid.BackColor = LightPrimaryBack;
-                        dataGrid.ColumnHeadersDefaultCellStyle.ForeColor = LightPrimaryFore;
-                        dataGrid.ColumnHeadersDefaultCellStyle.BackColor = LightPrimaryBack;
                         dataGrid.RowsDefaultCellStyle.ForeColor = LightSecondaryFore;
                         dataGrid.RowsDefaultCellStyle.BackColor = LightSecondaryBack;
+                        dataGrid.RowsDefaultCellStyle.SelectionBackColor = LightPrimaryFore;
+                        dataGrid.RowsDefaultCellStyle.SelectionForeColor = LightPrimaryBorderColor;
+                        dataGrid.GridColor = LightSecondaryFore;
+                        dataGrid.ColumnHeadersDefaultCellStyle.ForeColor = LightSecondaryFore;
+                        dataGrid.ColumnHeadersDefaultCellStyle.BackColor = LightPrimaryBack;
+                        dataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = LightPrimaryFore;
+                    }
+                    foreach (ComboBox comboBox in UserInterfaceLogic.GetAllControls<ComboBox>(form))
+                    {
+                        comboBox.ForeColor = LightSecondaryFore;
+                        comboBox.BackColor = LightPrimaryBack;
                     }
                     break;
                 case ApplicationTheme.Dark:
                     form.BackColor = DarkPrimaryBack;
-                    foreach (Label label in UserInterfaceLogic.GetAllControls<Label>(form))
+                    if (subForms != null)
+                    {
+                        foreach (var subForm in subForms)
+                        {
+                            subForm.BackColor = DarkPrimaryBack;
+                        }
+                    }
+                    foreach (Label label in UserInterfaceLogic.GetAllControls<Label>(form).Where(l => l.Tag?.ToString() != "UnchangeableColor"))
                     {
                         label.ForeColor = DarkPrimaryFore;
                     }
@@ -132,10 +157,19 @@ namespace ToolListHelperUI
                         dataGrid.BackgroundColor = DarkPrimaryBack;
                         dataGrid.ForeColor = DarkPrimaryFore;
                         dataGrid.BackColor = DarkPrimaryBack;
-                        dataGrid.ColumnHeadersDefaultCellStyle.ForeColor = DarkPrimaryFore;
-                        dataGrid.ColumnHeadersDefaultCellStyle.BackColor = DarkPrimaryBack;
                         dataGrid.RowsDefaultCellStyle.ForeColor = DarkSecondaryFore;
                         dataGrid.RowsDefaultCellStyle.BackColor = DarkSecondaryBack;
+                        dataGrid.RowsDefaultCellStyle.SelectionBackColor = DarkPrimaryFore;
+                        dataGrid.RowsDefaultCellStyle.SelectionForeColor = DarkPrimaryBorderColor;
+                        dataGrid.GridColor = DarkSecondaryFore;
+                        dataGrid.ColumnHeadersDefaultCellStyle.ForeColor = DarkSecondaryFore;
+                        dataGrid.ColumnHeadersDefaultCellStyle.BackColor = DarkPrimaryBack;
+                        dataGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = DarkPrimaryFore;
+                    }
+                    foreach (ComboBox comboBox in UserInterfaceLogic.GetAllControls<ComboBox>(form))
+                    {
+                        comboBox.ForeColor = DarkSecondaryFore;
+                        comboBox.BackColor = DarkSecondaryBack;
                     }
                     break;
             }

@@ -118,12 +118,12 @@ namespace ToolListHelperUI
             }
             if (_activeForm.GetType() == typeof(ToolListMaker))
             {
-                _activeForm.Width = mainPanel.VerticalScroll.Visible ? mainPanel.Width - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Width - (SystemInformation.Border3DSize.Width * 2);
+                _activeForm.Width = mainPanel.VerticalScroll.Visible ? mainPanel.Width - (SystemInformation.BorderSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Width - (SystemInformation.BorderSize.Width * 2);
             }
             else
             {
-                _activeForm.Width = mainPanel.VerticalScroll.Visible ? mainPanel.Width - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Width - (SystemInformation.Border3DSize.Width * 2);
-                _activeForm.Height = mainPanel.VerticalScroll.Visible ? mainPanel.Height - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Height - (SystemInformation.Border3DSize.Width * 2);
+                _activeForm.Width = mainPanel.VerticalScroll.Visible ? mainPanel.Width - (SystemInformation.BorderSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Width - (SystemInformation.BorderSize.Width * 2);
+                _activeForm.Height = mainPanel.VerticalScroll.Visible ? mainPanel.Height - (SystemInformation.BorderSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Height - (SystemInformation.BorderSize.Width * 2);
             }
         }
 
@@ -249,6 +249,13 @@ namespace ToolListHelperUI
                 try
                 {
                     ((IThemeLoader)_activeForm).LoadTheme(_applicationTheme);
+                    if (_activeForm is ToolListManager toolListManager)
+                    {
+                        if (toolListManager._activeForm != null)
+                        {
+                            ((IThemeLoader)toolListManager._activeForm).LoadTheme(_applicationTheme);
+                        }
+                    }
                 }
                 catch (System.Exception error)
                 {
@@ -269,6 +276,9 @@ namespace ToolListHelperUI
                     datronDictatorButton.BackColor = ApplicationThemes.LightSecondaryBack;
                     datronDictatorButton.ForeColor = ApplicationThemes.LightSecondaryFore;
                     datronDictatorButton.FlatAppearance.BorderColor = ApplicationThemes.LightSecondaryBorderColor;
+                    toolListManagerButton.BackColor = ApplicationThemes.LightSecondaryBack;
+                    toolListManagerButton.ForeColor = ApplicationThemes.LightSecondaryFore;
+                    toolListManagerButton.FlatAppearance.BorderColor = ApplicationThemes.LightSecondaryBorderColor;
                     toolListRemoverButton.BackColor = ApplicationThemes.LightSecondaryBack;
                     toolListRemoverButton.ForeColor = ApplicationThemes.LightSecondaryFore;
                     toolListRemoverButton.FlatAppearance.BorderColor = ApplicationThemes.LightSecondaryBorderColor;
@@ -293,6 +303,9 @@ namespace ToolListHelperUI
                     datronDictatorButton.BackColor = ApplicationThemes.DarkSecondaryBack;
                     datronDictatorButton.ForeColor = ApplicationThemes.DarkSecondaryFore;
                     datronDictatorButton.FlatAppearance.BorderColor = ApplicationThemes.DarkSecondaryBorderColor;
+                    toolListManagerButton.BackColor = ApplicationThemes.DarkSecondaryBack;
+                    toolListManagerButton.ForeColor = ApplicationThemes.DarkSecondaryFore;
+                    toolListManagerButton.FlatAppearance.BorderColor = ApplicationThemes.DarkSecondaryBorderColor;
                     toolListRemoverButton.BackColor = ApplicationThemes.DarkSecondaryBack;
                     toolListRemoverButton.ForeColor = ApplicationThemes.DarkSecondaryFore;
                     toolListRemoverButton.FlatAppearance.BorderColor = ApplicationThemes.DarkSecondaryBorderColor;

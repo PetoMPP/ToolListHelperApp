@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.descriptionPanel = new System.Windows.Forms.Panel();
             this.moduleDescriptionLabel = new System.Windows.Forms.Label();
             this.navigationPanel = new System.Windows.Forms.Panel();
@@ -38,18 +39,18 @@
             this.topPanel = new System.Windows.Forms.Panel();
             this.selectedListPanel = new System.Windows.Forms.Panel();
             this.buttonsPanel = new System.Windows.Forms.Panel();
-            this.deleteListButton = new System.Windows.Forms.Button();
+            this.createListButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.saveListButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.loadListButton = new System.Windows.Forms.Button();
             this.listIdPanel = new System.Windows.Forms.Panel();
             this.listIdTextBoxPanel = new System.Windows.Forms.Panel();
             this.listIdTextBox = new System.Windows.Forms.TextBox();
-            this.browseListIdPanel = new System.Windows.Forms.Panel();
-            this.browselistIdButton = new System.Windows.Forms.Button();
             this.selectedListLabel = new System.Windows.Forms.Label();
             this.viewPanel = new System.Windows.Forms.Panel();
+            this.actionButtonsToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.saveListButton = new System.Windows.Forms.Button();
+            this.deleteListButton = new System.Windows.Forms.Button();
+            this.reloadListButton = new System.Windows.Forms.Button();
             this.descriptionPanel.SuspendLayout();
             this.navigationPanel.SuspendLayout();
             this.topPanel.SuspendLayout();
@@ -57,7 +58,6 @@
             this.buttonsPanel.SuspendLayout();
             this.listIdPanel.SuspendLayout();
             this.listIdTextBoxPanel.SuspendLayout();
-            this.browseListIdPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // descriptionPanel
@@ -72,7 +72,7 @@
             // 
             // moduleDescriptionLabel
             // 
-            this.moduleDescriptionLabel.BackColor = System.Drawing.Color.White;
+            this.moduleDescriptionLabel.BackColor = System.Drawing.Color.Transparent;
             this.moduleDescriptionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.moduleDescriptionLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.moduleDescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -88,6 +88,7 @@
             // 
             // navigationPanel
             // 
+            this.navigationPanel.BackColor = System.Drawing.Color.Transparent;
             this.navigationPanel.Controls.Add(this.documentsLabel);
             this.navigationPanel.Controls.Add(this.fileManagementLabel);
             this.navigationPanel.Controls.Add(this.toolListLabel);
@@ -110,6 +111,7 @@
             this.documentsLabel.Name = "documentsLabel";
             this.documentsLabel.Size = new System.Drawing.Size(180, 30);
             this.documentsLabel.TabIndex = 3;
+            this.documentsLabel.Tag = "UnchangeableColor";
             this.documentsLabel.Text = "Pozostałe dokumenty";
             this.documentsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.documentsLabel.Click += new System.EventHandler(this.ModeLabel_Click);
@@ -125,6 +127,7 @@
             this.fileManagementLabel.Name = "fileManagementLabel";
             this.fileManagementLabel.Size = new System.Drawing.Size(180, 30);
             this.fileManagementLabel.TabIndex = 2;
+            this.fileManagementLabel.Tag = "UnchangeableColor";
             this.fileManagementLabel.Text = "Zarządzanie plikami";
             this.fileManagementLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.fileManagementLabel.Click += new System.EventHandler(this.ModeLabel_Click);
@@ -140,6 +143,7 @@
             this.toolListLabel.Name = "toolListLabel";
             this.toolListLabel.Size = new System.Drawing.Size(180, 30);
             this.toolListLabel.TabIndex = 1;
+            this.toolListLabel.Tag = "UnchangeableColor";
             this.toolListLabel.Text = "Lista Narzędzi";
             this.toolListLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toolListLabel.Click += new System.EventHandler(this.ModeLabel_Click);
@@ -155,6 +159,7 @@
             this.basicDataLabel.Name = "basicDataLabel";
             this.basicDataLabel.Size = new System.Drawing.Size(180, 30);
             this.basicDataLabel.TabIndex = 0;
+            this.basicDataLabel.Tag = "UnchangeableColor";
             this.basicDataLabel.Text = "Podstawowe Dane";
             this.basicDataLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.basicDataLabel.Click += new System.EventHandler(this.ModeLabel_Click);
@@ -183,11 +188,13 @@
             // 
             // buttonsPanel
             // 
+            this.buttonsPanel.BackColor = System.Drawing.Color.Transparent;
+            this.buttonsPanel.Controls.Add(this.reloadListButton);
             this.buttonsPanel.Controls.Add(this.deleteListButton);
-            this.buttonsPanel.Controls.Add(this.label2);
             this.buttonsPanel.Controls.Add(this.saveListButton);
+            this.buttonsPanel.Controls.Add(this.createListButton);
+            this.buttonsPanel.Controls.Add(this.label2);
             this.buttonsPanel.Controls.Add(this.label1);
-            this.buttonsPanel.Controls.Add(this.loadListButton);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonsPanel.Location = new System.Drawing.Point(525, 0);
             this.buttonsPanel.Name = "buttonsPanel";
@@ -195,74 +202,37 @@
             this.buttonsPanel.Size = new System.Drawing.Size(375, 47);
             this.buttonsPanel.TabIndex = 7;
             // 
-            // deleteListButton
+            // createListButton
             // 
-            this.deleteListButton.BackColor = System.Drawing.Color.White;
-            this.deleteListButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.deleteListButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
-            this.deleteListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteListButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.deleteListButton.ForeColor = System.Drawing.Color.DarkRed;
-            this.deleteListButton.Location = new System.Drawing.Point(250, 8);
-            this.deleteListButton.Margin = new System.Windows.Forms.Padding(10);
-            this.deleteListButton.Name = "deleteListButton";
-            this.deleteListButton.Size = new System.Drawing.Size(116, 31);
-            this.deleteListButton.TabIndex = 10;
-            this.deleteListButton.Text = "Usuń listę";
-            this.deleteListButton.UseVisualStyleBackColor = false;
+            this.createListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources._new;
+            this.createListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.createListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.createListButton.Location = new System.Drawing.Point(6, 3);
+            this.createListButton.Name = "createListButton";
+            this.createListButton.Size = new System.Drawing.Size(42, 42);
+            this.createListButton.TabIndex = 14;
+            this.actionButtonsToolTip.SetToolTip(this.createListButton, "Utwórz nową listę");
+            this.createListButton.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label2.Location = new System.Drawing.Point(245, 8);
+            this.label2.Location = new System.Drawing.Point(13, 8);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(5, 31);
             this.label2.TabIndex = 9;
             // 
-            // saveListButton
-            // 
-            this.saveListButton.BackColor = System.Drawing.Color.White;
-            this.saveListButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.saveListButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
-            this.saveListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.saveListButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.saveListButton.ForeColor = System.Drawing.Color.Green;
-            this.saveListButton.Location = new System.Drawing.Point(129, 8);
-            this.saveListButton.Margin = new System.Windows.Forms.Padding(10);
-            this.saveListButton.Name = "saveListButton";
-            this.saveListButton.Size = new System.Drawing.Size(116, 31);
-            this.saveListButton.TabIndex = 8;
-            this.saveListButton.Text = "Zapisz zmiany";
-            this.saveListButton.UseVisualStyleBackColor = false;
-            // 
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label1.Location = new System.Drawing.Point(124, 8);
+            this.label1.Location = new System.Drawing.Point(8, 8);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(5, 31);
             this.label1.TabIndex = 7;
             // 
-            // loadListButton
-            // 
-            this.loadListButton.BackColor = System.Drawing.Color.White;
-            this.loadListButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.loadListButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(60)))), ((int)(((byte)(111)))));
-            this.loadListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.loadListButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.loadListButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.loadListButton.Location = new System.Drawing.Point(8, 8);
-            this.loadListButton.Margin = new System.Windows.Forms.Padding(10);
-            this.loadListButton.Name = "loadListButton";
-            this.loadListButton.Size = new System.Drawing.Size(116, 31);
-            this.loadListButton.TabIndex = 6;
-            this.loadListButton.Text = "Załaduj listę";
-            this.loadListButton.UseVisualStyleBackColor = false;
-            // 
             // listIdPanel
             // 
             this.listIdPanel.Controls.Add(this.listIdTextBoxPanel);
-            this.listIdPanel.Controls.Add(this.browseListIdPanel);
             this.listIdPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.listIdPanel.Location = new System.Drawing.Point(300, 0);
             this.listIdPanel.Name = "listIdPanel";
@@ -271,12 +241,13 @@
             // 
             // listIdTextBoxPanel
             // 
+            this.listIdTextBoxPanel.BackColor = System.Drawing.Color.Transparent;
             this.listIdTextBoxPanel.Controls.Add(this.listIdTextBox);
             this.listIdTextBoxPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listIdTextBoxPanel.Location = new System.Drawing.Point(0, 0);
             this.listIdTextBoxPanel.Name = "listIdTextBoxPanel";
             this.listIdTextBoxPanel.Padding = new System.Windows.Forms.Padding(11);
-            this.listIdTextBoxPanel.Size = new System.Drawing.Size(175, 47);
+            this.listIdTextBoxPanel.Size = new System.Drawing.Size(225, 47);
             this.listIdTextBoxPanel.TabIndex = 1;
             // 
             // listIdTextBox
@@ -285,40 +256,15 @@
             this.listIdTextBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listIdTextBox.Location = new System.Drawing.Point(11, 11);
             this.listIdTextBox.Name = "listIdTextBox";
-            this.listIdTextBox.Size = new System.Drawing.Size(153, 25);
+            this.listIdTextBox.Size = new System.Drawing.Size(203, 25);
             this.listIdTextBox.TabIndex = 3;
-            // 
-            // browseListIdPanel
-            // 
-            this.browseListIdPanel.Controls.Add(this.browselistIdButton);
-            this.browseListIdPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.browseListIdPanel.Location = new System.Drawing.Point(175, 0);
-            this.browseListIdPanel.Name = "browseListIdPanel";
-            this.browseListIdPanel.Padding = new System.Windows.Forms.Padding(5);
-            this.browseListIdPanel.Size = new System.Drawing.Size(50, 47);
-            this.browseListIdPanel.TabIndex = 2;
-            // 
-            // browselistIdButton
-            // 
-            this.browselistIdButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.browselistIdButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.browselistIdButton.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.browselistIdButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.browselistIdButton.Location = new System.Drawing.Point(5, 5);
-            this.browselistIdButton.Margin = new System.Windows.Forms.Padding(0);
-            this.browselistIdButton.Name = "browselistIdButton";
-            this.browselistIdButton.Size = new System.Drawing.Size(40, 37);
-            this.browselistIdButton.TabIndex = 4;
-            this.browselistIdButton.Tag = "ProgramId";
-            this.browselistIdButton.Text = "▼";
-            this.browselistIdButton.UseVisualStyleBackColor = false;
             // 
             // selectedListLabel
             // 
-            this.selectedListLabel.BackColor = System.Drawing.Color.White;
+            this.selectedListLabel.BackColor = System.Drawing.Color.Transparent;
             this.selectedListLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.selectedListLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.selectedListLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.selectedListLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.selectedListLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
             this.selectedListLabel.Location = new System.Drawing.Point(0, 0);
             this.selectedListLabel.Name = "selectedListLabel";
@@ -330,12 +276,48 @@
             // 
             // viewPanel
             // 
-            this.viewPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.viewPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.viewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.viewPanel.Location = new System.Drawing.Point(0, 160);
             this.viewPanel.Name = "viewPanel";
             this.viewPanel.Size = new System.Drawing.Size(900, 620);
             this.viewPanel.TabIndex = 11;
+            // 
+            // saveListButton
+            // 
+            this.saveListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.edit;
+            this.saveListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.saveListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveListButton.Location = new System.Drawing.Point(54, 3);
+            this.saveListButton.Name = "saveListButton";
+            this.saveListButton.Size = new System.Drawing.Size(42, 42);
+            this.saveListButton.TabIndex = 15;
+            this.actionButtonsToolTip.SetToolTip(this.saveListButton, "Zapisz zmiany");
+            this.saveListButton.UseVisualStyleBackColor = true;
+            // 
+            // deleteListButton
+            // 
+            this.deleteListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.delete;
+            this.deleteListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.deleteListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.deleteListButton.Location = new System.Drawing.Point(150, 3);
+            this.deleteListButton.Name = "deleteListButton";
+            this.deleteListButton.Size = new System.Drawing.Size(42, 42);
+            this.deleteListButton.TabIndex = 16;
+            this.actionButtonsToolTip.SetToolTip(this.deleteListButton, "Usuń listę");
+            this.deleteListButton.UseVisualStyleBackColor = true;
+            // 
+            // reloadListButton
+            // 
+            this.reloadListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.load;
+            this.reloadListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.reloadListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.reloadListButton.Location = new System.Drawing.Point(102, 3);
+            this.reloadListButton.Name = "reloadListButton";
+            this.reloadListButton.Size = new System.Drawing.Size(42, 42);
+            this.reloadListButton.TabIndex = 17;
+            this.actionButtonsToolTip.SetToolTip(this.reloadListButton, "Załaduj ponownie listę");
+            this.reloadListButton.UseVisualStyleBackColor = true;
             // 
             // ToolListManager
             // 
@@ -357,7 +339,6 @@
             this.listIdPanel.ResumeLayout(false);
             this.listIdTextBoxPanel.ResumeLayout(false);
             this.listIdTextBoxPanel.PerformLayout();
-            this.browseListIdPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -374,17 +355,17 @@
         private Panel topPanel;
         private Panel viewPanel;
         private Panel selectedListPanel;
-        private Button loadListButton;
         private Panel listIdPanel;
         private Panel listIdTextBoxPanel;
         private TextBox listIdTextBox;
-        private Panel browseListIdPanel;
-        private Button browselistIdButton;
         private Label selectedListLabel;
         private Panel buttonsPanel;
-        private Button deleteListButton;
         private Label label2;
-        private Button saveListButton;
         private Label label1;
+        private ToolTip actionButtonsToolTip;
+        private Button createListButton;
+        private Button reloadListButton;
+        private Button deleteListButton;
+        private Button saveListButton;
     }
 }

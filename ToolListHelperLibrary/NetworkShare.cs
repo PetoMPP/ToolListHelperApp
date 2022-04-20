@@ -121,7 +121,7 @@ namespace ToolListHelperLibrary
             }
         }
 
-        private static ErrorClass[] ERROR_LIST = new ErrorClass[] {
+        private static readonly ErrorClass[] ERROR_LIST = new ErrorClass[] {
         new ErrorClass(ERROR_ACCESS_DENIED, "Error: Access Denied"),
         new ErrorClass(ERROR_ALREADY_ASSIGNED, "Error: Already Assigned"),
         new ErrorClass(ERROR_BAD_DEVICE, "Error: Bad Device"),
