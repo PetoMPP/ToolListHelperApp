@@ -320,16 +320,16 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             }
             if (model.Tools.Any(t => t.ToolType == ToolType.Assembly))
             {
-                header = "INSERT INTO TDM_LISTLISTB (LISTID, LISTLISTPOS, TOOLID, TIMESTAMP) VALUES ";
+                header = "INSERT INTO TDM_LISTLISTB (LISTID, LISTLISTPOS, TOOLID, TIMESTAMP, TOOLNUMBER, QUANTITY) VALUES ";
             }
             else
             {
-                header = "INSERT INTO TDM_LISTLISTB (LISTID, LISTLISTPOS, COMPID, TIMESTAMP) VALUES ";
+                header = "INSERT INTO TDM_LISTLISTB (LISTID, LISTLISTPOS, COMPID, TIMESTAMP, TOOLNUMBER, QUANTITY) VALUES ";
             }
             StringBuilder stringBuilder = new(header);
             for (int i = 0; i < model.Tools.Count; i++)
             {
-                stringBuilder.Append($"('{model.Id}', {i + 1}, '{model.Tools[i].Id}', {timestamp}),");
+                stringBuilder.Append($"('{model.Id}', {i + 1}, '{model.Tools[i].Id}', {timestamp}, '{model.Tools[i].Id}', 1),");
             }
             stringBuilder.Length--;
             return stringBuilder.ToString();
