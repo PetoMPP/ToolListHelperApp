@@ -8,13 +8,14 @@ namespace ToolListHelperLibrary.Models
 {
     public class ListBrowsingModel: ListModel
     {
+        public string MachineGroup { get; set; } =  string.Empty;
         public string Drawing { get; set; } = string.Empty;
         public string Operation { get; set; } = string.Empty;
         public string Status1 { get; set; } = string.Empty;
         public string Status2 { get; set; } = string.Empty;
         public string WorkpieceClass { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
-        public List<NcFileData> NcFiles { get; set; } = new();
+        public List<NcProgramFileModel> NcProgramFiles { get; set; } = new();
         public List<LogEntry> LogEntries { get; set; } = new();
     }
 }

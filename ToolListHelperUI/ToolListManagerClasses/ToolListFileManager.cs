@@ -48,5 +48,10 @@ namespace ToolListHelperUI.ToolListManagerClasses
                 panel.Width = Width / 2;
             }
         }
+
+        internal void LoadListData(ToolListHelperLibrary.Models.ListBrowsingModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

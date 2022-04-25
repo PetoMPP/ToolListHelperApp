@@ -2,8 +2,8 @@
 {
     public enum ListType
     {
-        Primary,
-        Secondary
+        Primary = 1,
+        Secondary = 2
     }
     public enum NcFileMode
     {

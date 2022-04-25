@@ -71,7 +71,7 @@
             this.programNameTextBox = new System.Windows.Forms.TextBox();
             this.ProgramNameLabel = new System.Windows.Forms.Label();
             this.rightPanel = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.logFileDataGridView = new System.Windows.Forms.DataGridView();
             this.lastChangesLabel = new System.Windows.Forms.Label();
             this.leftPanel.SuspendLayout();
             this.userPanel.SuspendLayout();
@@ -89,7 +89,7 @@
             this.programDescriptionPanel.SuspendLayout();
             this.programNamePanel.SuspendLayout();
             this.rightPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logFileDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // leftPanel
@@ -546,7 +546,7 @@
             // rightPanel
             // 
             this.rightPanel.BackColor = System.Drawing.Color.Transparent;
-            this.rightPanel.Controls.Add(this.dataGridView1);
+            this.rightPanel.Controls.Add(this.logFileDataGridView);
             this.rightPanel.Controls.Add(this.lastChangesLabel);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.rightPanel.Location = new System.Drawing.Point(450, 0);
@@ -555,18 +555,20 @@
             this.rightPanel.Size = new System.Drawing.Size(450, 620);
             this.rightPanel.TabIndex = 1;
             // 
-            // dataGridView1
+            // logFileDataGridView
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(15, 50);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(420, 555);
-            this.dataGridView1.TabIndex = 4;
+            this.logFileDataGridView.AllowUserToAddRows = false;
+            this.logFileDataGridView.AllowUserToDeleteRows = false;
+            this.logFileDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.logFileDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.logFileDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logFileDataGridView.Location = new System.Drawing.Point(15, 50);
+            this.logFileDataGridView.Name = "logFileDataGridView";
+            this.logFileDataGridView.ReadOnly = true;
+            this.logFileDataGridView.RowHeadersVisible = false;
+            this.logFileDataGridView.RowTemplate.Height = 25;
+            this.logFileDataGridView.Size = new System.Drawing.Size(420, 555);
+            this.logFileDataGridView.TabIndex = 4;
             // 
             // lastChangesLabel
             // 
@@ -623,7 +625,7 @@
             this.programNamePanel.ResumeLayout(false);
             this.programNamePanel.PerformLayout();
             this.rightPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.logFileDataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -661,7 +663,7 @@
         private Panel programDescriptionPanel;
         private TextBox programDescriptionTextBox;
         private Label programDescriptionLabel;
-        private DataGridView dataGridView1;
+        private DataGridView logFileDataGridView;
         private Label lastChangesLabel;
         private Panel status2Panel;
         private TextBox status2TextBox;

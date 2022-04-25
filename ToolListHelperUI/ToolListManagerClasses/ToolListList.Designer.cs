@@ -70,7 +70,6 @@
             this.listDataGridView.ReadOnly = true;
             this.listDataGridView.RowHeadersVisible = false;
             this.listDataGridView.RowTemplate.Height = 25;
-            this.listDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.listDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.listDataGridView.Size = new System.Drawing.Size(884, 604);
             this.listDataGridView.TabIndex = 5;

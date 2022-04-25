@@ -71,6 +71,7 @@
             this.developmentPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.developmentPanel.Location = new System.Drawing.Point(0, 0);
             this.developmentPanel.Name = "developmentPanel";
+            this.developmentPanel.Padding = new System.Windows.Forms.Padding(5);
             this.developmentPanel.Size = new System.Drawing.Size(450, 310);
             this.developmentPanel.TabIndex = 0;
             // 
@@ -93,7 +94,7 @@
             this.developingDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.developingDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.developingDataGridView.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.developingDataGridView.Location = new System.Drawing.Point(0, 40);
+            this.developingDataGridView.Location = new System.Drawing.Point(5, 45);
             this.developingDataGridView.MultiSelect = false;
             this.developingDataGridView.Name = "developingDataGridView";
             this.developingDataGridView.ReadOnly = true;
@@ -101,7 +102,7 @@
             this.developingDataGridView.RowTemplate.Height = 25;
             this.developingDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.developingDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.developingDataGridView.Size = new System.Drawing.Size(450, 270);
+            this.developingDataGridView.Size = new System.Drawing.Size(440, 260);
             this.developingDataGridView.TabIndex = 5;
             // 
             // developmentTitlePanel
@@ -109,9 +110,9 @@
             this.developmentTitlePanel.Controls.Add(this.developmentLabel);
             this.developmentTitlePanel.Controls.Add(this.developmentPictureBox);
             this.developmentTitlePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.developmentTitlePanel.Location = new System.Drawing.Point(0, 0);
+            this.developmentTitlePanel.Location = new System.Drawing.Point(5, 5);
             this.developmentTitlePanel.Name = "developmentTitlePanel";
-            this.developmentTitlePanel.Size = new System.Drawing.Size(450, 40);
+            this.developmentTitlePanel.Size = new System.Drawing.Size(440, 40);
             this.developmentTitlePanel.TabIndex = 0;
             // 
             // developmentLabel
@@ -121,7 +122,7 @@
             this.developmentLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
             this.developmentLabel.Location = new System.Drawing.Point(40, 0);
             this.developmentLabel.Name = "developmentLabel";
-            this.developmentLabel.Size = new System.Drawing.Size(410, 40);
+            this.developmentLabel.Size = new System.Drawing.Size(400, 40);
             this.developmentLabel.TabIndex = 1;
             this.developmentLabel.Text = "W przygotowaniu";
             this.developmentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -154,6 +155,7 @@
             this.releasedPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.releasedPanel.Location = new System.Drawing.Point(450, 0);
             this.releasedPanel.Name = "releasedPanel";
+            this.releasedPanel.Padding = new System.Windows.Forms.Padding(5);
             this.releasedPanel.Size = new System.Drawing.Size(450, 310);
             this.releasedPanel.TabIndex = 1;
             // 
@@ -176,7 +178,7 @@
             this.releasedDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.releasedDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.releasedDataGridView.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.releasedDataGridView.Location = new System.Drawing.Point(0, 40);
+            this.releasedDataGridView.Location = new System.Drawing.Point(5, 45);
             this.releasedDataGridView.MultiSelect = false;
             this.releasedDataGridView.Name = "releasedDataGridView";
             this.releasedDataGridView.ReadOnly = true;
@@ -184,7 +186,7 @@
             this.releasedDataGridView.RowTemplate.Height = 25;
             this.releasedDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.releasedDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.releasedDataGridView.Size = new System.Drawing.Size(450, 270);
+            this.releasedDataGridView.Size = new System.Drawing.Size(440, 260);
             this.releasedDataGridView.TabIndex = 5;
             // 
             // releasedTitlePanel
@@ -192,9 +194,9 @@
             this.releasedTitlePanel.Controls.Add(this.releasedLabel);
             this.releasedTitlePanel.Controls.Add(this.releasedPictureBox);
             this.releasedTitlePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.releasedTitlePanel.Location = new System.Drawing.Point(0, 0);
+            this.releasedTitlePanel.Location = new System.Drawing.Point(5, 5);
             this.releasedTitlePanel.Name = "releasedTitlePanel";
-            this.releasedTitlePanel.Size = new System.Drawing.Size(450, 40);
+            this.releasedTitlePanel.Size = new System.Drawing.Size(440, 40);
             this.releasedTitlePanel.TabIndex = 0;
             // 
             // releasedLabel
@@ -204,7 +206,7 @@
             this.releasedLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
             this.releasedLabel.Location = new System.Drawing.Point(40, 0);
             this.releasedLabel.Name = "releasedLabel";
-            this.releasedLabel.Size = new System.Drawing.Size(410, 40);
+            this.releasedLabel.Size = new System.Drawing.Size(400, 40);
             this.releasedLabel.TabIndex = 1;
             this.releasedLabel.Text = "Gotowe do produkcji";
             this.releasedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -236,6 +238,7 @@
             this.archivePanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.archivePanel.Location = new System.Drawing.Point(0, 0);
             this.archivePanel.Name = "archivePanel";
+            this.archivePanel.Padding = new System.Windows.Forms.Padding(5);
             this.archivePanel.Size = new System.Drawing.Size(450, 310);
             this.archivePanel.TabIndex = 2;
             // 
@@ -258,7 +261,7 @@
             this.archiveDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.archiveDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.archiveDataGridView.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
-            this.archiveDataGridView.Location = new System.Drawing.Point(0, 40);
+            this.archiveDataGridView.Location = new System.Drawing.Point(5, 45);
             this.archiveDataGridView.MultiSelect = false;
             this.archiveDataGridView.Name = "archiveDataGridView";
             this.archiveDataGridView.ReadOnly = true;
@@ -266,7 +269,7 @@
             this.archiveDataGridView.RowTemplate.Height = 25;
             this.archiveDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.archiveDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.archiveDataGridView.Size = new System.Drawing.Size(450, 270);
+            this.archiveDataGridView.Size = new System.Drawing.Size(440, 260);
             this.archiveDataGridView.TabIndex = 5;
             // 
             // archiveTitlePanel
@@ -274,9 +277,9 @@
             this.archiveTitlePanel.Controls.Add(this.archiveLabel);
             this.archiveTitlePanel.Controls.Add(this.archivePictureBox);
             this.archiveTitlePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.archiveTitlePanel.Location = new System.Drawing.Point(0, 0);
+            this.archiveTitlePanel.Location = new System.Drawing.Point(5, 5);
             this.archiveTitlePanel.Name = "archiveTitlePanel";
-            this.archiveTitlePanel.Size = new System.Drawing.Size(450, 40);
+            this.archiveTitlePanel.Size = new System.Drawing.Size(440, 40);
             this.archiveTitlePanel.TabIndex = 0;
             // 
             // archiveLabel
@@ -286,7 +289,7 @@
             this.archiveLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(112)))), ((int)(((byte)(184)))));
             this.archiveLabel.Location = new System.Drawing.Point(40, 0);
             this.archiveLabel.Name = "archiveLabel";
-            this.archiveLabel.Size = new System.Drawing.Size(410, 40);
+            this.archiveLabel.Size = new System.Drawing.Size(400, 40);
             this.archiveLabel.TabIndex = 1;
             this.archiveLabel.Text = "Zarchiwizowane";
             this.archiveLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

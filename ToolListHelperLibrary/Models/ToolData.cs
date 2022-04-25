@@ -10,6 +10,8 @@ namespace ToolListHelperLibrary.Models
     {
         public string Id { get; set; }
         public string ItemDescription { get; set; }
+        public string ItemOrderCode { get; set; }
+        public int? Quantity { get; set; }
         public ToolType ToolType { get; set; }
     }
 }

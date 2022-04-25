@@ -82,7 +82,7 @@ namespace ToolListHelperLibrary
 
         #region Consts
         const int RESOURCETYPE_DISK = 0x00000001;
-        const int CONNECT_UPDATE_PROFILE = 0x00000001;
+        //const int CONNECT_UPDATE_PROFILE = 0x00000001;
         #endregion
 
         #region Errors

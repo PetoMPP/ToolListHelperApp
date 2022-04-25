@@ -121,7 +121,7 @@ namespace ToolListHelperLibrary
                 //File.SetLastWriteTime(targetPath, DateTime.Now);
                 NetworkShare.DisconnectFromShare(@"\\MMS251107S1\IMPORTCAM", true);
             }
-            await InsertFileState(model, version, targetState, Path.GetExtension(filePath).ToUpper().Substring(1), connection);
+            await InsertFileState(model, version, targetState, Path.GetExtension(filePath).ToUpper()[1..], connection);
         }
 
         private async static Task InsertFileState(ListModel model, int version, string targetState, string extension, DbConnection connection)
@@ -594,19 +594,16 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
                 // Get List of NC programs with file locations
                 List<string> filePaths = await GetNcFilesPathsAsync(listId) ?? new();
                 // Delete files ignoring exception if file is not found
-                if (filePaths != null)
+                foreach (string filePath in filePaths)
                 {
-                    foreach (string filePath in filePaths)
+                    try
                     {
-                        try
-                        {
-                            File.Delete(filePath);
-                        }
-                        catch (FileNotFoundException)
-                        {
-                            ;
-                        }
-                    } 
+                        File.Delete(filePath);
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        ;
+                    }
                 }
                 // Delete db entries
                 await DeleteNcProgramsDbDataAsync(listId);

@@ -39,6 +39,9 @@
             this.topPanel = new System.Windows.Forms.Panel();
             this.selectedListPanel = new System.Windows.Forms.Panel();
             this.buttonsPanel = new System.Windows.Forms.Panel();
+            this.reloadListButton = new System.Windows.Forms.Button();
+            this.deleteListButton = new System.Windows.Forms.Button();
+            this.saveListButton = new System.Windows.Forms.Button();
             this.createListButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,9 +51,6 @@
             this.selectedListLabel = new System.Windows.Forms.Label();
             this.viewPanel = new System.Windows.Forms.Panel();
             this.actionButtonsToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.saveListButton = new System.Windows.Forms.Button();
-            this.deleteListButton = new System.Windows.Forms.Button();
-            this.reloadListButton = new System.Windows.Forms.Button();
             this.descriptionPanel.SuspendLayout();
             this.navigationPanel.SuspendLayout();
             this.topPanel.SuspendLayout();
@@ -202,6 +202,42 @@
             this.buttonsPanel.Size = new System.Drawing.Size(375, 47);
             this.buttonsPanel.TabIndex = 7;
             // 
+            // reloadListButton
+            // 
+            this.reloadListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.load;
+            this.reloadListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.reloadListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.reloadListButton.Location = new System.Drawing.Point(102, 3);
+            this.reloadListButton.Name = "reloadListButton";
+            this.reloadListButton.Size = new System.Drawing.Size(42, 42);
+            this.reloadListButton.TabIndex = 17;
+            this.actionButtonsToolTip.SetToolTip(this.reloadListButton, "Załaduj ponownie listę");
+            this.reloadListButton.UseVisualStyleBackColor = true;
+            // 
+            // deleteListButton
+            // 
+            this.deleteListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.delete;
+            this.deleteListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.deleteListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.deleteListButton.Location = new System.Drawing.Point(150, 3);
+            this.deleteListButton.Name = "deleteListButton";
+            this.deleteListButton.Size = new System.Drawing.Size(42, 42);
+            this.deleteListButton.TabIndex = 16;
+            this.actionButtonsToolTip.SetToolTip(this.deleteListButton, "Usuń listę");
+            this.deleteListButton.UseVisualStyleBackColor = true;
+            // 
+            // saveListButton
+            // 
+            this.saveListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.edit;
+            this.saveListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.saveListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.saveListButton.Location = new System.Drawing.Point(54, 3);
+            this.saveListButton.Name = "saveListButton";
+            this.saveListButton.Size = new System.Drawing.Size(42, 42);
+            this.saveListButton.TabIndex = 15;
+            this.actionButtonsToolTip.SetToolTip(this.saveListButton, "Zapisz zmiany");
+            this.saveListButton.UseVisualStyleBackColor = true;
+            // 
             // createListButton
             // 
             this.createListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources._new;
@@ -258,6 +294,7 @@
             this.listIdTextBox.Name = "listIdTextBox";
             this.listIdTextBox.Size = new System.Drawing.Size(203, 25);
             this.listIdTextBox.TabIndex = 3;
+            this.listIdTextBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListIdTextBox_MouseDoubleClick);
             // 
             // selectedListLabel
             // 
@@ -282,42 +319,6 @@
             this.viewPanel.Name = "viewPanel";
             this.viewPanel.Size = new System.Drawing.Size(900, 620);
             this.viewPanel.TabIndex = 11;
-            // 
-            // saveListButton
-            // 
-            this.saveListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.edit;
-            this.saveListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.saveListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.saveListButton.Location = new System.Drawing.Point(54, 3);
-            this.saveListButton.Name = "saveListButton";
-            this.saveListButton.Size = new System.Drawing.Size(42, 42);
-            this.saveListButton.TabIndex = 15;
-            this.actionButtonsToolTip.SetToolTip(this.saveListButton, "Zapisz zmiany");
-            this.saveListButton.UseVisualStyleBackColor = true;
-            // 
-            // deleteListButton
-            // 
-            this.deleteListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.delete;
-            this.deleteListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.deleteListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteListButton.Location = new System.Drawing.Point(150, 3);
-            this.deleteListButton.Name = "deleteListButton";
-            this.deleteListButton.Size = new System.Drawing.Size(42, 42);
-            this.deleteListButton.TabIndex = 16;
-            this.actionButtonsToolTip.SetToolTip(this.deleteListButton, "Usuń listę");
-            this.deleteListButton.UseVisualStyleBackColor = true;
-            // 
-            // reloadListButton
-            // 
-            this.reloadListButton.BackgroundImage = global::ToolListHelperUI.Properties.Resources.load;
-            this.reloadListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.reloadListButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.reloadListButton.Location = new System.Drawing.Point(102, 3);
-            this.reloadListButton.Name = "reloadListButton";
-            this.reloadListButton.Size = new System.Drawing.Size(42, 42);
-            this.reloadListButton.TabIndex = 17;
-            this.actionButtonsToolTip.SetToolTip(this.reloadListButton, "Załaduj ponownie listę");
-            this.reloadListButton.UseVisualStyleBackColor = true;
             // 
             // ToolListManager
             // 

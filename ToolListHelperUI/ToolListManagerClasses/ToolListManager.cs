@@ -14,7 +14,7 @@ using ToolListHelperUI.Properties;
 
 namespace ToolListHelperUI.ToolListManagerClasses
 {
-    public partial class ToolListManager : Form, IThemeLoader
+    public partial class ToolListManager : Form, IThemeLoader, IBrowseData
     {
         private static readonly Color _defaultButtonBackColor = Color.FromArgb(1, 112, 184);
         private static readonly Font _defaultButtonFont = new("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
@@ -75,7 +75,7 @@ namespace ToolListHelperUI.ToolListManagerClasses
             viewPanel.Controls.Add(_activeForm);
             _activeForm.BringToFront();
             _activeForm.Show();
-            _activeForm.Width = viewPanel.VerticalScroll.Visible ? viewPanel.Width - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : viewPanel.Width - (SystemInformation.Border3DSize.Width * 2);
+            _activeForm.Width = viewPanel.Width - (SystemInformation.Border3DSize.Width * 2);
             try
             {
                 ((IThemeLoader)form).LoadTheme(UserConfigManager.GetCurrentUserTheme());
@@ -90,7 +90,7 @@ namespace ToolListHelperUI.ToolListManagerClasses
         {
             try
             {
-                await GetListData();
+                await LoadListData();
             }
             catch (Exception error)
             {
@@ -98,7 +98,7 @@ namespace ToolListHelperUI.ToolListManagerClasses
             }
         }
 
-        private async Task GetListData()
+        private async Task LoadListData()
         {
             string listId = listIdTextBox.Text.Trim();
             if (!await TDMConnector.ValidateListIdAsync(listId))
@@ -106,7 +106,9 @@ namespace ToolListHelperUI.ToolListManagerClasses
                 throw new Exception($"Brak listy o numerze ID: '{listId}' w TDM!");
             }
             ListBrowsingModel model = await ToolListManagerTdmConnector.GetListBrowsingModel(listId);
-            _basicDataForm.LoadListData();
+            _basicDataForm.LoadListData(model);
+            _toolListForm.LoadListData(model);
+            _fileManagerForm.LoadListData(model);
         }
 
         private void ToolListManager_Resize(object sender, EventArgs e)
@@ -125,8 +127,8 @@ namespace ToolListHelperUI.ToolListManagerClasses
             {
                 return;
             }
-            _activeForm.Width = viewPanel.VerticalScroll.Visible ? viewPanel.Width - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : viewPanel.Width - (SystemInformation.Border3DSize.Width * 2);
-            _activeForm.Height = viewPanel.VerticalScroll.Visible ? viewPanel.Height - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : viewPanel.Height - (SystemInformation.Border3DSize.Width * 2);
+            _activeForm.Width = viewPanel.Width - (SystemInformation.Border3DSize.Width * 2);
+            _activeForm.Height = viewPanel.Height - (SystemInformation.Border3DSize.Width * 2);
         }
 
         private static int GetLabelXCoordinate(int labelWidth, int position)
@@ -148,15 +150,29 @@ namespace ToolListHelperUI.ToolListManagerClasses
             };
             button.FlatAppearance.BorderColor = Color.FromArgb(1, 112, 184);
             button.Font = new("Segoe UI", 9, FontStyle.Bold);
-            button.Click += (object sender, EventArgs e) => { MessageBox.Show("sss"); listIdTextBox.Focus(); };
+            button.Click += BrowseIdButton_Click;
             listIdTextBox.Controls.Add(button);
             listIdTextBox.Enter += TextBox_Enter;
             listIdTextBox.KeyDown += TextBox_KeyDown;
             listIdTextBox.Leave += TextBox_Leave;
             InteropOperations.SendMessage(listIdTextBox.Handle, 0xd3, (IntPtr)2, (IntPtr)(button.Width << 16));
             base.OnLoad(e);
-            LoadTheme(Enum.Parse<ApplicationTheme>(Properties.Settings.Default.ApplicationTheme));
+            LoadTheme(Enum.Parse<ApplicationTheme>(Settings.Default.ApplicationTheme));
         }
+        private async void BrowseIdButton_Click(object sender, EventArgs e)
+        {
+            BrowseWindow browseWindow = new(this, BrowsingMode.ProgramId, this);
+            browseWindow.ShowDialog();
+            try
+            {
+                await LoadListData();
+            }
+            catch (Exception error)
+            {
+                UserInterfaceLogic.ShowError(error.Message, "Błąd ładowania listy!");
+            }
+        }
+
         private void TextBox_Enter(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -195,6 +211,27 @@ namespace ToolListHelperUI.ToolListManagerClasses
                     reloadListButton.BackgroundImage = Resources.load_dark;
                     deleteListButton.BackgroundImage = Resources.delete_dark;
                     break;
+            }
+        }
+
+        public void LoadDataToUI(string dataString, BrowsingMode browsingMode)
+        {
+            listIdTextBox.Text = browsingMode switch
+            {
+                BrowsingMode.ProgramId => dataString,
+                _ => throw new InvalidOperationException(),
+            };
+        }
+
+        private async void ListIdTextBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                await LoadListData();
+            }
+            catch (Exception error)
+            {
+                UserInterfaceLogic.ShowError(error.Message, "Błąd podczas ładowania listy!");
             }
         }
     }

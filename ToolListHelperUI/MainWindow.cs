@@ -81,7 +81,7 @@ namespace ToolListHelperUI
             mainPanel.Controls.Add(_activeForm);
             _activeForm.BringToFront();
             _activeForm.Show();
-            _activeForm.Width = mainPanel.VerticalScroll.Visible ? mainPanel.Width - (SystemInformation.Border3DSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Width - (SystemInformation.Border3DSize.Width * 2);
+            _activeForm.Width = mainPanel.Width - (SystemInformation.Border3DSize.Width * 2);
             closeAppButton.Visible = true;
         }
 
@@ -118,12 +118,12 @@ namespace ToolListHelperUI
             }
             if (_activeForm.GetType() == typeof(ToolListMaker))
             {
-                _activeForm.Width = mainPanel.VerticalScroll.Visible ? mainPanel.Width - (SystemInformation.BorderSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Width - (SystemInformation.BorderSize.Width * 2);
+                _activeForm.Width = mainPanel.Width - (SystemInformation.BorderSize.Width * 2);
             }
             else
             {
-                _activeForm.Width = mainPanel.VerticalScroll.Visible ? mainPanel.Width - (SystemInformation.BorderSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Width - (SystemInformation.BorderSize.Width * 2);
-                _activeForm.Height = mainPanel.VerticalScroll.Visible ? mainPanel.Height - (SystemInformation.BorderSize.Width * 2) - SystemInformation.VerticalScrollBarWidth : mainPanel.Height - (SystemInformation.BorderSize.Width * 2);
+                _activeForm.Width = mainPanel.Width - (SystemInformation.BorderSize.Width * 2);
+                _activeForm.Height = mainPanel.Height - (SystemInformation.BorderSize.Width * 2);
             }
         }
 

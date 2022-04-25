@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ToolListHelperLibrary;
+using ToolListHelperLibrary.Models;
 using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI.ToolListManagerClasses
@@ -19,9 +20,42 @@ namespace ToolListHelperUI.ToolListManagerClasses
             InitializeComponent();
         }
 
-        internal void LoadListData()
+        internal void LoadListData(ListBrowsingModel model)
         {
-            throw new NotImplementedException();
+            programNameTextBox.Text = model.Name;
+            programDescriptionTextBox.Text = model.Description;
+            operationTextBox.Text = model.Operation;
+            drawingTextBox.Text = model.Drawing;
+            materialTextBox.Text = model.Material;
+            machineTextBox.Text = model.Machine;
+            machineGroupTextBox.Text = model.MachineGroup;
+            clampingTextBox.Text = model.Clamping;
+            switch (model.ListType)
+            {
+                case ListType.Primary:
+                    primaryTypeRadioButton.Checked = true;
+                    break;
+                case ListType.Secondary:
+                    secondaryTypeRadioButton.Checked = true;
+                    break;
+                default:
+                    break;
+            }
+            status1TextBox.Text = model.Status1;
+            status2TextBox.Text = model.Status2;
+            partClassTextBox.Text = model.WorkpieceClass;
+            userTextBox.Text = model.UserName;
+            LoadLogFileData(model.LogEntries);
+        }
+
+        private void LoadLogFileData(List<LogEntry> logEntries)
+        {
+            logFileDataGridView.DataSource = null;
+            logFileDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(logEntries.Select(l => (LogEntryViewModel)l));
+            logFileDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            logFileDataGridView.Columns["Note"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            logFileDataGridView.Columns["Note"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            logFileDataGridView.Columns["Date"].DefaultCellStyle.Format = @"dd/MM/yyyy HH:mm:ss";
         }
 
         private void ToolListBasicData_Resize(object sender, EventArgs e)
