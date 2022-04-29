@@ -100,6 +100,22 @@ namespace ToolListHelperLibrary
             await SendNewFile(model, connection, GetStateNameFromNcFileMode(ncFileMode), filePath, nextVersion, targetPath);
         }
 
+        public async static Task<IEnumerable<ToolDataViewModel>> GetCompsAsync(CancellationToken cancellationToken)
+        {
+            using DbConnection connection = GetTDMConnection();
+            return await connection.QueryAsync<ToolDataViewModel>(new CommandDefinition(@"
+SELECT COMPID AS Id, NAME AS ItemDescription, NAME2 AS ItemOrderCode
+FROM TDM_COMP", cancellationToken));
+        }
+
+        public static async Task<IEnumerable<ToolDataViewModel>> GetToolsAsync(CancellationToken cancellationToken)
+        {
+            using DbConnection connection = GetTDMConnection();
+            return await connection.QueryAsync<ToolDataViewModel>(new CommandDefinition(@"
+SELECT TOOLID AS Id, NAME AS ItemDescription, NAME2 AS ItemOrderCode
+FROM TDM_TOOL", cancellationToken));
+        }
+
         private static async Task<string?> GetListNameAsync(DbConnection connection, string id)
         {
             return await connection.ExecuteScalarAsync<string>(new CommandDefinition($"SELECT NCPROGRAM FROM TDM_LIST WHERE LISTID = '{id}'"));
@@ -464,6 +480,12 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             return await connection.QueryAsync<ProgramData>(new CommandDefinition("SELECT LISTID AS Id, NCPROGRAM AS Name, PARTNAME AS Description FROM TDM_LIST", commandType: CommandType.Text, cancellationToken: cancellationToken));
         }
 
+        public static async Task<IEnumerable<string>> GetListStringAsync(string columnName, CancellationToken cancellationToken)
+        {
+            using DbConnection connection = GetTDMConnection();
+            return await connection.QueryAsync<string>(new CommandDefinition($"SELECT DISTINCT({columnName}) AS Name FROM TDM_LIST WHERE FIXTURE IS NOT NULL", commandType: CommandType.Text, cancellationToken: cancellationToken));
+        }
+
         public static async Task<IEnumerable<ClampingData>> GetClampingsAsync(CancellationToken cancellationToken)
         {
             using DbConnection connection = GetTDMConnection();
@@ -541,12 +563,22 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             return (invalidTools, validTools);
         }
 
-        private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> ValidateToolAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
+        public async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> ValidateToolAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             return tool.ToolType switch
             {
                 ToolType.Item => await VerifyToolItemAsync(invalidTools, validTools, tool, connection),
                 ToolType.Assembly => await VerifyToolAssemblyAsync(invalidTools, validTools, tool, connection),
+                _ => throw new ArgumentException("Invalid tool type", nameof(tool)),
+            };
+        }
+        public async static Task<bool> ValidateToolAsync(ToolData tool)
+        {
+            using DbConnection connection = GetTDMConnection();
+            return tool.ToolType switch
+            {
+                ToolType.Item => await VerifyToolItemAsync(tool, connection),
+                ToolType.Assembly => await VerifyToolAssemblyAsync(tool, connection),
                 _ => throw new ArgumentException("Invalid tool type", nameof(tool)),
             };
         }
@@ -562,6 +594,11 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             return (invalidTools, validTools);
         }
 
+        private async static Task<bool> VerifyToolAssemblyAsync(ToolData tool, DbConnection connection)
+        {
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(TOOLID) FROM TDM_TOOL WHERE TOOLID = '{tool.Id}'", commandType: CommandType.Text));
+        }
+
         private async static Task<(List<ToolData> invalidTools, List<ToolData> validTools)> VerifyToolItemAsync(List<ToolData> invalidTools, List<ToolData> validTools, ToolData tool, DbConnection connection)
         {
             tool.ItemDescription = CsvOperations.GetDictonaryDescriptionValue(tool.ItemDescription);
@@ -573,6 +610,10 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             }
             invalidTools.Add(tool);
             return (invalidTools, validTools);
+        }
+        private async static Task<bool> VerifyToolItemAsync(ToolData tool, DbConnection connection)
+        {
+            return await connection.ExecuteScalarAsync<bool>(new CommandDefinition($"SELECT COUNT(COMPID) FROM TDM_COMP WHERE COMPID = '{tool.Id}'", commandType: CommandType.Text));
         }
 
         public async static Task<bool> ValidateUserAsync(string creator)

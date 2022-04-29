@@ -41,18 +41,117 @@ namespace ToolListHelperUI
             switch (_mode)
             {
                 case BrowsingMode.Machine:
+                case BrowsingMode.MachineGroup:
                     LoadMachineData();
                     break;
                 case BrowsingMode.Material:
                     LoadMaterialData();
                     break;
-                case BrowsingMode.Clamping:
-                    LoadClampingData();
-                    break;
-                default:
+                case BrowsingMode.ProgramId:
+                case BrowsingMode.ProgramName:
+                case BrowsingMode.ProgramDescription:
                     LoadProgramData();
                     break;
+                case BrowsingMode.Clamping:
+                case BrowsingMode.Drawing:
+                case BrowsingMode.Operation:
+                case BrowsingMode.Status1:
+                case BrowsingMode.Status2:
+                case BrowsingMode.WorkpieceClass:
+                case BrowsingMode.UserName:
+                    LoadSingleColumnData();
+                    break;
+                case BrowsingMode.ItemTriple:
+                case BrowsingMode.ToolTriple:
+                    LoadToolData();
+                    break;
+                default:
+                    break;
             }
+        }
+
+        private void LoadToolData()
+        {
+            try
+            {
+                switch (_mode)
+                {
+                    case BrowsingMode.ItemTriple:
+                        LoadComps();
+                        break;
+                    case BrowsingMode.ToolTriple:
+                        LoadTools();
+                        break;
+                    default:
+                        throw new InvalidOperationException();
+                }
+            }
+            catch (Exception error)
+            {
+                if (error.GetType() == typeof(SqlException))
+                {
+                    ConnectionError(error.Message);
+                    return;
+                }
+                else if (error.GetType() == typeof(TaskCanceledException))
+                {
+                    return;
+                }
+                throw new NotSupportedException(error.Message);
+            }
+            statusLabel.Visible = false;
+        }
+
+        private async void LoadTools()
+        {
+            IEnumerable<ToolDataViewModel> tools = await TDMConnector.GetToolsAsync(_cancellationToken);
+            _initialData.AddRange(tools.Cast<object>());
+            browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(tools);
+            AdjustUI();
+        }
+
+        private async void LoadComps()
+        {
+            IEnumerable<ToolDataViewModel> tools = await TDMConnector.GetCompsAsync(_cancellationToken);
+            _initialData.AddRange(tools.Cast<object>());
+            browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(tools);
+            AdjustUI();
+        }
+
+        private async void LoadSingleColumnData()
+        {
+            try
+            {
+                string columnName = _mode switch
+                {
+                    BrowsingMode.Clamping => "FIXTURE",
+                    BrowsingMode.Drawing => "WORKPIECEDRAWING",
+                    BrowsingMode.Operation => "WORKPROCESS",
+                    BrowsingMode.Status1 => "STATEID1",
+                    BrowsingMode.Status2 => "STATEID2",
+                    BrowsingMode.WorkpieceClass => "WORKPIECECLASSID",
+                    BrowsingMode.UserName => "USERNAME",
+                    _ => string.Empty
+                };
+                IEnumerable<string> data = await TDMConnector.GetListStringAsync(columnName, _cancellationToken);
+                _initialData.AddRange(data.Cast<object>());
+                browseDataGridView.DataSource = TableOperations.CreateTableFromListOfStrings(data);
+                AdjustUI();
+            }
+            catch (Exception error)
+            {
+                if (error.GetType() == typeof(SqlException))
+                {
+                    ConnectionError(error.Message);
+                    return;
+                }
+                else if (error.GetType() == typeof(TaskCanceledException))
+                {
+                    return;
+                }
+                throw new NotSupportedException(error.Message);
+            }
+            statusLabel.Visible = false;
         }
 
         private void AdjustUI()
@@ -90,31 +189,6 @@ namespace ToolListHelperUI
                 column.Width = columnWidth;
             }
             return (columnCount, columnWidth);
-        }
-
-        private async void LoadClampingData()
-        {
-            try
-            {
-                IEnumerable<ClampingData> clampings = await TDMConnector.GetClampingsAsync(_cancellationToken);
-                _initialData.AddRange(clampings.Cast<object>());
-                browseDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(clampings);
-                AdjustUI();
-            }
-            catch (Exception error)
-            {
-                if (error.GetType() == typeof(SqlException))
-                {
-                    ConnectionError(error.Message);
-                    return;
-                }
-                else if (error.GetType() == typeof(TaskCanceledException))
-                {
-                    return;
-                }
-                throw new NotSupportedException(error.Message);
-            }
-            statusLabel.Visible = false;
         }
 
         private void ConnectionError(string errorMessage)
@@ -216,15 +290,38 @@ namespace ToolListHelperUI
             {
                 return;
             }
-            string? output = _mode switch
+            string[] output = _mode switch
             {
-                BrowsingMode.ProgramId => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
-                BrowsingMode.ProgramName => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
-                BrowsingMode.ProgramDescription => browseDataGridView.SelectedRows[0].Cells["Description"].Value.ToString(),
-                BrowsingMode.Machine => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
-                BrowsingMode.Material => browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString(),
-                BrowsingMode.Clamping => browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString(),
-                _ => null,
+                BrowsingMode.ProgramId
+                => new[] { browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString() ?? string.Empty },
+                BrowsingMode.ProgramName
+                => new[] { browseDataGridView.SelectedRows[0].Cells["Name"].Value.ToString() ?? string.Empty },
+                BrowsingMode.ProgramDescription
+                => new[] { browseDataGridView.SelectedRows[0].Cells["Description"].Value.ToString() ?? string.Empty },
+                BrowsingMode.Machine or BrowsingMode.MachineGroup
+                => new[]
+                {
+                    browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString() ?? string.Empty,
+                    browseDataGridView.SelectedRows[0].Cells["ParentGroup"].Value.ToString() ?? string.Empty
+                },
+                BrowsingMode.Material
+                => new[] { browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString() ?? string.Empty },
+                BrowsingMode.Clamping or
+                BrowsingMode.Drawing or
+                BrowsingMode.Operation or
+                BrowsingMode.Status1 or
+                BrowsingMode.Status2 or
+                BrowsingMode.WorkpieceClass or
+                BrowsingMode.UserName => new[] { browseDataGridView.SelectedRows[0].Cells[0].Value.ToString() ?? string.Empty },
+                BrowsingMode.ToolTriple or
+                BrowsingMode.ItemTriple 
+                => new[] 
+                { 
+                    browseDataGridView.SelectedRows[0].Cells["Id"].Value.ToString() ?? string.Empty,
+                    browseDataGridView.SelectedRows[0].Cells["ItemDescription"].Value.ToString() ?? string.Empty,
+                    browseDataGridView.SelectedRows[0].Cells["ItemOrderCode"].Value.ToString() ?? string.Empty,
+                },
+                _ => Array.Empty<string>()
             };
             if (output != null)
             {
@@ -259,19 +356,40 @@ namespace ToolListHelperUI
         {
             switch (_mode)
             {
+                case BrowsingMode.ProgramId:
+                case BrowsingMode.ProgramName:
+                case BrowsingMode.ProgramDescription:
+                    FilterProgramData();
+                    break;
                 case BrowsingMode.Machine:
+                case BrowsingMode.MachineGroup:
                     FilterMachineData();
                     break;
                 case BrowsingMode.Material:
                     FilterMaterialData();
                     break;
                 case BrowsingMode.Clamping:
-                    FilterClampingData();
-                    break;
-                default:
-                    FilterProgramData();
+                case BrowsingMode.Drawing:
+                case BrowsingMode.Operation:
+                case BrowsingMode.Status1:
+                case BrowsingMode.Status2:
+                case BrowsingMode.WorkpieceClass:
+                case BrowsingMode.UserName:
+                    FilterStringData();
                     break;
             }
+        }
+
+        private void FilterStringData()
+        {
+            List<string> filteredData = new();
+            if (string.IsNullOrWhiteSpace(textBox1.Text) && string.IsNullOrWhiteSpace(textBox2.Text) && string.IsNullOrWhiteSpace(textBox3.Text))
+            {
+                ReloadDataGridData(_initialData);
+                return;
+            }
+            filteredData.AddRange(_initialData.Cast<string>().Where(s => Regex.IsMatch(s, Regex.Escape(textBox1.Text), RegexOptions.IgnoreCase)));
+            ReloadDataGridData(filteredData);
         }
 
         private void FilterProgramData()

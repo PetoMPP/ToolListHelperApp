@@ -33,5 +33,19 @@ namespace ToolListHelperUI
             IEnumerable<Control> controls = control.Controls.Cast<Control>();
             return controls.SelectMany(x => GetAllControls(x)).Concat(controls);
         }
+        public static void HandleClick(DataGridView dataGridView, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
+            {
+                if (dataGridView.HitTest(e.X, e.Y).Type != DataGridViewHitTestType.Cell)
+                {
+                    dataGridView.ClearSelection();
+                }
+                else
+                {
+                    dataGridView.Rows[dataGridView.HitTest(e.X, e.Y).RowIndex].Selected = true;
+                }
+            }
+        }
     }
 }

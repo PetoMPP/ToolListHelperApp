@@ -294,6 +294,7 @@
             this.listIdTextBox.Name = "listIdTextBox";
             this.listIdTextBox.Size = new System.Drawing.Size(203, 25);
             this.listIdTextBox.TabIndex = 3;
+            this.listIdTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListIdTextBox_KeyDown);
             this.listIdTextBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListIdTextBox_MouseDoubleClick);
             // 
             // selectedListLabel

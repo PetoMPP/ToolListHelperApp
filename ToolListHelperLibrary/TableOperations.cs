@@ -31,5 +31,15 @@ namespace ToolListHelperLibrary
             }
             return table;
         }
+        public static DataTable CreateTableFromListOfStrings(IEnumerable<string> strings)
+        {
+            DataTable table = new("Table");
+            table.Columns.Add("Value");
+            foreach (string s in strings)
+            {
+                table.Rows.Add(new object[] { s });
+            }
+            return table;
+        }
     }
 }

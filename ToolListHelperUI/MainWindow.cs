@@ -232,7 +232,7 @@ namespace ToolListHelperUI
             {
                 return;
             }
-            LoadFormToUI(new ToolListManager(), "Tool List Manager");
+            LoadFormToUI(new ToolListManager(this), "Tool List Manager");
         }
 
         private void ThemeSwitchPictureBox_Click(object sender, EventArgs e)

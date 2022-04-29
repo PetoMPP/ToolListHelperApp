@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ToolListHelperLibrary;
+using ToolListHelperLibrary.Models;
 using ToolListHelperUI.Interfaces;
 using ToolListHelperUI.Properties;
 
@@ -49,9 +51,14 @@ namespace ToolListHelperUI.ToolListManagerClasses
             }
         }
 
-        internal void LoadListData(ToolListHelperLibrary.Models.ListBrowsingModel model)
+        internal void LoadListData(ListBrowsingModel model)
         {
-            throw new NotImplementedException();
+            developingDataGridView.DataSource = null;
+            archiveDataGridView.DataSource = null;
+            releasedDataGridView.DataSource = null;
+            developingDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(model.NcProgramFiles.Where(f => f.StateId == "NC DEVELOPING"));
+            archiveDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(model.NcProgramFiles.Where(f => f.StateId == "ARCHIVE"));
+            releasedDataGridView.DataSource = TableOperations.CreateTableFromListOfModels(model.NcProgramFiles.Where(f => f.StateId == "RELEASE FOR PRODUCTION"));
         }
     }
 }

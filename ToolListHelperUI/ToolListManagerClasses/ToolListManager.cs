@@ -21,12 +21,18 @@ namespace ToolListHelperUI.ToolListManagerClasses
         private static readonly Color _activeButtonBackColor = Color.FromArgb(30, 165, 235);
         private static readonly Font _activeButtonFont = new("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point);
         public Form? _activeForm;
-        private readonly ToolListBasicData _basicDataForm = new();
-        private readonly ToolListList _toolListForm = new();
-        private readonly ToolListFileManager _fileManagerForm = new();
-        public ToolListManager()
+        private readonly ToolListBasicData _basicDataForm;
+        private readonly ToolListList _toolListForm;
+        private readonly ToolListFileManager _fileManagerForm;
+        private readonly Form _caller;
+
+        public ToolListManager(Form caller)
         {
             InitializeComponent();
+            _caller = caller;
+            _basicDataForm = new();
+            _toolListForm = new(_caller);
+            _fileManagerForm = new();
             // Opens default menu tab on startup
             ModeLabel_Click(basicDataLabel, new EventArgs());
         }
@@ -214,11 +220,11 @@ namespace ToolListHelperUI.ToolListManagerClasses
             }
         }
 
-        public void LoadDataToUI(string dataString, BrowsingMode browsingMode)
+        public void LoadDataToUI(string[] dataStrings, BrowsingMode browsingMode)
         {
             listIdTextBox.Text = browsingMode switch
             {
-                BrowsingMode.ProgramId => dataString,
+                BrowsingMode.ProgramId => dataStrings[0],
                 _ => throw new InvalidOperationException(),
             };
         }
@@ -232,6 +238,21 @@ namespace ToolListHelperUI.ToolListManagerClasses
             catch (Exception error)
             {
                 UserInterfaceLogic.ShowError(error.Message, "Błąd podczas ładowania listy!");
+            }
+        }
+
+        private async void ListIdTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Return)
+            {
+                try
+                {
+                    await LoadListData();
+                }
+                catch (Exception error)
+                {
+                    UserInterfaceLogic.ShowError(error.Message, "Błąd podczas ładowania listy!");
+                }
             }
         }
     }

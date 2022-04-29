@@ -2,6 +2,6 @@
 {
     public interface IBrowseData
     {
-        public void LoadDataToUI(string dataString, BrowsingMode browsingMode);
+        public void LoadDataToUI(string[] dataStrings, BrowsingMode browsingMode);
     }
 }

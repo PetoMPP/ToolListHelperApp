@@ -265,27 +265,27 @@ namespace ToolListHelperUI
             browseWindow.ShowDialog();
         }
 
-        public void LoadDataToUI(string dataString, BrowsingMode browsingMode)
+        public void LoadDataToUI(string[] dataStrings, BrowsingMode browsingMode)
         {
             switch (browsingMode)
             {
                 case BrowsingMode.ProgramId:
-                    programIdTextBox.Text = dataString;
+                    programIdTextBox.Text = dataStrings[0];
                     break;
                 case BrowsingMode.ProgramName:
-                    programNameTextBox.Text = dataString;
+                    programNameTextBox.Text = dataStrings[0];
                     break;
                 case BrowsingMode.ProgramDescription:
-                    programDescriptionTextBox.Text = dataString;
+                    programDescriptionTextBox.Text = dataStrings[0];
                     break;
                 case BrowsingMode.Machine:
-                    machineTextBox.Text = dataString;
+                    machineTextBox.Text = dataStrings[0];
                     break;
                 case BrowsingMode.Material:
-                    materialTextBox.Text = dataString;
+                    materialTextBox.Text = dataStrings[0];
                     break;
                 case BrowsingMode.Clamping:
-                    clampingTextBox.Text = dataString;
+                    clampingTextBox.Text = dataStrings[0];
                     break;
             }
         }

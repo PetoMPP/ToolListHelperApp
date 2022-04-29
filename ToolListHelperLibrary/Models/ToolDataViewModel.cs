@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace ToolListHelperLibrary.Models
 {
-    public struct ToolData
+    public struct ToolDataViewModel
     {
-        public int ToolListPosition { get; set; }
         public string Id { get; set; }
         public string ItemDescription { get; set; }
         public string ItemOrderCode { get; set; }
-        public int? Quantity { get; set; }
-        public ToolType ToolType { get; set; }
     }
 }

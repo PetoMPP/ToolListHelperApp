@@ -13,7 +13,7 @@ using ToolListHelperUI.Interfaces;
 
 namespace ToolListHelperUI.ToolListManagerClasses
 {
-    public partial class ToolListBasicData : Form, IThemeLoader
+    public partial class ToolListBasicData : Form, IThemeLoader, IBrowseData
     {
         public ToolListBasicData()
         {
@@ -109,7 +109,8 @@ namespace ToolListHelperUI.ToolListManagerClasses
                 };
                 button.FlatAppearance.BorderColor = Color.FromArgb(1, 112, 184);
                 button.Font = new("Segoe UI", 9, FontStyle.Bold);
-                button.Click += (object sender, EventArgs e) => { MessageBox.Show("sss"); textBox.Focus(); } ;
+                //button.Click += (object sender, EventArgs e) => { MessageBox.Show("sss"); textBox.Focus(); } ;
+                button.Click += Button_Click;
                 textBox.Controls.Add(button);
                 textBox.Enter += TextBox_Enter;
                 textBox.KeyDown += TextBox_KeyDown;
@@ -117,6 +118,65 @@ namespace ToolListHelperUI.ToolListManagerClasses
                 InteropOperations.SendMessage(textBox.Handle, 0xd3, (IntPtr)2, (IntPtr)(button.Width << 16));
             }
             base.OnLoad(e);
+        }
+
+        private void Button_Click(object sender, EventArgs e)
+        {
+            Control caller = (Control)sender;
+            BrowseWindow browseWindow;
+            switch (caller.Parent.Name)
+            {
+                case "programNameTextBox":
+                    browseWindow = new(this, BrowsingMode.ProgramName, this);
+                    browseWindow.Show();
+                    break;
+                case "programDescriptionTextBox":
+                    browseWindow = new(this, BrowsingMode.ProgramDescription, this);
+                    browseWindow.Show();
+                    break;
+                case "operationTextBox":
+                    browseWindow = new(this, BrowsingMode.Operation, this);
+                    browseWindow.Show();
+                    break;
+                case "drawingTextBox":
+                    browseWindow = new(this, BrowsingMode.Drawing, this);
+                    browseWindow.Show();
+                    break;
+                case "materialTextBox":
+                    browseWindow = new(this, BrowsingMode.Material, this);
+                    browseWindow.Show();
+                    break;
+                case "machineTextBox":
+                    browseWindow = new(this, BrowsingMode.Machine, this);
+                    browseWindow.Show();
+                    break;
+                case "machineGroupTextBox":
+                    browseWindow = new(this, BrowsingMode.MachineGroup, this);
+                    browseWindow.Show();
+                    break;
+                case "clampingTextBox":
+                    browseWindow = new(this, BrowsingMode.Clamping, this);
+                    browseWindow.Show();
+                    break;
+                case "status1TextBox":
+                    browseWindow = new(this, BrowsingMode.Status1, this);
+                    browseWindow.Show();
+                    break;
+                case "status2TextBox":
+                    browseWindow = new(this, BrowsingMode.Status2, this);
+                    browseWindow.Show();
+                    break;
+                case "partClassTextBox":
+                    browseWindow = new(this, BrowsingMode.WorkpieceClass, this);
+                    browseWindow.Show();
+                    break;
+                case "userTextBox":
+                    browseWindow = new(this, BrowsingMode.UserName, this);
+                    browseWindow.Show();
+                    break;
+                default:
+                    throw new ArgumentException("Unsupported calling control", nameof(sender));
+            }
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
@@ -170,6 +230,50 @@ namespace ToolListHelperUI.ToolListManagerClasses
         public void LoadTheme(ApplicationTheme applicationTheme)
         {
             ApplicationThemes.ApplyTheme(this, applicationTheme);
+        }
+
+        public void LoadDataToUI(string[] dataStrings, BrowsingMode browsingMode)
+        {
+            switch (browsingMode)
+            {
+                case BrowsingMode.ProgramName:
+                    programNameTextBox.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.ProgramDescription:
+                    programDescriptionLabel.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.Machine:
+                case BrowsingMode.MachineGroup:
+                    machineTextBox.Text = dataStrings[0];
+                    machineGroupTextBox.Text = dataStrings[1];
+                    break;
+                case BrowsingMode.Material:
+                    materialTextBox.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.Clamping:
+                    clampingTextBox.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.Drawing:
+                    drawingTextBox.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.Operation:
+                    operationTextBox.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.Status1:
+                    status1TextBox.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.Status2:
+                    status2TextBox.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.WorkpieceClass:
+                    partClassTextBox.Text = dataStrings[0];
+                    break;
+                case BrowsingMode.UserName:
+                    userTextBox.Text = dataStrings[0];
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

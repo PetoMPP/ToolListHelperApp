@@ -13,7 +13,16 @@ namespace ToolListHelperUI
         ProgramDescription,
         Machine,
         Material,
-        Clamping
+        Clamping,
+        MachineGroup,
+        Drawing,
+        Operation,
+        Status1,
+        Status2,
+        WorkpieceClass,
+        UserName,
+        ToolTriple,
+        ItemTriple
     }
     public enum ApplicationTheme
     {
