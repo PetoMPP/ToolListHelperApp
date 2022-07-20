@@ -27,5 +27,6 @@ namespace ToolListHelperLibrary.Models
         public List<ToolData>? Tools { get; set; }
         public string CreatorId { get; set; }
         public ListStatus ListStatus { get; set; }
+        public bool PreserveClampingItems { get; set; }
     }
 }

@@ -256,11 +256,26 @@ WHERE MACHINEID = '{machine}'"))).AsList();
 
         private static async Task OverwriteTools(ListModel model, DbConnection connection)
         {
+            if (model.PreserveClampingItems)
+                model.Tools?.AddRange(await GetClampingItems(model, connection));
             await connection.ExecuteAsync(new CommandDefinition($"DELETE FROM TDM_LISTLISTB WHERE LISTID = '{model.Id}'"));
-            if (model.Tools?.Count > 0)
-            {
-                await connection.ExecuteAsync(new CommandDefinition(GenerateInsertToolsStringFromModel(model), commandType: CommandType.Text));
-            }
+
+            foreach (var command in GenerateInsertToolsStringsFromModel(model))
+                await connection.ExecuteAsync(new CommandDefinition(command, commandType: CommandType.Text));
+        }
+
+        private static async Task<IEnumerable<ToolData>> GetClampingItems(ListModel model, DbConnection connection)
+        {
+            var output = new List<ToolData>();
+            var itemIds = await connection.QueryAsync<string>(new CommandDefinition(
+                                $"SELECT A.COMPID FROM TDM_LISTLISTB AS A " +
+                                $"JOIN TDM_COMP AS B ON A.COMPID = B.COMPID " +
+                                $"WHERE A.LISTID = '{model.Id}' AND B.TOOLCLASSID = 'C01' AND B.TOOLGROUPID = '100'"));
+            if (itemIds.Any(id => string.IsNullOrEmpty(id)))
+                return output;
+            foreach (var itemId in itemIds)
+                output.Add(new ToolData { Id = itemId, ToolType = ToolType.Item });
+            return output;
         }
 
         private async static Task<string> GenerateLogInsertString(ListModel model, DbConnection connection, string logMessage)
@@ -306,33 +321,42 @@ VALUES ({timestamp} , 'TDM_LIST', '{model.Id}', '{await GetNextLogfilePosition(m
             return (await connection.ExecuteScalarAsync<int>(new CommandDefinition($"SELECT MAX(POS) FROM TMS_CHANGEINFO WHERE ID = '{id}' AND TNAME = 'TDM_LIST'", commandType: CommandType.Text))) + 1;
         }
 
-        private static string GenerateInsertToolsStringFromModel(ListModel model)
+        private static List<string> GenerateInsertToolsStringsFromModel(ListModel model)
         {
+            var commands = new List<string>();
             int timestamp = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
             string header;
             if (model.Tools == null || model.Tools.Count == 0)
-            {
                 throw new ArgumentException("Tools list cannot be null or empty!", nameof(model));
-            }
-            if (model.Tools.Any(t => t.ToolType == ToolType.Assembly) && model.Tools.Any(t => t.ToolType == ToolType.Item))
-            {
-                throw new NotSupportedException("List of Tools with diffirent tool types are not supported!");
-            }
+
+            var createdToolCount = 0;
             if (model.Tools.Any(t => t.ToolType == ToolType.Assembly))
             {
+                var assemblies = model.Tools.Where(t => t.ToolType == ToolType.Assembly);
                 header = "INSERT INTO TDM_LISTLISTB (LISTID, LISTLISTPOS, TOOLID, TIMESTAMP, TOOLNUMBER, QUANTITY) VALUES ";
+                StringBuilder stringBuilder = new(header);
+                foreach (var assembly in assemblies)
+                {
+                    stringBuilder.Append($"('{model.Id}', {createdToolCount + 1}, '{assembly.Id}', {timestamp}, '{assembly.Id}', 1),");
+                    createdToolCount++;
+                }
+                stringBuilder.Length--;
+                commands.Add(stringBuilder.ToString());
             }
-            else
+            if (model.Tools.Any(t => t.ToolType == ToolType.Item))
             {
+                var items = model.Tools.Where(t => t.ToolType == ToolType.Item);
                 header = "INSERT INTO TDM_LISTLISTB (LISTID, LISTLISTPOS, COMPID, TIMESTAMP, TOOLNUMBER, QUANTITY) VALUES ";
+                StringBuilder stringBuilder = new(header);
+                foreach (var item in items)
+                {
+                    stringBuilder.Append($"('{model.Id}', {createdToolCount + 1}, '{item.Id}', {timestamp}, '{item.Id}', 1),");
+                    createdToolCount++;
+                }
+                stringBuilder.Length--;
+                commands.Add(stringBuilder.ToString());
             }
-            StringBuilder stringBuilder = new(header);
-            for (int i = 0; i < model.Tools.Count; i++)
-            {
-                stringBuilder.Append($"('{model.Id}', {i + 1}, '{model.Tools[i].Id}', {timestamp}, '{model.Tools[i].Id}', 1),");
-            }
-            stringBuilder.Length--;
-            return stringBuilder.ToString();
+            return commands;
         }
 
         private async static Task<string> GenerateUpdateStringFromModelAsync(ListModel model, DbConnection connection)
