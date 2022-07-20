@@ -256,6 +256,11 @@ WHERE MACHINEID = '{machine}'"))).AsList();
 
         private static async Task OverwriteTools(ListModel model, DbConnection connection)
         {
+            if (model.PreserveClampingItems)
+                model.Tools?.AddRange(await connection.QueryAsync<ToolData>(new CommandDefinition(
+                    $"SELECT A.COMPID, B.NAME FROM TDM_LISTLISTB AS A" +
+                    $"JOIN TDM_COMP AS B ON A.COMPID = B.COMPID " +
+                    $"WHERE A.LISTID = '{model.Id}' AND B.TOOLCLASSID = 'C01' AND B.TOOLGROUPID = '100'")));
             await connection.ExecuteAsync(new CommandDefinition($"DELETE FROM TDM_LISTLISTB WHERE LISTID = '{model.Id}'"));
             if (model.Tools?.Count > 0)
             {

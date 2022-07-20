@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 using ToolListHelperLibrary;
 using ToolListHelperLibrary.Models;
 using ToolListHelperUI.Interfaces;
@@ -292,47 +284,61 @@ namespace ToolListHelperUI
 
         private async void CreateListButton_Click(object sender, EventArgs e)
         {
-            string errorMessage = ValidateUI();
-            if (errorMessage.Length > 0)
+            try
             {
-                UserInterfaceLogic.ShowError(errorMessage, "Błąd w formularzu!");
-                return;
-            }
-            ListModel model = await CreateModelFromUI();
-            errorMessage = await ValidateModel(model);
-            if (errorMessage.Length > 0)
-            {
-                UserInterfaceLogic.ShowError(errorMessage, "Błąd danych!");
-                return;
-            }
-            if (string.IsNullOrEmpty(model.Machine) && !model.SkipMachine &&
-                UserInterfaceLogic.ShowWarning("Nie wybrano maszyny dla listy narzędziowej, czy chcesz kontynuować?", "Brak maszyny!") == DialogResult.No)
-            {
-                return;
-            }
-            if (!model.SkipNcFile && _filePaths.Length > 1 &&
-                UserInterfaceLogic.ShowWarning($"Wybrano więcej niż jeden plik źrodłowy do przesłania do TDM, program wspiera przesyłanie tylko jednego pliku naraz, przez co tylko plik: \"{Path.GetFileName(model.NcFile.FilePath)}\" zostanie przesłany.\n\nKontynuować?", "Wybrano wiele list do przesłania!") == DialogResult.No)
-            {
-                return;
-            }
-            (List<ToolData> invalidTools, List<ToolData> validTools) = await TDMConnector.ValidateToolsAsync(model.Tools);
-            if (invalidTools.Count > 0)
-            {
-                if (UserInterfaceLogic.ShowWarning("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => string.IsNullOrEmpty(t.Id) ? t.ItemDescription : t.Id)
-                    .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!") == DialogResult.No)
+                string errorMessage = ValidateUI();
+                if (errorMessage.Length > 0)
+                {
+                    UserInterfaceLogic.ShowError(errorMessage, "Błąd w formularzu!");
+                    return;
+                }
+                ListModel model = await CreateModelFromUI();
+                errorMessage = await ValidateModel(model);
+                if (errorMessage.Length > 0)
+                {
+                    UserInterfaceLogic.ShowError(errorMessage, "Błąd danych!");
+                    return;
+                }
+                if (string.IsNullOrEmpty(model.Machine) && !model.SkipMachine &&
+                    UserInterfaceLogic.ShowWarning("Nie wybrano maszyny dla listy narzędziowej, czy chcesz kontynuować?", "Brak maszyny!") == DialogResult.No)
                 {
                     return;
                 }
+                if (!model.SkipNcFile && _filePaths.Length > 1 &&
+                    UserInterfaceLogic.ShowWarning($"Wybrano więcej niż jeden plik źrodłowy do przesłania do TDM, program wspiera przesyłanie tylko jednego pliku naraz, przez co tylko plik: \"{Path.GetFileName(model.NcFile.FilePath)}\" zostanie przesłany.\n\nKontynuować?", "Wybrano wiele list do przesłania!") == DialogResult.No)
+                {
+                    return;
+                }
+                (List<ToolData> invalidTools, List<ToolData> validTools) = await TDMConnector.ValidateToolsAsync(model.Tools);
+                if (invalidTools.Count > 0)
+                {
+                    if (UserInterfaceLogic.ShowWarning("Następujące narzędzia z pliku nie zostały odnalezione w bazie TDM:\n\n" + string.Join('\n', invalidTools.Select(t => string.IsNullOrEmpty(t.Id) ? t.ItemDescription : t.Id)
+                        .ToArray()) + "\n\nCzy chcesz kontynuować tworzenie listy bez tych narzędzi?", "Brakujące narzędzia!") == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+                if (model.CreatingMode == CreatingMode.Update)
+                {
+                    if (UserInterfaceLogic.ShowQuestion("Czy chcesz zachować istniejące mocowania?", "Istniejące mocowania") == DialogResult.Yes)
+                    {
+                        model.PreserveClampingItems = true;
+                    }
+                }
+                model.Tools = validTools;
+                (string listId, errorMessage) = await TDMConnector.PostListModelAsync(model);
+                if (errorMessage.Length > 0)
+                {
+                    UserInterfaceLogic.ShowError(errorMessage, "Błąd podczas tworzenia listy!");
+                    return;
+                }
+                Enabled = false;
+                UserInterfaceLogic.ShowSuccess(listId, this);
             }
-            model.Tools = validTools;
-            (string listId, errorMessage) = await TDMConnector.PostListModelAsync(model);
-            if (errorMessage.Length > 0)
+            catch (Exception error)
             {
-                UserInterfaceLogic.ShowError(errorMessage, "Błąd podczas tworzenia listy!");
-                return;
+                UserInterfaceLogic.ShowError(error.Message, "Nieznany błąd!");
             }
-            Enabled = false;
-            UserInterfaceLogic.ShowSuccess(listId, this);
         }
         private static async Task<string> ValidateModel(ListModel model)
         {

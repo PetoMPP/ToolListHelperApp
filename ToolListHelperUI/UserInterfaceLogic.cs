@@ -19,15 +19,22 @@ namespace ToolListHelperUI
             successPrompt.ShowDialog();
         }
 
-        internal static DialogResult ShowWarning(string message, string header)
+        public static DialogResult ShowWarning(string message, string header)
         {
             return MessageBox.Show(message, header, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
+
+        public static DialogResult ShowQuestion(string message, string header)
+        {
+            return MessageBox.Show(message, header, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        }
+
         public static IEnumerable<Control> GetAllControls<T>(Control control)
         {
             IEnumerable<Control> controls = control.Controls.Cast<Control>();
             return controls.SelectMany(x => GetAllControls<T>(x)).Concat(controls).Where(y => y.GetType() == typeof(T));
         }
+
         public static IEnumerable<Control> GetAllControls(Control control)
         {
             IEnumerable<Control> controls = control.Controls.Cast<Control>();
