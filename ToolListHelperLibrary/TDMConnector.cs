@@ -113,7 +113,8 @@ namespace ToolListHelperLibrary
             }
             catch (IOException)
             {
-                NetworkShare.ConnectToShare(@"\\MMS251107S1\IMPORTCAM", @"MMS251107S1\Fastems", "!FMS1operator!");
+                var fmsCredentials = AppConfigManager.GetFmsCredentials();
+                NetworkShare.ConnectToShare(@"\\MMS251107S1\IMPORTCAM", fmsCredentials.User, fmsCredentials.Password);
                 File.Copy(filePath, targetPath, true);
                 //File.SetAttributes(targetPath, FileAttributes.ReadOnly);
                 //File.SetCreationTime(targetPath, DateTime.Now);

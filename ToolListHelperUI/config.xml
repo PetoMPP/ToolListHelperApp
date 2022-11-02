@@ -10,5 +10,7 @@
 		<DictonaryMode value="Global"/>
 		<DatabaseMode value="Prod"/>
 		<SettingsPassPhrase value="admin"/>
+		<FmsUser value="admin"/>
+		<FmsPassword value="admin"/>
 	</appSettings>
 </configuration>

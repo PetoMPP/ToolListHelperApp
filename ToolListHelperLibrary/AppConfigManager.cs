@@ -158,5 +158,13 @@ namespace ToolListHelperLibrary
                 config.Save(ConfigPath);
             }
         }
-    }
+
+        public static (string User, string Password) GetFmsCredentials()
+        {
+            XmlDocument config = GetConfigAsXml();
+            string user = config.SelectSingleNode("configuration/appSettings/FmsUser")?.Attributes?["value"]?.Value!;
+            string password = config.SelectSingleNode("configuration/appSettings/FmsPassword")?.Attributes?["value"]?.Value!;
+            return (user, password);
+        }
+  }
 }
